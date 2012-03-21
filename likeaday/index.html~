@@ -1,0 +1,113 @@
+<html>
+<head>
+   <title>A like a day for Simmy!</title>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script>
+
+
+ $(document).ready(function(){
+
+birthday = new Date(1984,6,14);
+today = new Date();
+counter = new Date(1984,6,14);
+var one_day=1000*60*60*24
+var total_days = Math.floor((today.getTime() -birthday.getTime())/one_day);
+
+var days_until_next = Math.floor((new Date(today.getFullYear()+1,6,14).getTime()-today.getTime())/one_day);
+
+if(days_until_next < 365){
+ $("h1").text("A like a day for Simmy! \nOnly " + days_until_next + " likes until her next birthday!");
+}
+
+windowWidth = $(document).width()-20,
+    windowHeight = $(document).height()-20;
+
+$(window).resize(function(){
+		windowWidth = $(document).width()-20;
+		windowHeight = $(document).height()-20;
+	    });
+
+ $("h1").css("position","absolute");
+    $("h1").css("top", (($(window).height() - $("h1").outerHeight()) / 2) + $(window).scrollTop() + "px");
+    $("h1").css("left", (($(window).width() - $("h1").outerWidth()) / 2) + $(window).scrollLeft() + "px");
+   
+leftbounds = $("h1").offset().left-5;
+topbounds = $("h1").offset().top-5;
+rightbounds = $("h1").outerWidth()+ leftbounds;
+bottombounds = $("h1").outerHeight()+topbounds;
+
+
+
+
+   putStuff();
+
+   
+});
+
+
+function putStuff(){
+	if(counter < today){
+   		counter.setDate(counter.getDate()+1);
+
+var newx = leftbounds+1;
+var newy = topbounds+1;
+
+while(newx>leftbounds && newx<rightbounds && newy>topbounds && newy<bottombounds){
+   newx = Math.floor(Math.random()*windowWidth);
+   newy = Math.floor(Math.random()*windowHeight);
+}
+
+    $(document.createElement("img"))
+        .attr({ src: 'thumbsup' + (counter.getDate() === 14 && counter.getMonth()===6?'bday':'') + '.png', title: (counter.getMonth()+1) + "/" + counter.getDate() + "/" + counter.getFullYear()})
+        .addClass("icon")
+        .appendTo("body")
+        .css("left",newx)
+        .css("top",newy)
+        .css("z-index",(counter.getDate() === 14 && counter.getMonth()===6?3:1))
+        
+
+	setTimeout(putStuff,15);
+   }
+
+}
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4481396-1']);
+  _gaq.push(['_trackPageview']);
+ 
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<style type="text/css">
+body {
+  background: #eeeeee;
+  font-family: “Trebuchet MS”, Verdana, Arial, serif;
+}
+.icon{
+  position:absolute;
+  z-index:1
+}
+h1{
+  position:absolute;
+  z-index:2;
+  margin:10px;
+}
+</style>
+
+</head>
+<body>
+<h1>A Like a Day for Simmy!  Happy Birthday!</h1>
+
+
+
+
+
+
+
+</body>
+</html>

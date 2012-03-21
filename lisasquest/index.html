@@ -1,0 +1,275 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en"> 
+<head profile="http://gmpg.org/xfn/11"> 
+
+<title>Lisa's Quest: Happy Birthday Lisa!</title> 
+ 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script> 
+
+
+<style type="text/css">
+#backgroundconsole { 
+	background-image:url('kings_bg_full.png');}
+</style>
+ 
+<script> 
+$(document).ready(function()
+    {
+	var frame = 0, 
+		flagframe = 0,
+		gaterframe = 0,
+		framewidth = 25,
+		messageframe = 0,
+		frameheight = 65,
+		direction = 3,  // 0 = left; 1 = right; 2=down; 3=up;
+		mouseX = 600,
+		mouseY = 350,
+		princeX = 600,
+		princeY = 190,
+		gater1X = 300,
+		gater1Y=  430,
+		gater2X = 600,
+		gater2Y= 435,
+		gaterdirection1=0,
+		gaterdirection2=1;  
+ 
+	$('#graham').css("background-image", "url(prince_final.png)")
+		.css("background-position", "-26 -68")
+		.css("position","absolute")
+		.css("width","25")
+		.css("height","63")
+		.css("z-index","4");
+
+	$('#gater1').css("background-image", "url(kings_gater.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","51")
+		.css("height","25")
+		.css("left","200")
+		.css("top","0")
+		.css("z-index","4");
+
+	$('#gater2').css("background-image", "url(kings_gater.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","51")
+		.css("height","25")
+		.css("z-index","4");
+ 
+	$('#backgroundconsole').css("background-image", "url(kings_bg_full2.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","875")
+		.css("height","632")
+		.css("left","0")
+		.css("top","0")
+		.css("z-index","6");
+
+	$('#backgroundscreen').css("background-image", "url(kings_background_trimmed.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","640px")
+		.css("height","402px")
+		.css("left","150px")
+		.css("top","110px")
+		.css("z-index","2");
+
+ 	$('#tree').css("background-image", "url(tree.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","247px")
+		.css("height","253px")
+		.css("left","552px")
+		.css("top","129px")
+		.css("z-index","5");
+
+	$('#tower').css("background-image", "url(castle.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","177px")
+		.css("height","225px")
+		.css("left","354px")
+		.css("top","139px")
+		.css("z-index","5");
+
+
+ 	$('#flag').css("background-image", "url(kings_flags.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","178px")
+		.css("height","25px")
+		.css("left","165px")
+		.css("top","140px")
+		.css("z-index","3");
+
+	$('#message').css("background-image", "url(kings_happy_birthday.png)")
+		.css("background-position", "0 0")
+		.css("position","absolute")
+		.css("width","0px")
+		.css("height","18px")
+		.css("left","182px")
+		.css("top","463px")
+		.css("z-index","10");
+ 
+	(function loop(){
+
+		// figure out grahams movement
+		
+		if(direction == 1){
+			// ha ha, whoops, I made the left facing guy moonwalk.  hack here because its past my bedtime.  you understand, don't you?
+			frame = ((frame - 1) + 6) % 6;
+		} else {
+			frame = (frame + 1) % 6;
+			
+		}
+ 
+		if(mouseX - (princeX+(framewidth/2))>3){
+			if(checkValid(princeX+3,princeY)){
+				princeX = princeX + 3;
+			}
+			direction = 0;
+ 
+		} else if(mouseX - (princeX+(framewidth/2))<-3){
+			if(checkValid(princeX-3,princeY)){
+				princeX = princeX - 3;
+			}
+			
+			direction = 1;
+ 
+		}
+		if(mouseY - (princeY+(frameheight/2))>3){
+			if(checkValid(princeX,princeY+3)){
+				princeY = princeY + 3;
+			}
+			
+			if(Math.abs(mouseX-(princeX+(framewidth/2)))<3){
+				direction = 2
+			}
+ 
+		} else if(mouseY-(princeY+(frameheight/2))<-3){
+			if(checkValid(princeX,princeY-3)){
+				princeY = princeY - 3;
+			}
+			if(Math.abs(mouseX-(princeX+(framewidth/2)))<3){
+				direction = 3
+			}
+ 
+		}
+ 
+		if(Math.abs(mouseY-(princeY+(frameheight/2)))>3 || Math.abs(mouseX-(princeX+(framewidth/2)))>3){
+			$('#graham').css("background-position", (-1 * frame * framewidth) + "px " + (-1*frameheight*direction) +"px");
+		}	
+
+		// animate flag
+		flagframe = (flagframe + 1) % 5;
+		$('#flag').css("background-position", "0px " + (-1*flagframe*25) +"px");
+
+
+		// animate gater
+		gaterframe = (gaterframe + 1) % 15;
+		$('#gater1').css("background-position", (-1*(Math.floor(gaterframe/5))*55) + "px " + (25*gaterdirection1) +"px");
+		$('#gater2').css("background-position", (-1*(Math.floor(gaterframe/5))*55) + "px " + (25*gaterdirection2) +"px");
+
+		// Set everybody to the right spot
+
+ 
+		$('#graham').css("left",princeX);
+	    	$('#graham').css("top",princeY);
+
+		// make sure graham is in front of or behind tree in proper spot
+		if(princeY>326)
+			$('#tree').css('z-index',3);
+		else
+			$('#tree').css('z-index',5);
+
+
+		$('#gater1').css("left",gater1X);
+	    	$('#gater1').css("top",gater1Y);
+
+
+		$('#gater2').css("left",gater2X);
+	    	$('#gater2').css("top",gater2Y);
+
+
+		// animate message
+		
+		if(Math.random()*50<10 && messageframe<31){
+
+			messageframe = messageframe+1;
+		}
+		$('#message').css("width",messageframe*16);
+
+		
+		
+		setTimeout(loop,75);
+	})();
+ 
+	$(document).mousemove(function(e){
+
+		mouseX = e.pageX;
+		mouseY = e.pageY;
+ 
+	});
+ 
+	/*
+ 
+	$('#kingsquest').hover(function() {
+		$(this).css('cursor','pointer');
+		}, function() {
+		$(this).css('cursor','auto');
+		});
+ 
+	$('#kingsquest').click(function(){window.location='http://en.wikipedia.org/wiki/King\'s_Quest'});
+ 
+	*/
+	
+});
+
+	function checkValid(x,y){
+		if(y>=383)
+			return false;
+		if(x>=761)
+			return false;
+		if(y<=173)
+			return false;
+		if(x<=167)
+			return false;
+		if(x<=518 & y<=359& y>=311)
+			return false;
+		if(x<=464 && y<=287)
+			return false;
+		if(x<=470 && y<=311)
+			return false;
+		if(x>=497&&x<=539&&y>=311&&y<=338)
+			return false;
+		
+		if(x>=599&&x<728&&y<=383&&y>=350)
+			return false;
+		if(x>=660&&x<717&&y<=329&&y>=308)
+			return false;
+		
+		if(x<504&&y<=308&&y>=299)
+			return false;
+
+		return true;
+
+	}
+	
+	</script> 
+</head> 
+ 
+<body bgcolor="black"> 
+ 
+<div id="graham"></div> 
+<div id="gater1"></div> 
+<div id="gater2"></div> 
+<div id="tower"></div> 
+<div id="tree"></div> 
+<div id="flag"></div> 
+<div id="backgroundscreen"></div> 
+<div id="backgroundconsole"></div> 
+<div id="message"></div> 
+
+</body> 
+</html> 
