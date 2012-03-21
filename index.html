@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="Rob Scanlon, Robert Scanlon, Software Engineer, Boston, Programmer">
+<meta name="Description" content="Boston based software engineer"/>
+<meta name="abstract" content="A software engineer from Boston" />
+<meta http-equiv="Content-Language" content="EN" />
+<meta name="author" content="Robert Scanlon" />
+<meta name="distribution" content="Global" />
+<meta name="revisit-after" content="1 days" />
+<link rel="shortcut icon" href="/images/icons/favicon.ico">
+
+<title>Rob Scanlon</title>
+<link rel="stylesheet" type="text/css" href="main.css"> 
+
+<!--[if lt IE 8]>
+<style type="text/css">
+
+</style>
+<![endif]-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script> 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4481396-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script>
+$(document).ready(function()
+    {
+	var frame = 0, 
+		framewidth = 25,
+		frameheight = 65,
+		direction = 3,  // 0 = left; 1 = right; 2=down; 3=up;
+		mouseX = 150,
+		mouseY = 150,
+		princeX = -200,
+		princeY = 200;  
+
+	$('#kingsquest').css("background-image", "url(images/prince_final.png)")
+		.css("background-position", "-26 -68")
+		.css("position","absolute")
+		.css("width","25")
+		.css("height","63")
+		.css("height","63");
+
+
+	(function loop(){
+		
+		if(direction == 1){
+			// ha ha, whoops, I made the left facing guy moonwalk.  hack here because its past my bedtime.  you understand, don't you?
+			frame = ((frame - 1) + 6) % 6;
+		} else {
+			frame = (frame + 1) % 6;
+			
+		}
+
+		if(mouseX - (princeX+(framewidth/2))>3){
+			princeX = princeX + 3;
+			direction = 0;
+
+		} else if(mouseX - (princeX+(framewidth/2))<-3){
+			princeX = princeX - 3;
+			direction = 1;
+
+		}
+		if(mouseY - (princeY+(frameheight/2))>3){
+			princeY = princeY + 3;
+			if(Math.abs(mouseX-(princeX+(framewidth/2)))<3){
+				direction = 2
+			}
+
+		} else if(mouseY-(princeY+(frameheight/2))<-3){
+			princeY = princeY - 3;
+			if(Math.abs(mouseX-(princeX+(framewidth/2)))<3){
+				direction = 3
+			}
+
+		}
+
+		if(Math.abs(mouseY-(princeY+(frameheight/2)))>3 || Math.abs(mouseX-(princeX+(framewidth/2)))>3){
+			$('#kingsquest').css("background-position", (-1 * frame * framewidth) + "px " + (-1*frameheight*direction) +"px");
+		}	
+
+		$('#kingsquest').css("left",princeX);
+	    	$('#kingsquest').css("top",princeY);
+		
+		setTimeout(loop,75);
+	})();
+
+	$(document).mousemove(function(e){
+
+		mouseX = Math.min(e.pageX,425);
+		mouseY = e.pageY;
+
+	});
+
+	
+
+	$('#kingsquest').hover(function() {
+		$(this).css('cursor','pointer');
+		}, function() {
+		$(this).css('cursor','auto');
+		});
+
+	$('#kingsquest').click(function(){window.location='/kq/'});
+
+	
+	
+});
+	
+	</script>
+</head>
+
+<body>
+
+<div id="content"> 
+		
+	<p>Hi, I'm Rob Scanlon.</p> 
+
+	<p>You can find out more about me on <a href="http://linkedin.com/in/robscanlon">LinkedIn</a>, <a href="http://twitter.com/arscan">Twitter</a> and <a href="https://plus.google.com/117094129525169640178">Google+</a>. </p>
+
+	
+	<p>You can check out some of the things I'm working on in my free time over at <a href="https://github.com/arscan">github</a>.
+
+	<p>Or you can head over to my <a href="http://www.robscanlon.com/blog" class="bloglink">blog</a> for occasional updates on my projects.</p>
+
+</div>
+
+
+
+
+</div>
+<div id="kingsquest"></div>
+</body>
+</html>

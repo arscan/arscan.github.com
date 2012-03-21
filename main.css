@@ -1,0 +1,22 @@
+body
+{
+	background: url(images/portrait_reverse_1000.jpg) left top no-repeat #0b0906;
+	color: #e4e5d9;
+	font: Normal 30px Georgia, "Times New Roman", Times, serif;
+	margin: 50px 65% 40px 40px;
+	padding: 0px;
+}
+
+#content
+{
+	//background-color: rgba(68, 57, 48, 0.148438);
+	top: 30px;
+	margin-left: 400px;
+	width: 500px;
+	padding: 30px 30px 1px;
+	z-index:4;
+}
+
+p{margin:0px 0px 20px 0px; padding:0px;}
+a{text-decoration:none; color:#ff424f;}
+a:hover{color:#83060f;}
