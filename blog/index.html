@@ -1,0 +1,9 @@
+---
+layout: blog
+---
+
+{% for post in site.posts %}
+<h2><a href="{{post.id}}">{{post.title}}</a></h2>
+<div class="postdate"><strong>{{ post.date  | date: "%d %B %Y" }}</strong></div>
+<div class="postcontents">{{ post.content }}</div>
+{% endfor %}

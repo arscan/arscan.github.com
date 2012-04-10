@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="Keywords" content="Rob Scanlon, Robert Scanlon, Software Engineer, Boston, Programmer">
+        <meta name="Description" content="Boston based software engineer"/>
+        <meta name="abstract" content="A software engineer from Boston" />
+        <meta http-equiv="Content-Language" content="EN" />
+        <meta name="author" content="Robert Scanlon" />
+        <meta name="distribution" content="Global" />
+        <meta name="revisit-after" content="1 days" />
+        <link rel="shortcut icon" href="/images/icons/favicon.ico">
+        <link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Atom 1.0">
+
+        <title>Rob Scanlon: {{page.title}}</title>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.css"> 
+        <link rel="stylesheet" type="text/css" href="/css/blog.css"> 
+
+        <!--[if lt IE 8]>
+        <style type="text/css">
+
+        </style>
+        <![endif]-->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> 
+        <script src="/js/bootstrap.js"></script> 
+    </head>
+
+    <body>
+        <div class="navbar">
+
+            <div class="navbar-inner">
+                <div class="container">
+
+                    <a class="brand" href="/">robscanlon.com</a>
+                    <ul class="nav">
+                        <li><a href="/">home</a></li>
+                        <li class="active"><a href="/blog">blog</a></li>
+                        <li class="dropdown" id="menu1">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
+                            other sites
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="http://github.com/arscan/" onClick="location.href='http://github.com/arscan/';">github</a></li>
+                            <li><a href="http://www.linkedin.com/in/robscanlon" onClick="location.href='http://www.linkedin.com/in/robscanlon/';">linkedin</a></li>
+                            <li><a href="http://www.facebook.com/scanlonr/" onClick="location.href='http://www.facebook.com/scanlonr';">facebook</a></li>
+                            <li><a href="http://www.twitter.com/arscan/" onClick="location.href='http://www.twitter.com/arscan/'">twitter</a></li>
+                            <li><a href="https://plus.google.com/117094129525169640178" onClick="location.href='http://plus.google.com/117094129525169640178';">google+</a></li>
+                        </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="span12 blogheader">
+                    <h1><a href="/blog/">Rob Scanlon's Blog</a> <small>Just some things keeping me busy on the weekends</small></h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span8">
+                    <div class="mainblogcontent">
+                        <h2>{{ post.title }}</h2>
+                        {{ content }}
+                    </div>
+                </div>
+                <div class="span4">
+                    <h3>Past Posts</h3>
+                    <ul>
+                        {% for post in site.posts %}
+                        <li>
+                        {{ post.date | date: "%m/%d/%y"}}: <a href="{{post.id}}">{{post.title}}</a>
+
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </body>
+</html>
