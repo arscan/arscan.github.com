@@ -3,6 +3,7 @@ body
     background: url(/images/portrait_reverse_1000.jpg) left top no-repeat #0b0906;
     color: #e4e5d9;
     padding: 0px;
+    margin-top:60px;
 }
 
 #content
@@ -27,3 +28,7 @@ a{
 a:hover{
     color:#83060f;
 }
+.container {
+    margin-left:20px;
+}
+
