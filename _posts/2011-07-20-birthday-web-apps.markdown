@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Birthday Web Apps
+title: Birthday Web App Fun
 ---
 This month I've had some fun making little web applications to celebrate the birthdays of friends and family. I think I'm going to make a habit of doing this -- I'm always looking for an excuse to play around with jQuery, and people seem to get a kick out of them. Click on the images to check them out.
 
