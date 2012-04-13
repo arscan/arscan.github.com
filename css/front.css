@@ -32,3 +32,9 @@ a:hover{
     margin-left:20px;
 }
 
+.roblogo{
+    display: inline-block;
+    float: left;
+    background-image: url(/images/roblogo_gradient.png);
+}
+

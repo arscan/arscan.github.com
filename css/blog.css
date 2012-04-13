@@ -60,7 +60,7 @@ h3 {
     margin: 10px 0px 2px;
 
 }
-img {
+.content img {
     
         -webkit-box-shadow:  2px 2px 5px 2px rgba(00, 00, 00, .5);
         -moz-box-shadow:  2px 2px 5px 2px rgba(00, 00, 00, .5);
@@ -71,3 +71,9 @@ img {
 .container {
     margin-left:20px;
 }
+.roblogo{
+    display: inline-block;
+    float: left;
+    background-image: url(/images/roblogo_gradient.png);
+}
+
