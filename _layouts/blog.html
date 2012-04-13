@@ -25,18 +25,38 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> 
         <script src="/js/bootstrap.js"></script> 
         <script type="text/javascript">
+            $(document).ready(function()
+                    {
+                    var logogradientoffset=0,
+                    logogradientoffsetmin=-300,
+                    logogradientincrement=-1;  
 
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-4481396-1']);
-            _gaq.push(['_trackPageview']);
 
-            (function() {
-             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-             })();
+                    (function loop(){
+                     logogradientoffset += logogradientincrement;
+                     if(logogradientoffset > 0 || logogradientoffset < logogradientoffsetmin){
+                     logogradientincrement = logogradientincrement * -1;
+                     logogradientoffset += logogradientincrement;
+                     }
+                     $('.roblogo').css("background-position-y",logogradientoffset + "px");
+                     setTimeout(loop,75);
 
-         </script>
+                     })();
+                    });
+                </script>
+                <script type="text/javascript">
+
+                    var _gaq = _gaq || [];
+                    _gaq.push(['_setAccount', 'UA-4481396-1']);
+                    _gaq.push(['_trackPageview']);
+
+                    (function() {
+                     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                     })();
+
+</script>
     </head>
 
     <body>
@@ -44,8 +64,11 @@
 
             <div class="navbar-inner">
                 <div class="container">
-
-                    <a class="brand" href="/">robscanlon.com</a>
+                <div class="roblogo">
+                    <a href="/">
+                        <img src="/images/robtitle_inverse.png"/>
+                    </a>
+                </div>
                     <ul class="nav pull-right">
                         <li><a href="/">home</a></li>
                         <li class="active"><a href="/blog">blog</a></li>
@@ -60,8 +83,8 @@
                             <li><a href="http://www.facebook.com/scanlonr/" onClick="location.href='http://www.facebook.com/scanlonr';">facebook</a></li>
                             <li><a href="http://www.twitter.com/arscan/" onClick="location.href='http://www.twitter.com/arscan/'">twitter</a></li>
                             <li><a href="https://plus.google.com/117094129525169640178" onClick="location.href='http://plus.google.com/117094129525169640178';">google+</a></li>
-                             <li class="divider"></li>
-                             <li><a href="http://github.com/arscan/arscan.github.com" onClick="location.href='http://github.com/arscan/arscan.github.com';">hosted by github</a>
+                            <li class="divider"></li>
+                            <li><a href="http://github.com/arscan/arscan.github.com" onClick="location.href='http://github.com/arscan/arscan.github.com';">hosted by github</a>
                         </ul>
                         </li>
                     </ul>

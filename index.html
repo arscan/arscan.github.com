@@ -48,7 +48,10 @@
                  mouseX = 150,
                  mouseY = 150,
                  princeX = -200,
-                 princeY = 200;  
+                 princeY = 200,
+                 logogradientoffset=0,
+                 logogradientoffsetmin=-300,
+                 logogradientincrement=-1;  
 
                  $('#kingsquest').css("background-image", "url(/images/prince_final.png)")
                  .css("background-position", "-26 -68")
@@ -98,7 +101,15 @@
                      $('#kingsquest').css("left",princeX);
                      $('#kingsquest').css("top",princeY);
 
+                     logogradientoffset += logogradientincrement;
+                     if(logogradientoffset > 0 || logogradientoffset < logogradientoffsetmin){
+                         logogradientincrement = logogradientincrement * -1;
+                         logogradientoffset += logogradientincrement;
+                     }
+
+                     $('.roblogo').css("background-position-y",logogradientoffset+"px");
                      setTimeout(loop,75);
+
                  })();
 
                  $(document).mousemove(function(e){
@@ -131,8 +142,12 @@
 
              <div class="navbar-inner">
                  <div class="container">
+                     <div class="roblogo">
+                         <a href="/">
+                             <img src="/images/robtitle_inverse.png"/>
+                         </a>
+                     </div>
 
-                     <a class="brand" href="/">robscanlon.com</a>
                      <ul class="nav pull-right">
                          <li class="active"><a href="/">home</a></li>
                          <li><a href="/blog">blog</a></li>
@@ -147,34 +162,34 @@
                              <li><a href="http://www.facebook.com/scanlonr/" onClick="location.href='http://www.facebook.com/scanlonr';">facebook</a></li>
                              <li><a href="http://www.twitter.com/arscan/" onClick="location.href='http://www.twitter.com/arscan/'">twitter</a></li>
                              <li><a href="https://plus.google.com/117094129525169640178" onClick="location.href='http://plus.google.com/117094129525169640178';">google+</a></li>
-<li class="divider"></li>
+                             <li class="divider"></li>
                              <li><a href="http://github.com/arscan/arscan.github.com" onClick="location.href='http://github.com/arscan/arscan.github.com';">hosted by github</a>
                          </ul>
                          </li>
                      </ul>
                  </div>
 
-                 </div>
              </div>
          </div>
+     </div>
 
-         <div id="content"> 
+     <div id="content"> 
 
-             <p>Hi, I'm Rob Scanlon.</p> 
+         <p>Hi, I'm Rob Scanlon.</p> 
 
-             <p>You can find out more about me on <a href="http://linkedin.com/in/robscanlon">LinkedIn</a>, <a href="http://twitter.com/arscan">Twitter</a> and <a href="https://plus.google.com/117094129525169640178">Google+</a>. </p>
-
-
-             <p>You can check out some of the things I'm working on in my free time over at <a href="https://github.com/arscan">github</a>.
-
-             <p>Or you can head over to my <a href="http://www.robscanlon.com/blog" class="bloglink">blog</a> for occasional updates on my projects.</p>
-
-         </div>
+         <p>You can find out more about me on <a href="http://linkedin.com/in/robscanlon">LinkedIn</a>, <a href="http://twitter.com/arscan">Twitter</a> and <a href="https://plus.google.com/117094129525169640178">Google+</a>. </p>
 
 
+         <p>You can check out some of the things I'm working on in my free time over at <a href="https://github.com/arscan">github</a>.
 
+         <p>Or you can head over to my <a href="http://www.robscanlon.com/blog" class="bloglink">blog</a> for occasional updates on my projects.</p>
 
      </div>
-     <div id="kingsquest"></div>
+
+
+
+
+ </div>
+ <div id="kingsquest"></div>
  </body>
  </html>
