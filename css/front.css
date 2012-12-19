@@ -18,8 +18,8 @@ body
 #linkpopup
 {
     position: absolute;
-    top: 200px;
-    left:150px;
+    top: 170px;
+    left:110px;
     width: 500px;
     padding: 20px 20px 20px 20px;
     z-index:5;
@@ -49,6 +49,7 @@ body
 #linkpopup a {
     font-size:14px;
     color: #800000;
+    padding-left:30px;
 }
 
 p{
