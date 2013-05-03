@@ -1,0 +1,77 @@
+body
+{
+    background: url(/images/portrait_glacier.jpg) left top no-repeat #dbdad6;
+    color: #111;
+    padding: 0px;
+    margin-top:60px;
+}
+
+#content
+{
+    top: 30px;
+    margin-left: 400px;
+    width: 500px;
+    padding: 30px 30px 1px;
+    z-index:4;
+}
+
+#linkpopup
+{
+    position: absolute;
+    top: 170px;
+    left:110px;
+    width: 500px;
+    padding: 20px 20px 20px 20px;
+    z-index:5;
+    /*display: none;*/
+    background-color: rgba(255, 255, 255, 0.9);
+
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -khtml-border-radius:10px;
+    border-radius:10px;
+    color: #121212;
+    display:none;
+}
+
+#linkpopup ul{
+    margin:5px;
+}
+
+#linkpopup li {
+
+    list-style: none;
+    display:block;
+    float:left;
+    width:200px;
+}
+
+#linkpopup a {
+    font-size:14px;
+    color: #800000;
+    padding-left:30px;
+}
+
+p{
+    margin:0px 0px 20px 0px; 
+    padding:0px;
+    font: Normal 30px Georgia, "Times New Roman", Times, serif;
+}
+
+a{
+    text-decoration:none; 
+    color:#3f7ed4;
+}
+a:hover{
+    color:#83060f;
+}
+.container {
+    margin-left:20px;
+}
+
+.roblogo{
+    display: inline-block;
+    float: left;
+    background-image: url(/images/roblogo_gradient.png);
+}
+

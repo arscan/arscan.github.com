@@ -12,11 +12,13 @@
         <meta name="revisit-after" content="1 days" />
         <link rel="shortcut icon" href="/images/icons/favicon.ico">
         <link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Atom 1.0">
-        <link href="http://tent.robscanlon.com/profile" rel="https://tent.io/rels/profile" />
 
         <title>Rob Scanlon</title>
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.css"> 
-        <link rel="stylesheet" type="text/css" href="/css/front.css"> 
+        <script type="text/javascript">
+            var cssver = Math.floor(Math.random() * 2 + 1);
+            document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/front" + cssver + ".css\">");
+        </script>
 
         <!--[if lt IE 8]>
         <style type="text/css">
@@ -53,6 +55,7 @@
                  logogradientoffset=0,
                  logogradientoffsetmin=-300,
                  logogradientincrement=-1;  
+
 
                  $('#kingsquest').css("background-image", "url(/images/prince_final.png)")
                  .css("background-position", "-26 -68")
