@@ -136,6 +136,12 @@
 
                  $('#shortcutlink').click(openShortcuts);
                  $('#closeshortcuts').click(closeShortcuts);
+                 $('#ablink').click(function(){
+                     var newver = ((cssver)%2)+1;
+                     $('link[href="/css/front' + cssver + '.css"]').attr('href','/css/front' + newver + '.css');
+                     cssver = newver;
+                     return false;
+                 });
 
                  $(document).keypress(function(event) {
                     
@@ -214,6 +220,7 @@
                              <li><a href="http://github.com/arscan/arscan.github.com" onClick="location.href='http://github.com/arscan/arscan.github.com';">hosted by github</a>
                          </ul>
                          </li>
+                         <li><a href="#" id="ablink">A/B</a></li>
                      </ul>
                  </div>
 
