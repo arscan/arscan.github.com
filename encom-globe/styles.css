@@ -1,0 +1,24 @@
+
+/* 775 by 363 */
+
+body {
+    background-color: #000000;
+    font-family: 'Inconsolata', sans-serif;
+    color: #fff;
+
+}
+
+
+#container {
+    width: 1900px;
+    height: 700px;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position:absolute;
+    /*border: 1px solid #00EEEE;*/
+    /*border-bottom: 1px solid #333;*/
+
+}
