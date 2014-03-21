@@ -1,16 +1,10 @@
 
 var ENCOM = (function(ENCOM, THREE, document){
 
-    var pixelData;
-
     var extend = function(first, second) {
         for(var i in first){
             second[i] = first[i];
         }
-    };
-
-    var sCurve = function(t) {
-        return 1/(1 + Math.exp(-t*12 + 6));
     };
 
     var renderToCanvas = function (width, height, renderFunction) {
@@ -33,7 +27,6 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         this.shutDownFlag = (this.repeatAtTile < 0);
         this.done = false;
-
 
         this.tilesHorizontal = tilesHoriz;
         this.tilesVertical = tilesVert;
@@ -83,8 +76,6 @@ var ENCOM = (function(ENCOM, THREE, document){
 
     };
 
-    /* private globe function */
-
     var latLonToXY = function(width, height, lat,lon){
 
         var x = Math.floor(width/2.0 + (width/360.0)*lon);
@@ -95,12 +86,14 @@ var ENCOM = (function(ENCOM, THREE, document){
 
     var samplePoints = function(projectionContext, width, height, latoffset, lonoffset, latinc, loninc, cb){
         var points = [],
-        isPixelBlack = function(context, x, y, width, height){
-            if(pixelData == undefined){
-                pixelData = context.getImageData(0,0,width, height);
-            }
-            return pixelData.data[(y * pixelData.width + x) * 4] === 0;
-        };
+            pixelData = null;
+
+        var isPixelBlack = function(context, x, y, width, height){
+                if(pixelData == null){
+                    pixelData = context.getImageData(0,0,width, height);
+                }
+                return pixelData.data[(y * pixelData.width + x) * 4] === 0;
+            };
 
         for(var lat = 90-latoffset; lat > -90; lat -= latinc){
             for(var lon = -180+lonoffset; lon < 180; lon += loninc){
@@ -143,7 +136,7 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
-        context.font = size + "pt Inconsolata";
+        context.font = size + "pt " + this.font;
 
         var textWidth = context.measureText(text).width;
 
@@ -162,7 +155,7 @@ var ENCOM = (function(ENCOM, THREE, document){
         if(underlineColor){
             canvas.height += 30;
         }
-        context.font = size + "pt Inconsolata";
+        context.font = size + "pt " + this.font;
 
         context.textAlign = "center";
         context.textBaseline = "middle";
@@ -221,8 +214,8 @@ var ENCOM = (function(ENCOM, THREE, document){
         var waveInterval = Math.floor((numFrames-waveStart)/numWaves);
         var waveDist = pixels - 25; // width - center of satellite
         var distPerFrame = waveDist / (numFrames-waveStart)
-        var offsetx = 0,
-        offsety = 0;
+        var offsetx = 0;
+        var offsety = 0;
         var curRow = 0;
 
         return renderToCanvas(numFrames * pixels / rows, pixels * rows, function(ctx){
@@ -342,7 +335,7 @@ var ENCOM = (function(ENCOM, THREE, document){
 
     var createSpecialMarkerCanvas = function() {
         var markerWidth = 100,
-        markerHeight = 100;
+            markerHeight = 100;
 
         return renderToCanvas(markerWidth, markerHeight, function(ctx){
             ctx.strokeStyle="#FFCC00";
@@ -358,104 +351,36 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         });
 
-    }
-
-    var mainParticles = function(){
-
-        var material, geometry;
-
-        var colors = [];
-
-        var sprite = this.hexTexture;
-        var myColors1 = pusher.color('#ffcc00').hueSet();
-        var myColors = [];
-        for(var i = 0; i< myColors1.length; i++){
-            myColors.push(myColors1[i]);
-
-            // myColors.push(myColors1[i].shade(.2 + Math.random()/2.0));
-            // myColors.push(myColors1[i].shade(.2 + Math.random()/2.0));
-        }
-        var geometry = new THREE.Geometry();
-
-        for ( i = 0; i < this.points.length; i ++ ) {
-
-
-            var vertex = new THREE.Vector3();
-            var point = mapPoint(this.points[i].lat, this.points[i].lon, 500);
-            var delay = this.swirlTime*((180+this.points[i].lon)/360.0); 
-
-            vertex.x = 0;
-            vertex.y = 0;
-            vertex.z = this.cameraDistance+1;
-
-            geometry.vertices.push( vertex );
-
-            addPointAnimation.call(this,delay, i, {
-                x : point.x*this.swirlMultiplier,
-                y : point.y*this.swirlMultiplier,
-                z : point.z*this.swirlMultiplier});
-
-                for(var a = 0; a < 4; a++){
-                    addPointAnimation.call(this,delay + 500 + (60)*a, i, {
-                        x : point.x*(this.swirlMultiplier - (.1 + a/40.0)),
-                        y : point.y*(this.swirlMultiplier - (.1 + a/40.0)),
-                        z : point.z*(this.swirlMultiplier - (.1 + a/40.0))});
-                }
-
-
-        }
-
-        geometry.colors = colors;
-
-        material = new THREE.ParticleSystemMaterial( { size: 13, map: sprite, vertexColors: true, transparent: false} );
-
-        this.globe_particles = new THREE.ParticleSystem( geometry, material );
-
-        this.scene.add( this.globe_particles );
-
     };
 
-
-    var addBufferParticles = function(){
+    var createParticles = function(){
 
         var pointVertexShader = [
             "#define PI 3.141592653589793238462643",
             "#define DISTANCE 500.0",
-            "#define INTRODURATION " + (parseFloat(this.swirlTime) + .00001),
-            "#define INTRODISTANCE " + (parseFloat(this.swirlMultiplier) + .00001),
+            "#define INTRODURATION " + (parseFloat(this.introLinesDuration) + .00001),
+            "#define INTROALTITUDE " + (parseFloat(this.introLinesAltitude) + .00001),
             "attribute float lng;",
             "uniform float currentTime;",
             "varying vec4 vColor;",
-            "vec3 getPos(float lat, float lon)",
-            "{",
-            "if (lon < -180.0){",
-            "   lon = 180.0;",
-            "}",
-            "float phi = (90.0 - lat) * PI / 180.0;",
-            "float theta = (180.0 - lon) * PI / 180.0;",
-            "float x = DISTANCE * sin(phi) * cos(theta);",
-            "float y = DISTANCE * cos(phi);",
-            "float z = DISTANCE * sin(phi) * sin(theta);",
-            "return vec3(x, y, z);",
-            "}",
             "",
             "void main()",
             "{",
-            // var delay = this.swirlTime*((180+this.points[i].lon)/360.0); 
-            "vec3 newPos = position;",
-            "float opacity = 0.0;",
-            "float introStart = INTRODURATION * ((180.0 + lng)/360.0);",
-            "if(currentTime > introStart){",
-            "opacity = 1.0;",
-            "}",
-            "if(currentTime > introStart && currentTime < introStart + 400.0){",
-            "newPos = position * INTRODISTANCE;",
-            "}",
-            "if(currentTime > introStart + 400.0 && currentTime < introStart + 600.0){",
-            "newPos = position * (1.0 + ((INTRODISTANCE-1.0) * (1.0-(currentTime - introStart-400.0)/200.0)));",
-            "}",
-            "vColor = vec4( color, opacity );", //     set color associated to vertex; use later in fragment shader.
-            "gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);",
+            "   vec3 newPos = position;",
+            "   float opacity = 0.0;",
+            "   float introStart = INTRODURATION * ((180.0 + lng)/360.0);",
+            "   if(currentTime > introStart){",
+            "      opacity = 1.0;",
+            "   }",
+            "   if(currentTime > introStart && currentTime < introStart + INTRODURATION / 8.0){",
+            "      newPos = position * INTROALTITUDE;",
+            "      opacity = .3;",
+            "   }",
+            "   if(currentTime > introStart + INTRODURATION / 8.0 && currentTime < introStart + INTRODURATION / 8.0 + 200.0){",
+            "      newPos = position * (1.0 + ((INTROALTITUDE-1.0) * (1.0-(currentTime - introStart-(INTRODURATION/8.0))/200.0)));",
+            "   }",
+            "   vColor = vec4( color, opacity );", //     set color associated to vertex; use later in fragment shader.
+            "   gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);",
             "}"
         ].join("\n");
 
@@ -463,10 +388,10 @@ var ENCOM = (function(ENCOM, THREE, document){
             "varying vec4 vColor;",     
             "void main()", 
             "{",
-            "float depth = gl_FragCoord.z / gl_FragCoord.w;",
-            "float fogFactor = smoothstep(" + (parseInt(this.cameraDistance)-200) +".0," + (parseInt(this.cameraDistance+275)) +".0, depth );",
-            "vec3 fogColor = vec3(0.0);",
-            "gl_FragColor = mix( vColor, vec4( fogColor, gl_FragColor.w ), fogFactor );",
+            "   float depth = gl_FragCoord.z / gl_FragCoord.w;",
+            "   float fogFactor = smoothstep(" + (parseInt(this.cameraDistance)-200) +".0," + (parseInt(this.cameraDistance+375)) +".0, depth );",
+            "   vec3 fogColor = vec3(0.0);",
+            "   gl_FragColor = mix( vColor, vec4( fogColor, gl_FragColor.w ), fogFactor );",
             "}"
         ].join("\n");
 
@@ -476,7 +401,6 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         this.pointUniforms = {
             currentTime: { type: 'f', value: 0.0}
-            // color: { type: 'c', value: new THREE.Color("#ffcc00")},
         }
 
         var pointMaterial = new THREE.ShaderMaterial( {
@@ -489,17 +413,6 @@ var ENCOM = (function(ENCOM, THREE, document){
             side: THREE.DoubleSide
         });
 
-        this.scene.add( new THREE.AmbientLight( 0x444444 ) );
-
-        // var light1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
-        // light1.position.set( 1, 1, 1 );
-        // this.scene.add( light1 );
-
-        // var light2 = new THREE.DirectionalLight( 0xffffff, 1.5 );
-        // light2.position.set( 0, -1, 0 );
-        // this.scene.add( light2 );
-
-        // var triangles = 160000;
         var hexes = this.points.length;
         var triangles = hexes * 4;
 
@@ -511,17 +424,13 @@ var ENCOM = (function(ENCOM, THREE, document){
         geometry.addAttribute( 'color', Float32Array, triangles * 3, 3 );
         geometry.addAttribute( 'lng', Float32Array, triangles * 3, 1 );
 
-        lng_values = geometry.attributes.lng.array;
+        var lng_values = geometry.attributes.lng.array;
         
 
-        var myColors1 = pusher.color('#ffcc00').hueSet();
+        var baseColorSet = pusher.color(this.baseColor).hueSet();
         var myColors = [];
-        // var baseColor = pusher.color('#ffcc00');
-        // for(var i = 0; i< 10; i++){
-        //     myColors.push(baseColor.shade(i/10));
-        // }
-        for(var i = 0; i< myColors1.length; i++){
-            myColors.push(myColors1[i].shade(Math.random()/3.0));
+        for(var i = 0; i< baseColorSet.length; i++){
+            myColors.push(baseColorSet[i].shade(Math.random()/3.0));
         }
 
         // break geometry into
@@ -540,7 +449,6 @@ var ENCOM = (function(ENCOM, THREE, document){
         }
 
         var positions = geometry.attributes.position.array;
-        var normals = geometry.attributes.normal.array;
         var colors = geometry.attributes.color.array;
 
         var n = 800, n2 = n/2;  // triangles spread in the cube
@@ -557,6 +465,8 @@ var ENCOM = (function(ENCOM, THREE, document){
         var addTriangle = function(k, ax, ay, az, bx, by, bz, cx, cy, cz, lat, lng, color){
             var p = k * 3;
             var i = p * 3;
+            var colorIndex = Math.floor(Math.random()*myColors.length);
+            var colorRGB = myColors[colorIndex].rgb();
 
             lng_values[p] = lng;
             lng_values[p+1] = lng;
@@ -574,38 +484,6 @@ var ENCOM = (function(ENCOM, THREE, document){
             positions[ i + 7 ] = cy;
             positions[ i + 8 ] = cz;
 
-            // flat face normals
-
-            pA.set( ax, ay, az );
-            pB.set( bx, by, bz );
-            pC.set( cx, cy, cz );
-
-            cb.subVectors( pC, pB );
-            ab.subVectors( pA, pB );
-            cb.cross( ab );
-
-            cb.normalize();
-
-            var nx = cb.x;
-            var ny = cb.y;
-            var nz = cb.z;
-
-            normals[ i ]     = nx;
-            normals[ i + 1 ] = ny;
-            normals[ i + 2 ] = nz;
-
-            normals[ i + 3 ] = nx;
-            normals[ i + 4 ] = ny;
-            normals[ i + 5 ] = nz;
-
-            normals[ i + 6 ] = nx;
-            normals[ i + 7 ] = ny;
-            normals[ i + 8 ] = nz;
-
-            var colorIndex = Math.floor(Math.random()*myColors.length);
-
-            var colorRGB = myColors[colorIndex].rgb();
-
             colors[ i ]     = color.r;
             colors[ i + 1 ] = color.g;
             colors[ i + 2 ] = color.b;
@@ -620,24 +498,12 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         };
 
-        addHex = function(i, lat, lng){
+        var addHex = function(i, lat, lng){
             var k = i * 4;
-            var C = Math.random()*.25 + .25;
+            // var C = Math.random()*.25 + .25;
+            var C = 1/this.pointsPerDegree * Math.min(1,this.pointSize * (1 + (Math.random() * (2*this.pointsVariance)) - this.pointsVariance));
             var B = .866*C;
             var A = C/2;
-
-            // var p1a = 0;
-            // var p1b = B;
-            // var p2a = A;
-            // var p2b = 0;
-            // var p3a = A+C;
-            // var p3b = 0;
-            // var p4a = 2*C;
-            // var p4b = B;
-            // var p5a = A+C;
-            // var p5b = 2*B;
-            // var p6a = A;
-            // var p6b = 2*B;
 
             var p1 = mapPoint(lat + 0 - B, lng + A + C - B, 500);
             var p2 = mapPoint(lat + 0 - B, lng + A - B, 500);
@@ -649,20 +515,18 @@ var ENCOM = (function(ENCOM, THREE, document){
             var colorIndex = Math.floor(Math.random()*myColors.length);
             var colorRGB = myColors[colorIndex].rgb();
             var color = new THREE.Color();
-            color.setRGB(colorRGB[0]/256.0, colorRGB[1]/256.0, colorRGB[2]/256.0);//colorRGB[0], colorRGB[1], colorRGB[2]);
 
-            addTriangle(k+3, p4.x, p4.y, p4.z, p3.x, p3.y, p3.z, p5.x, p5.y, p5.z, lat, lng, color);
-            addTriangle(k+2, p3.x, p3.y, p3.z, p6.x, p6.y, p6.z, p5.x, p5.y, p5.z, lat, lng, color);
-            addTriangle(k+1, p2.x, p2.y, p2.z, p6.x, p6.y, p6.z, p3.x, p3.y, p3.z, lat, lng, color);
+            color.setRGB(colorRGB[0]/255.0, colorRGB[1]/255.0, colorRGB[2]/255.0);
+
             addTriangle(k, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p6.x, p6.y, p6.z, lat, lng, color);
+            addTriangle(k+1, p2.x, p2.y, p2.z, p6.x, p6.y, p6.z, p3.x, p3.y, p3.z, lat, lng, color);
+            addTriangle(k+2, p3.x, p3.y, p3.z, p6.x, p6.y, p6.z, p5.x, p5.y, p5.z, lat, lng, color);
+            addTriangle(k+3, p4.x, p4.y, p4.z, p3.x, p3.y, p3.z, p5.x, p5.y, p5.z, lat, lng, color);
             
-        }
+        };
 
         for(i = 0; i < this.points.length; i++){
-            // var point = mapPoint(this.points[i].lat, this.points[i].lon, 500);
-
-            addHex(i, this.points[i].lat, this.points[i].lon);
-
+            addHex.call(this, i, this.points[i].lat, this.points[i].lon);
         }
 
         geometry.offsets = [];
@@ -683,36 +547,22 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         geometry.computeBoundingSphere();
 
-
-        var material = new THREE.MeshPhongMaterial( {
-            color: 0xaaaaaa, ambient: 0xaaaaaa, specular: 0xffffff, shininess: 250,
-            side: THREE.DoubleSide, vertexColors: THREE.VertexColors
-        } );
-
-        // var material = new THREE.ShaderMaterial({
-
-        // });
-
         mesh = new THREE.Mesh( geometry, pointMaterial );
         this.scene.add( mesh );
 
-
     };
 
-    var swirls = function(){
-        var geometrySpline;
+    var createIntroLines = function(){
         var sPoint;
-        var _this = this;
-
-        this.swirlMaterial = new THREE.LineBasicMaterial({
-            color: 0x8FD8D8,
+        var introLinesMaterial = new THREE.LineBasicMaterial({
+            color: this.introLinesColor,
             transparent: true,
             linewidth: 2,
-            opacity: .8
+            opacity: .5
         });
 
-        for(var i = 0; i<75; i++){
-            geometrySpline = new THREE.Geometry();
+        for(var i = 0; i<this.introLinesCount; i++){
+            var geometry = new THREE.Geometry();
 
             var lat = Math.random()*180 + 90;
             var lon =  Math.random()*5;
@@ -725,15 +575,15 @@ var ENCOM = (function(ENCOM, THREE, document){
 
             for(var j = 0; j< lenBase; j++){
                 var thisPoint = mapPoint(lat, lon - j * 5);
-                sPoint = new THREE.Vector3(thisPoint.x*this.swirlMultiplier, thisPoint.y*this.swirlMultiplier, thisPoint.z*this.swirlMultiplier);
+                sPoint = new THREE.Vector3(thisPoint.x*this.introLinesAltitude, thisPoint.y*this.introLinesAltitude, thisPoint.z*this.introLinesAltitude);
 
-                geometrySpline.vertices.push(sPoint);  
+                geometry.vertices.push(sPoint);  
             }
 
-            this.swirl.add(new THREE.Line(geometrySpline, this.swirlMaterial));
+            this.introLines.add(new THREE.Line(geometry, introLinesMaterial));
 
         }
-        this.scene.add(this.swirl);
+        this.scene.add(this.introLines);
     };
 
     var removeMarker = function(marker){
@@ -836,60 +686,51 @@ var ENCOM = (function(ENCOM, THREE, document){
 
     /* globe constructor */
 
-    function Globe(opts){
+    function Globe(width, height, opts){
+        var baseSampleMultiplier = .7;
 
         if(!opts){
             opts = {};
         }
 
-        var baseSampleMultiplier = .85;
+        this.width = width;
+        this.height = height;
+        this.smokeIndex = 0;
+        this.points = [];
+        this.introLines = new THREE.Object3D();
+        this.markers = [];
+        this.quills = [];
+        this.markerCoords = {};
+        this.markerIndex = {};
+        this.satelliteAnimations = [];
+        this.satelliteMeshes = [];
+
 
         var defaults = {
-            width: document.width,
-            height: document.height,
             font: "Inconsolata",
+            baseColor: "#ffcc00",
+            blankPercentage: .08,
+            thinAntarctica: .01, // only show 1% of antartica... you can't really see it on the map anyhow
             mapUrl: "resources/equirectangle_projection.png",
-            size: 100,
-            swirlMultiplier: 1.15,
-            swirlTime: 2500,
+            introLinesAltitude: 1.10,
+            introLinesDuration: 2000,
+            introLinesColor: "#8FD8D8",
+            introLinesCount: 60,
             cameraDistance: 1700,
-            samples: [
-                { 
-                offsetLat: 0,
-                offsetLon: 0,
-                incLat: baseSampleMultiplier * 2,
-                incLon: baseSampleMultiplier * 4
-            },
-            { 
-                offsetLat: baseSampleMultiplier,
-                offsetLon: baseSampleMultiplier * 2,
-                incLat: baseSampleMultiplier * 2,
-                incLon: baseSampleMultiplier * 4
-            }
-            ],
-            points: [],
-            globe_pointAnimations: [],
-            swirl: new THREE.Object3D(),
-            markers: [],
-            quills: [],
-            markerCoords: {},
+            pointsPerDegree: 1.1,
+            pointSize: .45,
+            pointsVariance: .3,
             maxMarkers: 20,
             maxQuills:100,
-            markerIndex: {},
-            satelliteAnimations: [],
-            satelliteMeshes: [],
             data: []
-
         };
-
-
-        this.smokeIndex = 0;
-
-        extend(opts, defaults);
 
         for(var i in defaults){
             if(!this[i]){
                 this[i] = defaults[i];
+                if(opts[i]){
+                    this[i] = opts[i];
+                }
             }
         }
 
@@ -904,8 +745,7 @@ var ENCOM = (function(ENCOM, THREE, document){
         this.data.sort(function(a,b){return (b.lng - b.label.length * 2) - (a.lng - a.label.length * 2)});
 
         for(var i = 0; i< this.data.length; i++){
-            var delay = this.swirlTime*((180+this.data[i].lng)/360.0); 
-            this.data[i].when = delay + 100;
+            this.data[i].when = this.introLinesDuration*((180+this.data[i].lng)/360.0); 
         }
 
     }
@@ -913,37 +753,51 @@ var ENCOM = (function(ENCOM, THREE, document){
     /* public globe functions */
 
     Globe.prototype.init = function(cb){
-        var  projectionContext,
+        var callbackCount = 0,
             img = document.createElement('img'),
             projectionCanvas = document.createElement('canvas'),
+            projectionContext = projectionCanvas.getContext('2d');
             _this = this;
 
         document.body.appendChild(projectionCanvas);
-        projectionContext = projectionCanvas.getContext('2d');
-
-        var numRegistered = 0;
 
         var registerCallback = function(){
-            numRegistered++;
+            callbackCount++;
+
             return function(){
 
-                numRegistered--;
+                callbackCount--;
 
-                if(numRegistered == 0){
+                if(callbackCount == 0){
                     //image has loaded, may rsume
                     projectionCanvas.width = img.width;
                     projectionCanvas.height = img.height;
                     projectionContext.drawImage(img, 0, 0, img.width, img.height);
-                    for (var i = 0; i< _this.samples.length; i++){
 
-                        samplePoints(projectionContext,img.width, img.height, _this.samples[i].offsetLat, _this.samples[i].offsetLon, _this.samples[i].incLat, _this.samples[i].incLon, function(point){
-                            // if((point.lat > -60 || Math.random() > .9) && Math.random()>.2){ // thin it out (especially antartica)
+                    var samples= [
+                            { 
+                                offsetLat: 0,
+                                offsetLon: 0,
+                                incLat: (1 / _this.pointsPerDegree) * 2,
+                                incLon: (1 /_this.pointsPerDegree) * 4
+                            },
+                            { 
+                                offsetLat: (1 / _this.pointsPerDegree),
+                                offsetLon: (1 / _this.pointsPerDegree) * 2,
+                                incLat: (1 / _this.pointsPerDegree) * 2,
+                                incLon: ( 1/ _this.pointsPerDegree) * 4
+                            }
+                        ];
+
+                    for (var i = 0; i< samples.length; i++){
+
+                        samplePoints(projectionContext,img.width, img.height, samples[i].offsetLat, samples[i].offsetLon, samples[i].incLat, samples[i].incLon, function(point){
+                            if((point.lat > -60 && Math.random() > _this.blankPercentage) || Math.random() < _this.thinAntarctica){
                                 _this.points.push(point);
-                            // }
+                            }
                         });
                     }
                     document.body.removeChild(projectionCanvas);
-
 
                     // create the camera
 
@@ -958,8 +812,7 @@ var ENCOM = (function(ENCOM, THREE, document){
 
                     _this.scene.fog = new THREE.Fog( 0x000000, _this.cameraDistance-200, _this.cameraDistance+250 );
 
-                    // add the swirls
-                    swirls.call(_this);
+                    createIntroLines.call(_this);
 
                     // pregenerate the satellite canvas
                     var numFrames = 50;
@@ -987,39 +840,35 @@ var ENCOM = (function(ENCOM, THREE, document){
                         "",
                         "vec3 getPos(float lat, float lon)",
                         "{",
-                        "if (lon < -180.0){",
-                        "   lon = 180.0;",
-                        "}",
-                        "float phi = (90.0 - lat) * PI / 180.0;",
-                        "float theta = (180.0 - lon) * PI / 180.0;",
-                        "float x = DISTANCE * sin(phi) * cos(theta);",
-                        "float y = DISTANCE * cos(phi);",
-                        "float z = DISTANCE * sin(phi) * sin(theta);",
-                        "return vec3(x, y, z);",
+                        "   if (lon < -180.0){",
+                        "      lon = lon + 360.0;",
+                        "   }",
+                        "   float phi = (90.0 - lat) * PI / 180.0;",
+                        "   float theta = (180.0 - lon) * PI / 180.0;",
+                        "   float x = DISTANCE * sin(phi) * cos(theta);",
+                        "   float y = DISTANCE * cos(phi);",
+                        "   float z = DISTANCE * sin(phi) * sin(theta);",
+                        "   return vec3(x, y, z);",
                         "}",
                         "",
                         "void main()",
                         "{",
-                        "float dt = currentTime - myStartTime;",
-                        "if (dt < 0.0){",
-                        "dt = 0.0;",
-                        "}",
-                        "if (dt > 0.0 && active > 0.0) {",
-                        "dt = mod(dt,1500.0);",
-                        "}",
-                        "float opacity = 1.0 - dt/ 1500.0;",
-                        "if (dt == 0.0 || active == 0.0){",
-                        "opacity = 0.0;",
-                        "}",
-                        "float cameraAngle = (2.0 * PI) / (20000.0/currentTime);",
-                        "float myAngle = (180.0-myStartLon) * PI / 180.0;",
-                        "opacity = opacity * (cos(myAngle - cameraAngle - PI) + 1.0)/2.0;",
-                        "float newPosRaw = myStartLon - (dt / 50.0);",
-                        "vec3 newPos = getPos(myStartLat, myStartLon - ( dt / 50.0));",
-                        "vColor = vec4( color, opacity );", //     set color associated to vertex; use later in fragment shader.
-                        "vec4 mvPosition = modelViewMatrix * vec4( newPos, 1.0 );",
-                        "gl_PointSize = 2.5 - (dt / 1500.0);",
-                        "gl_Position = projectionMatrix * mvPosition;",
+                        "   float dt = currentTime - myStartTime;",
+                        "   if (dt < 0.0){",
+                        "      dt = 0.0;",
+                        "   }",
+                        "   if (dt > 0.0 && active > 0.0) {",
+                        "      dt = mod(dt,1500.0);",
+                        "   }",
+                        "   float opacity = 1.0 - dt/ 1500.0;",
+                        "   if (dt == 0.0 || active == 0.0){",
+                        "      opacity = 0.0;",
+                        "   }",
+                        "   vec3 newPos = getPos(myStartLat, myStartLon - ( dt / 50.0));",
+                        "   vColor = vec4( color, opacity );", //     set color associated to vertex; use later in fragment shader.
+                        "   vec4 mvPosition = modelViewMatrix * vec4( newPos, 1.0 );",
+                        "   gl_PointSize = 2.5 - (dt / 1500.0);",
+                        "   gl_Position = projectionMatrix * mvPosition;",
                         "}"
                     ].join("\n");
 
@@ -1027,7 +876,10 @@ var ENCOM = (function(ENCOM, THREE, document){
                         "varying vec4 vColor;",     
                         "void main()", 
                         "{",
-                        "gl_FragColor = vColor;",
+                        "   float depth = gl_FragCoord.z / gl_FragCoord.w;",
+                        "   float fogFactor = smoothstep(" + (parseInt(_this.cameraDistance)-200) +".0," + (parseInt(_this.cameraDistance+375)) +".0, depth );",
+                        "   vec3 fogColor = vec3(0.0);",
+                        "   gl_FragColor = mix( vColor, vec4( fogColor, gl_FragColor.w ), fogFactor );",
                         "}"
                     ].join("\n");
 
@@ -1065,10 +917,10 @@ var ENCOM = (function(ENCOM, THREE, document){
                     _this.smokeAttributes.myStartLon.needsUpdate = true;
                     _this.smokeAttributes.active.needsUpdate = true;
 
-                    var particleSystem = new THREE.ParticleSystem( _this.smokeParticleGeometry, _this.smokeMaterial);
+                    _this.scene.add( new THREE.ParticleSystem( _this.smokeParticleGeometry, _this.smokeMaterial));
 
-                    _this.scene.add( particleSystem);
-                    addBufferParticles.call(_this);
+
+                    createParticles.call(_this);
 
                     cb();
                 }
@@ -1077,7 +929,6 @@ var ENCOM = (function(ENCOM, THREE, document){
         };
 
         this.markerTopTexture = new THREE.ImageUtils.loadTexture( 'resources/markertop.png', undefined, registerCallback());
-        this.hexTexture = THREE.ImageUtils.loadTexture( "resources/hex.png", undefined, registerCallback());
 
         this.specialMarkerTexture = new THREE.Texture(createSpecialMarkerCanvas.call(this));
         this.specialMarkerTexture.needsUpdate = true;
@@ -1091,7 +942,6 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         var _this = this;
         var point = mapPoint(lat,lng);
-
 
         /* check to see if we have somebody at that exact lat-lng right now */
 
@@ -1133,7 +983,7 @@ var ENCOM = (function(ENCOM, THREE, document){
             // create the new one
 
             /* add the text */
-            var textSprite = createLabel(text, point.x*1.18, point.y*1.18, point.z*1.18, 18, "white");
+            var textSprite = createLabel.call(this,text, point.x*1.18, point.y*1.18, point.z*1.18, 18, "white");
             this.scene.add(textSprite);
 
             /* add the top */
@@ -1205,9 +1055,6 @@ var ENCOM = (function(ENCOM, THREE, document){
         })
         .start();
 
-
-
-
     }
 
     Globe.prototype.addConnectedPoints = function(lat1, lng1, text1, lat2, lng2, text2){
@@ -1239,28 +1086,28 @@ var ENCOM = (function(ENCOM, THREE, document){
         this.scene.add(marker1);
         this.scene.add(marker2);
 
-        var textSprite1 = createLabel(text1.toUpperCase(), point1.x*1.25, point1.y*1.25, point1.z*1.25, 25, "white", "#FFCC00");
-        var textSprite2 = createLabel(text2.toUpperCase(), point2.x*1.25, point2.y*1.25, point2.z*1.25, 25, "white", "#FFCC00");
+        var textSprite1 = createLabel.call(this, text1.toUpperCase(), point1.x*1.25, point1.y*1.25, point1.z*1.25, 25, "white", "#FFCC00");
+        var textSprite2 = createLabel.call(this, text2.toUpperCase(), point2.x*1.25, point2.y*1.25, point2.z*1.25, 25, "white", "#FFCC00");
 
         this.scene.add(textSprite1);
         this.scene.add(textSprite2);
 
         new TWEEN.Tween({x: 0, y: 0})
-        .to({x: 50, y: 50}, 2000)
-        .easing( TWEEN.Easing.Elastic.InOut )
-        .onUpdate(function(){
-            marker1.scale.set(this.x, this.y);
-        })
-        .start();
+            .to({x: 50, y: 50}, 2000)
+            .easing( TWEEN.Easing.Elastic.InOut )
+            .onUpdate(function(){
+                marker1.scale.set(this.x, this.y);
+            })
+            .start();
 
         new TWEEN.Tween({x: 0, y: 0})
-        .to({x: 45, y: 45}, 2000)
-        .easing( TWEEN.Easing.Elastic.InOut )
-        .onUpdate(function(){
-            marker2.scale.set(this.x, this.y);
-        })
-        .delay(2200)
-        .start();
+            .to({x: 45, y: 45}, 2000)
+            .easing( TWEEN.Easing.Elastic.InOut )
+            .onUpdate(function(){
+                marker2.scale.set(this.x, this.y);
+            })
+            .delay(2200)
+            .start();
 
         var geometrySpline = new THREE.Geometry();
         var materialSpline = new THREE.LineBasicMaterial({
@@ -1344,9 +1191,7 @@ var ENCOM = (function(ENCOM, THREE, document){
 
         this.scene.add(new THREE.Line(geometrySpline, materialSpline));
         this.scene.add(new THREE.Line(geometrySpline2, materialSpline2, THREE.LinePieces));
-
     }
-
 
     Globe.prototype.addSatellite = function(lat, lon, dist, newTexture){
 
@@ -1457,25 +1302,21 @@ var ENCOM = (function(ENCOM, THREE, document){
             mesh.rotateZ(mesh.tiltDirection * Math.PI/2);
             mesh.rotateZ(Math.sin(this.cameraAngle + (mesh.lon / 180) * Math.PI) * mesh.tiltMultiplier * mesh.tiltDirection * -1);
 
-
         }
 
-        if(this.swirlTime > this.totalRunTime){
-            if(this.totalRunTime/this.swirlTime < .1){
-                this.swirlMaterial.opacity = (this.totalRunTime/this.swirlTime)*10 - .2;
-            } else if(this.totalRunTime/this.swirlTime < .9){
-                this.swirlMaterial.opacity = .8;
-            }if(this.totalRunTime/this.swirlTime > .9){
-                // this.swirlMaterial.opacity = Math.max(1-this.totalRunTime/this.swirlTime,0);
+        if(this.introLinesDuration > this.totalRunTime){
+            if(this.totalRunTime/this.introLinesDuration < .1){
+                this.introLines.children[0].material.opacity = (this.totalRunTime/this.introLinesDuration) * (1 / .1) - .2;
+            }if(this.totalRunTime/this.introLinesDuration > .8){
+                this.introLines.children[0].material.opacity = Math.max(1-this.totalRunTime/this.introLinesDuration,0) * (1 / .2);
             }
-            this.swirl.rotateY((2 * Math.PI)/(this.swirlTime/renderTime));
-        } else if(this.swirl){
-            this.scene.remove(this.swirl);
-            delete[this.swirl];
-
+            this.introLines.rotateY((2 * Math.PI)/(this.introLinesDuration/renderTime));
+        } else if(this.introLines){
+            this.scene.remove(this.introLines);
+            delete[this.introLines];
         }
 
-        // do the particles
+        // do the shaders
 
         this.smokeUniforms.currentTime.value = this.totalRunTime;
         this.pointUniforms.currentTime.value = this.totalRunTime;
