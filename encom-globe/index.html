@@ -2,22 +2,20 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Encom Sphere</title>
+        <title>Encom Globe</title>
         <link href="styles.css" rel="stylesheet" type="text/css" />
         <script src="include/three.min.js"></script>
         <script src="include/tween.min.js"></script>
         <script src="include/pusher.color.js"></script>
-        <script src="data.js"></script>
+        <script src="data.json"></script>
         <script src="encom-globe.js"></script>
         <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 
         <script>
             var globe;
 
-            globe = new ENCOM.Globe({
+            globe = new ENCOM.Globe(1000, 800, {
                 font: "Inconsolata",
-                width: 1000,
-                height: 800,
                 data: data
                 });
 
