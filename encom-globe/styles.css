@@ -14,6 +14,12 @@ body {
     margin: 0;
     padding: 0;
 }
+#thumbprint {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    cursor: pointer;
+}
 
 #canvas {
     margin: 0;
@@ -53,6 +59,78 @@ body {
     width: 300px;
 }
 
+#options {
+    position: absolute;
+    top: 0;
+    left: -270px;
+    bottom: 0;
+    width: 350px;
+    background-color: rgba(0,0,0,.9);
+    padding-left: 35px;
+    padding-top: 55px;
+    border-right: 2px solid #6fc0ba;
+    box-shadow: 0 0 2px #005b8e, inset 0 0 2px #005b8e;
+}
+
+#options-content {
+    opacity: 0;
+}
+
+
+.header{
+
+    border-top: 1px solid #1d2c33;
+    border-bottom: 1px solid #1d2c33;
+    /* box-shadow: 0 0 6px #005b8e, inset 0 0 6px #005b8e; */
+    color: #fff;
+    padding: 2px 0;
+    visibility: hidden;
+    left: 25px;
+    width: 300px;
+    font-size: 6pt
+
+}
+
+.header-left-section {
+    float: left;
+    width: 80%;
+    background-color: #000;
+    margin-left: -5px;
+    padding: 0 8px;
+}
+
+.header-right-section {
+    float: right;
+    width: 20%;
+    background-color: #000;
+    text-align: right;
+    margin-right: -5px;
+    padding: 0 8px;
+}
+
+#header-bottom {
+    position: absolute;
+    bottom: 100px;
+}
+
+
+#header-top {
+    position: absolute;
+    top: 25px;
+}
+
+.header-animator{
+    position: absolute;
+    top: 300px;
+    left: 25px;
+    width: 300px;
+    height: 2px;
+    border-top: 1px solid #1d2c33;
+    border-bottom: 1px solid #1d2c33;
+    visibility: hidden;
+}
+
+/*
 
 .header{
     color: #fff;
@@ -65,7 +143,6 @@ body {
     overflow: hidden;
 }
 
-
 .header:before{
     content: "";
     display: block;
@@ -77,6 +154,7 @@ body {
     background: #FFCC00;
 
 }
+*/
 
 #realtime-info {
     font-size: .8em;
