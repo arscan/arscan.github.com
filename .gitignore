@@ -1,3 +1,5 @@
 _site/
 *.swp
 *.swo
+encom-globe/bower_components/
+encom-globe/node_modules/
