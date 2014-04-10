@@ -1,13 +1,13 @@
 $(function(){
 
-    var hexasphere = new Hexasphere(15, 6, .9);
-    var width = $(window).width();
-    var height = $(window).height();
+    var hexasphere = new Hexasphere(30, 30, .95);
+    var width = $(window).innerWidth() - 20;
+    var height = $(window).innerHeight() - 20;
 
     var renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setSize( width, height);
 
-    var cameraDistance = 45;
+    var cameraDistance = 65;
     var camera = new THREE.PerspectiveCamera( cameraDistance, width / height, 1, 200);
     camera.position.z = -cameraDistance;
 
@@ -73,13 +73,6 @@ $(function(){
         }
 
     }
-
-    console.log("---- lon");
-    console.log(maxLon);
-    console.log(minLon);
-    console.log("---- lat");
-    console.log(maxLat);
-    console.log(minLat);
 
     var startTime = Date.now();
     var lastTime = Date.now();
