@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/arscan/arscan.github.com",
   "dependencies": {
-    "hexasphere.js": "0.0.1"
+    "hexasphere.js": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
