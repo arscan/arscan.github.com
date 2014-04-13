@@ -1,6 +1,6 @@
 {
   "name": "hexasphere.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "hexasphere",
   "main": "build/hexasphere.js",
   "dependencies": {
@@ -29,10 +29,10 @@
     "url": "https://github.com/arscan/hexashere.js/issues"
   },
   "homepage": "https://github.com/arscan/hexashere.js",
-  "_id": "hexasphere.js@0.0.3",
-  "_from": "hexasphere.js@0.0.3",
+  "_id": "hexasphere.js@0.0.4",
+  "_from": "hexasphere.js@0.0.4",
   "dist": {
-    "shasum": "7d03a9d3a39e545a1ddff6708d1f7c503c887449"
+    "shasum": "92d50b8454fc7938025c19c226af73c873864af4"
   },
-  "_resolved": "https://registry.npmjs.org/hexasphere.js/-/hexasphere.js-0.0.3.tgz"
+  "_resolved": "https://registry.npmjs.org/hexasphere.js/-/hexasphere.js-0.0.4.tgz"
 }
