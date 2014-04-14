@@ -15,7 +15,14 @@ module.exports = function(grunt) {
                     cwd: 'node_modules/hexasphere.js/',
                     src: '**',
                     dest: 'hexasphere/'
-                }]
+                },
+                { 
+                    expand: true,
+                    cwd: 'node_modules/encom-globe/',
+                    src: '**',
+                    dest: 'encom-globe/'
+                }
+                ]
             }
         }
     });
