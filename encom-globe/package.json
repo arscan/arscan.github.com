@@ -1,17 +1,16 @@
 {
   "name": "encom-globe",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "encom-globe",
   "main": "src/Globe.js",
   "devDependencies": {
     "minimist": "0.0.8",
     "grunt": "~0.4.2",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-copy": "~0.5.0",
     "grunt-shell": "~0.6.4",
     "browserify": "~3.41.0",
-    "grunt-browserify": "~2.0.7"
+    "grunt-browserify": "~2.0.7",
+    "pngjs": "~0.4.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -38,10 +37,10 @@
     "url": "https://github.com/arscan/encom-globe/issues"
   },
   "homepage": "https://github.com/arscan/encom-globe",
-  "_id": "encom-globe@0.1.0",
-  "_from": "encom-globe@0.1.0",
+  "_id": "encom-globe@0.2.1",
+  "_from": "encom-globe@0.2.1",
   "dist": {
-    "shasum": "90226d3c8de1862568d2da5f1e31faa28e78bcb9"
+    "shasum": "e812e6000dee25076282fc66243479760a17705f"
   },
-  "_resolved": "https://registry.npmjs.org/encom-globe/-/encom-globe-0.1.0.tgz"
+  "_resolved": "https://registry.npmjs.org/encom-globe/-/encom-globe-0.2.1.tgz"
 }

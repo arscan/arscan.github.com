@@ -41691,7 +41691,7 @@ var createParticles = function(){
         side: THREE.DoubleSide
     });
 
-    var triangles = this.earthTiles.length * 4;
+    var triangles = this.tiles.length * 4;
 
     var geometry = new THREE.BufferGeometry();
 
@@ -41767,24 +41767,22 @@ var createParticles = function(){
 
     };
 
-    for(var i =0; i< this.earthTiles.length; i++){
-        var t = this.earthTiles[i];
+    for(var i =0; i< this.tiles.length; i++){
+        var t = this.tiles[i];
         var k = i * 4;
 
         var colorIndex = Math.floor(Math.random()*myColors.length);
         var colorRGB = myColors[colorIndex].rgb();
         var color = new THREE.Color();
 
-        var latLon = utils.latLonFromXYZ(t.centerPoint.x, t.centerPoint.y, t.centerPoint.z, 500);
-
         color.setRGB(colorRGB[0]/255.0, colorRGB[1]/255.0, colorRGB[2]/255.0);
 
-        addTriangle(k, t.boundary[0].x, t.boundary[0].y, t.boundary[0].z, t.boundary[1].x, t.boundary[1].y, t.boundary[1].z, t.boundary[2].x, t.boundary[2].y, t.boundary[2].z, latLon.lat, latLon.lon, color);
-        addTriangle(k+1, t.boundary[0].x, t.boundary[0].y, t.boundary[0].z, t.boundary[2].x, t.boundary[2].y, t.boundary[2].z, t.boundary[3].x, t.boundary[3].y, t.boundary[3].z, latLon.lat, latLon.lon, color);
-        addTriangle(k+2, t.boundary[0].x, t.boundary[0].y, t.boundary[0].z, t.boundary[3].x, t.boundary[3].y, t.boundary[3].z, t.boundary[4].x, t.boundary[4].y, t.boundary[4].z, latLon.lat, latLon.lon, color);
+        addTriangle(k, t.b[0].x, t.b[0].y, t.b[0].z, t.b[1].x, t.b[1].y, t.b[1].z, t.b[2].x, t.b[2].y, t.b[2].z, t.lat, t.lon, color);
+        addTriangle(k+1, t.b[0].x, t.b[0].y, t.b[0].z, t.b[2].x, t.b[2].y, t.b[2].z, t.b[3].x, t.b[3].y, t.b[3].z, t.lat, t.lon, color);
+        addTriangle(k+2, t.b[0].x, t.b[0].y, t.b[0].z, t.b[3].x, t.b[3].y, t.b[3].z, t.b[4].x, t.b[4].y, t.b[4].z, t.lat, t.lon, color);
 
-        if(t.boundary.length > 5){ // for the occasional pentagon that i have to deal with
-            addTriangle(k+3, t.boundary[0].x, t.boundary[0].y, t.boundary[0].z, t.boundary[5].x, t.boundary[5].y, t.boundary[5].z, t.boundary[4].x, t.boundary[4].y, t.boundary[4].z, latLon.lat, latLon.lon, color);
+        if(t.b.length > 5){ // for the occasional pentagon that i have to deal with
+            addTriangle(k+3, t.b[0].x, t.b[0].y, t.b[0].z, t.b[5].x, t.b[5].y, t.b[5].z, t.b[4].x, t.b[4].y, t.b[4].z, t.lat, t.lon, color);
         }
 
     }
@@ -41956,12 +41954,13 @@ function Globe(width, height, opts){
 /* public globe functions */
 
 Globe.prototype.init = function(cb){
-    var callbackCount = 0,
-    img = document.createElement('img'),
-    projectionCanvas = document.createElement('canvas'),
-    projectionContext = projectionCanvas.getContext('2d');
-    _this = this;
+    //var callbackCount = 0,
+    //img = document.createElement('img'),
+    //projectionCanvas = document.createElement('canvas'),
+    //projectionContext = projectionCanvas.getContext('2d');
+    //_this = this;
 
+    /*
     document.body.appendChild(projectionCanvas);
 
     var registerCallback = function(){
@@ -42037,6 +42036,39 @@ Globe.prototype.init = function(cb){
     img.addEventListener('load', registerCallback());
 
     img.src = this.mapUrl;
+   */
+
+                // create the camera
+
+                
+    this.camera = new THREE.PerspectiveCamera( 50, this.width / this.height, 1, this.cameraDistance + 250 );
+    this.camera.position.z = this.cameraDistance;
+
+    this.cameraAngle=(Math.PI * 2) * .5;
+
+    // create the scene
+
+    this.scene = new THREE.Scene();
+
+    this.scene.fog = new THREE.Fog( 0x000000, this.cameraDistance-200, this.cameraDistance+250 );
+
+    createIntroLines.call(this);
+
+    // pregenerate the satellite canvas
+    var numFrames = 50;
+    var pixels = 100;
+    var rows = 10;
+    var waveStart = Math.floor(numFrames/8);
+    var numWaves = 8;
+    var repeatAt = Math.floor(numFrames-2*(numFrames-waveStart)/numWaves)+1;
+    // this.satelliteCanvas = createSatelliteCanvas.call(this, numFrames, pixels, rows, waveStart, numWaves);
+
+    // create the smoke particles
+
+    this.smokeProvider = new SmokeProvider(this.scene);
+
+    createParticles.call(this);
+    cb();
 };
 
 Globe.prototype.destroy = function(callback){
@@ -43391,14 +43423,6 @@ var utils = {
       return canvas;
 
   },
-  latLonFromXYZ: function(x, y, z, radius){
-      var theta = Math.acos(y / radius); //lat 
-      var phi = (Math.atan2(x ,z) + Math.PI/2) % (Math.PI *2); // lon
-      return {
-          lat: 180 * theta / Math.PI - 90,
-          lon: (360 * phi / (2* Math.PI))
-      };
-  }
 
 };
 
