@@ -1,0 +1,798 @@
+body {
+    background-color: black;
+    font-size:6pt;
+    /* color: #6fc0ba; */
+    color: #fff;
+}
+
+a {
+    color: #00eeee;
+}
+
+strong {
+    color: #ffcc00;
+
+}
+
+h2, p, li {
+    font-size: 8pt;
+    line-height: 12pt;
+}
+
+ul {
+    list-style: none;
+    margin: 0px;
+    padding-left: 5px;
+}
+
+.container-border{
+
+    border: 2px solid #6fc0ba;
+    border-radius: 5px;
+    box-shadow: 0 0 2px #005b8e, inset 0 0 2px #005b8e;
+}
+#lt-container-outside{
+    position:absolute;
+    width: 1140px;
+    height: 610px;
+    z-index: 10;
+
+}
+
+#lt-container-inside {
+    position:absolute;
+    left: 40px;
+    top:20px;
+    width: 1100px;
+    height: 600px;
+    z-index: 20;
+}
+
+#lt-left-column{
+    position: absolute;
+    left: 52px;
+    width: 380px;
+}
+
+#lt-right-column{
+    position: absolute;
+    left: 500px;
+    width: 480px;
+}
+
+.lt-header{
+
+    border-top: 1px solid #1d2c33;
+    border-bottom: 1px solid #1d2c33;
+    /* box-shadow: 0 0 6px #005b8e, inset 0 0 6px #005b8e; */
+    color: #fff;
+    padding: 2px 0;
+    visibility: hidden;
+    width: 100%;
+
+}
+
+.lt-header-left-section {
+    float: left;
+    width: 80%;
+    background-color: #000;
+    margin-left: -5px;
+    padding: 0 8px;
+}
+
+.lt-header-right-section {
+    float: right;
+    width: 10%;
+    background-color: #000;
+    text-align: right;
+    margin-right: -5px;
+    padding: 0 8px;
+}
+
+.alt-1 {
+    color: #00eeee;
+}
+.alt-2 {
+    color: #ffcc00;
+}
+
+#lt-header-top-left {
+    position: absolute;
+    top: 25px;
+}
+
+#lt-header-top-right {
+    position: absolute;
+    top: 25px;
+}
+
+#lt-header-bottom-left {
+    position: absolute;
+    top: 550px;
+}
+
+#lt-header-bottom-left .lt-header-left-section{
+    width: 45%
+}
+#lt-header-bottom-left .lt-header-right-section{
+    width: 45%
+}
+
+#lt-bottom-boxes-1 {
+    margin-top: 1px;
+    float: right;
+    border: 1px solid #6fc0ba;
+    border-radius: 2px;
+    height: 4px;
+    width: 35px;
+}
+
+#lt-bottom-boxes-2 {
+    margin-top: 1px;
+    margin-right: 20px;
+    float: right;
+    border: 1px solid #1b2f2d;
+    border-radius: 2px;
+    height: 4px;
+    width: 25px;
+}
+
+#lt-bottom-boxes-3 {
+    margin-top: 1px;
+    margin-right: 4px;
+    float: right;
+    border: 1px solid #6fc0ba;
+    border-radius: 2px;
+    height: 4px;
+    width: 30px;
+}
+
+
+#lt-header-bottom-right {
+    position: absolute;
+    top: 550px;
+}
+
+.lt-header-animator-left {
+    position: absolute;
+    top: 300px;
+    width: 100%;
+    height: 2px;
+    border-top: 1px solid #1d2c33;
+    border-bottom: 1px solid #1d2c33;
+    visibility: hidden;
+}
+
+.lt-header-animator-right {
+    position: absolute;
+    top: 300px;
+    width: 100%;
+    height: 2px;
+    border-top: 1px solid #1d2c33;
+    border-bottom: 1px solid #1d2c33;
+    visibility: hidden;
+}
+
+.content-container {
+
+    border: 2px solid #6fc0ba;
+    border-radius: 2px;
+    /* box-shadow: 0 0 6px #005b8e, inset 0 0 6px #005b8e; */
+    padding: 3px;
+    opacity: 0;
+}
+
+.content {
+
+    border: 1px solid #1b2f2d;
+    /* box-shadow: 0 0 6px #005b8e, inset 0 0 6px #005b8e; */
+}
+
+.content-container h2 {
+    color: #fff;
+    margin: 0;
+    border-bottom: 1px solid #1b2f2d;
+    padding: 2px 4px;
+    font-weight: bold;
+}
+
+.content-container h2 em{
+    font-style: normal;
+    float: right;
+    font-size: .8em;
+    padding-top: 1px;
+    color: #00eeee;
+
+}
+
+.content-container p {
+    margin: 2px 0 0;
+    padding: 4px 6px;
+
+}
+
+#lt-readme {
+    position: absolute;
+    top: 60px;
+    overflow: hidden;
+}
+
+#lt-readme .content {
+    height: 300px;
+    overflow: hidden;
+}
+#lt-mobile-readme {
+    position: absolute;
+    top: 260px;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+}
+
+#lt-mobile-readme .content {
+    height: 290px;
+}
+
+#lt-bandwidth {
+    position: absolute;
+    top: 390px;
+}
+
+#lt-globalization {
+    position: absolute;
+    top: 60px;
+    width: 470px;
+}
+
+#lt-globalization .content {
+    height: 260px;
+    overflow: hidden;
+}
+
+#lt-command-line {
+    width: 318px;
+    float: left;
+    height: 129px;
+    margin-top: 5px;
+    padding: 5px;
+    overflow: hidden;
+}
+
+#lt-command-lines {
+    white-space: nowrap;
+}
+
+#lt-command-line-header {
+    border-bottom: 1px dashed #fff;
+    padding-bottom: 3px;
+
+}
+
+.command {
+    clear: both;
+    padding-top: 5px;
+    font-size: 8pt;
+}
+
+.command-blinker {
+    background-color: #00eeee;
+}
+
+.blink {
+    animation: blink 1s steps(2, start) infinite;
+    -webkit-animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink {
+    to { visibility: hidden; }
+}
+@-webkit-keyframes blink {
+    to { visibility: hidden; }
+}
+
+.command-text {
+    color: #aaa;
+
+}
+.response {
+    padding-top: 3px;
+    padding-left: 25px;
+    font-size: 7pt;
+}
+
+.response .alert{
+    font-color: #aa0000;
+}
+
+.response .highlight{
+    color: #ffcc00;
+}
+
+.ls {
+    float: left;
+    width: 40px;
+    padding: 2px;
+    margin-right: 25px;
+    margin-top: 5px;
+
+}
+
+.ls-highlight {
+    background-color: #fff;
+    color: #000;
+}
+
+.folder-container {
+    margin: 8px 18px 0;
+    float: left;
+    cursor: pointer;
+}
+
+
+.folder-label{
+    background-color: #000;
+    color: #fff;
+    font-size: 10px;
+    margin-bottom: 5px;
+    padding: 1px;
+    width: 70px;
+    text-transform: uppercase;
+    border-radius: 2px;
+}
+
+.folder-container:hover .folder-label{
+    background-color: #feb400;
+    color: #000;
+}
+
+.folder-label.selected{
+    background-color: #feb400;
+    color: #000;
+}
+
+#lt-launch-github {
+    margin-top: 20px;
+}
+
+.selected-folder {
+    background-color: #feb400;
+    color: #000;
+}
+
+.folder-big {
+    background-image: url(../images/encom_folder_big.png);
+    padding: 0px;
+    margin: 0px;
+    width:95px;
+    height: 63px;
+}
+
+.folder-small {
+    background-image: url(../images/encom_folder_small.png);
+    padding: 0px;
+    margin: 0px;
+    width:80px;
+    height: 49px;
+}
+
+#lt-keyboard {
+    margin-left: 8px;
+    position: absolute;
+    top: 355px;
+    width: 470px;
+}
+
+#lt-keyboard div{
+    background-color: rgba(255,255,255,0);
+    border-radius: 5px;
+    float: left;
+    width: 35px;
+    text-align:center;
+    padding-top: 10px;
+    margin-top: 5px;
+    height: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #00eeee;
+    cursor: pointer;
+}
+
+#lt-keyboard #k-9{
+    clear: both;
+    margin-left:10px;
+}
+
+#lt-keyboard #k-500{
+    clear: both;
+    margin-left:20px;
+}
+
+#lt-keyboard #k-16{
+    clear: both;
+    margin-left:5px;
+}
+
+#lt-keyboard #k-32 {
+    clear: both;
+    width: 300px;
+    height: 5px;
+    border: 1px solid #00eeee;
+    border-radius: 3px;
+    margin-top: 10px;
+    margin-left: 80px;
+
+
+}
+
+#lt-far-right-column {
+    position: absolute;
+    left: 1000px;
+    height: 600px;
+    width: 80px;
+
+}
+
+#lt-encom-logo {
+    font-family: 'Terminator';
+    position: absolute;
+    font-size: 8pt;
+    padding-left: 2px;
+    top: 25px;
+    left: 20px;
+    color: #6fc0ba;
+    border-left: 2px solid #6fc0ba;
+    border-top: 2px solid #6fc0ba;
+    border-bottom: 2px solid #6fc0ba;
+    border-radius: 4px;
+}
+
+#lt-thumbprint {
+    position: absolute;
+    left: 15px;
+    top: 500px;
+    z-index: 200;
+    -webkit-animation: pulsate 5s;
+    -webkit-animation-iteration-count: 100; 
+    animation: pulsate 5s ease-out;
+    animation-iteration-count: 100; 
+}
+
+@-webkit-keyframes pulsate { 
+    0% {opacity: .3;}
+    50% {opacity: 1.0;}
+    100% {opacity: 0.3;}
+}
+
+@keyframes pulsate { 
+    0% {opacity: 0.3;}
+    50% {opacity: 1.0;}
+    100% {opacity: 0.3;}
+}
+}
+
+
+@media (max-width: 1100px) { 
+
+    #lt-far-right-column {
+        display: none;
+    }
+
+    #lt-left-column {
+        display: none;
+    }
+    #lt-right-column {
+        left: 0;
+        top: 0;
+        width: 330px;
+    }
+
+    .content-container {
+        width: 330px;
+    }
+    #lt-globalization {
+        top: 30px;
+        width: 320px;
+        height: 200px;
+    }
+
+    #lt-globalization .content{
+        height: 200px;
+    }
+    #lt-container-outside{
+        top: 0;
+        width: 350px;
+        height: 610px;
+        z-index: 10;
+        box-shadow: none;
+        border: none;
+    }
+
+    #lt-keyboard {
+        display: none;
+    }
+
+    #lt-container-inside {
+        position:absolute;
+        left: 0;
+        top:0;
+        width: 330px;
+        height: 600px;
+        z-index: 20;
+        box-shadow: none;
+        border: none;
+    }
+    #lt-header-top-right {
+        position: absolute;
+        top: 0;
+    }
+
+    #lt-header-bottom-right {
+        position: absolute;
+        top: 580px;
+    }
+
+    .lt-header-left-section {
+        width:65%;
+
+    }
+    .lt-header-right-section {
+        width:25%;
+
+    }
+
+    h2 em, h2 .alt-1 {
+        display:none;
+
+    }
+
+    #lt-command-line {
+        display:none;
+    }
+
+    #lt-mobile-readme {
+        width: 320px;
+    }
+
+    .folder-big {
+        background-image: url(../images/encom_folder_small.png);
+        width:80px;
+        height: 49px;
+        margin: 0;
+    }
+
+    #lt-launch-github {
+        margin-top: 8px;
+    }
+
+    .folder-small {
+        background-image: url(../images/encom_folder_small.png);
+        width:80px;
+        height: 49px;
+        margin: 0;
+    }
+
+    .folder-container {
+        margin: 8px 12px;
+
+
+    }
+
+}
+
+@media (min-width: 1600px) { 
+
+    body {
+        font-size:8pt;
+    }
+
+
+    h2, p, li {
+        font-size: 12pt;
+        line-height: 16pt;
+    }
+
+    #lt-container-outside{
+        position:absolute;
+        /* width: 1140px; */
+        /* height: 610px; */
+        width: 1540px;
+        height: 760px;
+
+    }
+
+    #lt-container-inside {
+        /* width: 1100px; */
+        /* height: 600px; */
+        width: 1500px;
+        height: 750px;
+    }
+
+    #lt-left-column{
+        /*width: 380px;*/
+        width: 580px;
+    }
+
+    #lt-right-column{
+        position: absolute;
+        left: 700px;
+        width: 680px;
+    }
+
+
+    .lt-header-right-section {
+        float: right;
+        width: 10%;
+        background-color: #000;
+        text-align: right;
+        margin-right: -5px;
+        padding: 0 8px;
+    }
+
+    #lt-header-bottom-left {
+        position: absolute;
+        top: 700px;
+    }
+
+    #lt-bottom-boxes-1 {
+        margin-top: 3px;
+        height: 6px;
+        width: 35px;
+    }
+
+    #lt-bottom-boxes-2 {
+        margin-top: 3px;
+        height: 6px;
+        width: 30px;
+    }
+
+    #lt-bottom-boxes-3 {
+        margin-top: 3px;
+        margin-right: 8px;
+        height: 6px;
+        width: 35px;
+    }
+
+    #lt-header-bottom-right {
+        position: absolute;
+        top: 700px;
+    }
+
+    .lt-header-animator-left {
+        top: 350px;
+    }
+
+    .lt-header-animator-right {
+        top: 350px;
+    }
+
+    #lt-readme .content {
+        height: 380px;
+    }
+    #lt-readme .content p{
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 8px;
+    }
+
+    #lt-bandwidth {
+        top: 490px;
+        width: 570px;
+    }
+
+    #lt-globalization {
+        width: 680px;
+    }
+
+    #lt-globalization .content {
+        height: 360px;
+    }
+
+    #lt-command-line {
+        width: 440px;
+        height: 185px;
+        margin-top:20px;
+    }
+
+    .response {
+        padding-top: 3px;
+        padding-left: 25px;
+        font-size: 7pt;
+    }
+
+    .response .alert{
+        font-color: #aa0000;
+    }
+
+    .response .highlight{
+        color: #ffcc00;
+    }
+
+    .ls {
+        float: left;
+        width: 40px;
+        padding: 2px;
+        margin-right: 25px;
+        margin-top: 5px;
+
+    }
+
+    .ls-highlight {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .folder-container {
+        margin: 8px 30px 0;
+    }
+
+    .folder-label{
+        font-size: 10pt;
+        width: 92px;
+    }
+
+
+    #lt-launch-github {
+        margin-top: 60px;
+    }
+
+    #lt-keyboard {
+        margin-left: 60px;
+        top: 455px;
+        width: 600px;
+    }
+
+    #lt-keyboard div{
+        width: 45px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    #lt-keyboard #k-9{
+        margin-left:20px;
+    }
+
+
+    #lt-keyboard #k-32 {
+        width: 400px;
+        height: 12px;
+        margin-top: 15px;
+    }
+
+    #lt-keyboard #k-500{
+        margin-left:40px;
+    }
+
+    #lt-far-right-column {
+        position: absolute;
+        left: 1400px;
+        height: 700px;
+        width: 80px;
+
+    }
+
+    #lt-encom-logo {
+        top: 35px;
+    }
+
+    #lt-thumbprint {
+        top: 630px;
+    }
+
+    #lt-bandwidth canvas {
+        width: 100%;
+
+    }
+
+    .folder-big {
+        background-image: url(../images/encom_folder_xl.png);
+        width:140px;
+        height: 93px;
+    }
+
+    .folder-small {
+        background-image: url(../images/encom_folder_big.png);
+        width:95px;
+        height: 63px;
+    }
+
+
+}

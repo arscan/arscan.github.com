@@ -3,4 +3,5 @@ _site/
 *.swo
 encom-globe/bower_components/
 encom-globe/node_modules/
+encom-boardroom/node_modules/
 node_modules/

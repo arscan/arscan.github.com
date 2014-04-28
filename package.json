@@ -18,7 +18,8 @@
   "homepage": "https://github.com/arscan/arscan.github.com",
   "dependencies": {
     "hexasphere.js": "*",
-    "encom-globe": "*"
+    "encom-globe": "*",
+    "encom-boardroom": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

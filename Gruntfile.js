@@ -21,6 +21,12 @@ module.exports = function(grunt) {
                     cwd: 'node_modules/encom-globe/',
                     src: '**',
                     dest: 'encom-globe/'
+                },
+                { 
+                    expand: true,
+                    cwd: 'node_modules/encom-boardroom/',
+                    src: '**',
+                    dest: 'encom-boardroom/'
                 }
                 ]
             }
