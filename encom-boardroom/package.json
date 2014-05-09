@@ -1,6 +1,6 @@
 {
   "name": "encom-boardroom",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "encom-boardroom",
   "main": "index.html",
   "dependencies": {
@@ -36,16 +36,16 @@
     "name": "rscanlon@mit.edu"
   },
   "license": "MIT",
-  "readme": "webgl-encom-globe\n=================\n",
+  "readme": "Encom Boardroom\n=================\n\nThis is an HTML5 recreation (tribute?) of the [Boardroom Scene](http://work.gmunk.com/TRON-Board-Room) \nin Disney's [Tron: Legacy](http://www.imdb.com/tible/tt1104001/).  It currently \ndisplays realtime(ish) data from Github and Wikipedia.  View it in action at http://www.robscanlon.com/encom-boardroom\n\n### Motivation\n\n\n### Usage\n\n### Noteable Dependencies\n\n* Three.js\n* EncomSphere\n* Hexasphere.js\n* Quadtree2\n\n### License\n\nThe MIT License (MIT)\nCopyright (c) 2014 Robert Scanlon\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/arscan/encom-boardroom/issues"
   },
   "homepage": "https://github.com/arscan/encom-boardroom",
-  "_id": "encom-boardroom@0.1.3",
-  "_from": "encom-boardroom@0.1.3",
+  "_id": "encom-boardroom@0.2.0",
+  "_from": "encom-boardroom@0.2.0",
   "dist": {
-    "shasum": "a09db6fbf78af07813b3e1b53c3f73bd149b6bc1"
+    "shasum": "3d7e8da8fb7e5b060f0dcc8d40a3283c54664947"
   },
-  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.1.3.tgz"
+  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.2.0.tgz"
 }
