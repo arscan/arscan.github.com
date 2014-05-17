@@ -78659,7 +78659,7 @@ var boardroomActive = false,
 sliderHeads = {};
 var Boardroom = {};
 
-Boardroom.init = function(){
+Boardroom.init = function(title, data){
     var ratio = $(window).width() / 1918;
     blinkies = $('.blinky');
     mediaBoxes = $('.media-box .user-pic');
@@ -78668,6 +78668,8 @@ Boardroom.init = function(){
         "-moz-transform": "scale(" + ratio + ")",
         "-moz-transform-origin": "0 0"
     });
+
+    Boardroom.data = data;
 
     $("#boardroom").center();
 
@@ -78712,6 +78714,9 @@ Boardroom.init = function(){
         other: {count: 10, ref: $("#location-area-other")},
         unknown: {count: 10, ref: $("#location-area-unknown")}
     };
+
+    $("#ticker-text").text(title.toUpperCase());
+    $("#ticker-value").text(formatYTD(data[0].events, data[data.length-1].events));
 
     setInterval(function(){
         if(boardroomActive){
@@ -78828,8 +78833,8 @@ Boardroom.show = function(cb){
             box = new Box({containerId: "cube"});
             satbar = new SatBar("satbar");
             timertrees = new TimerTrees("timer-trees");
-            stockchart = new StockChart("stock-chart");
-            stockchartsmall = new StockChartSmall("stock-chart-small");
+            stockchart = new StockChart("stock-chart", {data: Boardroom.data});
+            stockchartsmall = new StockChartSmall("stock-chart-small", {data: Boardroom.data});
             swirls = new Swirls("swirls");
             logo = new Logo("logo");
             boardroomActive = true;
@@ -78886,6 +78891,8 @@ Boardroom.message = function(message){
     if(message.type && swirls){
         swirls.hit(message.type);
     }
+
+    changeBlinkies();
  
     if(interactionContainer && interactionContainer[0].lastChild){
         var lastChild = interactionContainer[0].lastChild;
@@ -79021,10 +79028,13 @@ function addPic(data){
         if(showPic){
             var img = document.createElement('img');
 
+
             var profileImageLoaded = function(ui){
                 var mb = $(mediaBoxes[ui]);
                 mb.css('background-image', 'url(' + pic + ')');
-                mb.find('span').text(data.actor);
+                mb.find('span').text(data.username);
+                mb.off();
+                mb.click(function(){window.open('http://github.com/' + data.username, "_blank")});
             };
 
             img.addEventListener('load', profileImageLoaded.bind(this, picIndex));
@@ -79114,6 +79124,17 @@ function getTime(){
     return (hours < 10 ? "0":"") + hours + ":" + (minutes < 10 ? "0":"") + minutes + ":" + (seconds< 10? "0": "") + seconds + ":" + (mili < 10? "0" : "") + mili;
 
 }
+
+function formatYTD(first, last){
+    var percentage = 100 * (((last- first) / first) - 1);
+    console.log(percentage);
+    var output = percentage.toFixed(1) + "%";
+    if(percentage > 0 && percentage < 100){
+        output = "+" + output;
+    }
+
+    return output;
+};
 
 module.exports =  Boardroom;
 
@@ -79730,16 +79751,20 @@ LightTable.init = function(_hideFn){
 
     $("#lt-launch-github").click(function(){
         $(this).find(".folder-big").css("background-color", "#fff");
-        simulateCommand("cd github$");
+        simulateCommand("|cd github$");
         simulateCommand("ls$");
         simulateCommand("run github.exe$");
+        $(document).off();
+        $(".folder-container").off();
     });
 
     $("#lt-launch-wikipedia").click(function(){
         $(this).find(".folder-big").css("background-color", "#fff");
-        simulateCommand("cd wikipedia$");
+        simulateCommand("|cd wikipedia$");
         simulateCommand("ls$");
         simulateCommand("run wikipedia.exe$");
+        $(document).off();
+        $(".folder-container").off();
     });
 
     $("#lt-launch-test").click(function(){
@@ -79783,7 +79808,7 @@ LightTable.show = function(cb){
 
     $(document).keydown(function(event){
 
-        if(!event.ctrlKey){
+        if(!event.ctrlKey && (event.which < 112 || event.which > 134) && event.which != 91) { // let them do f1-f12, windows key
             var keycode = event.which;
             event.preventDefault();
             keyClick(keycode);
@@ -79818,7 +79843,7 @@ LightTable.hide = function(cb) {
 
     webglTest.reset();
 
-    $(document).removeAttr("keydown");
+    $(document).off();
 
     if(typeof cb == "function"){
         cb();
@@ -80339,6 +80364,8 @@ function charToKeyCode(char){
         return 32;
     } else if (char === "$"){
         return 13;
+    } else if (char === "|"){
+        return 27; 
     }
 
     return 0;
@@ -80699,8 +80726,10 @@ var StockChart = function(containerId, opts){
 
     var defaults = {
         ticks: 7,
-        holdTime: 10000,
+        holdTime: 3000,
         swipeTime: 800,
+        data: []
+   
     }
 
     Utils.extend(opts, defaults);
@@ -80721,50 +80750,69 @@ var StockChart = function(containerId, opts){
 
     this.currentFrame = -1;
 
-    for(var j = 0; j < 4; j++){
-        var data = [];
+    var q = -1;
+    var count = 0;
+    var quarter = "1st Quarter";
 
-        for(var i = 0; i< 50; i++){
-            data.push(100-((20+i) + Math.random()*30));
+    if(!this.opts.data.length){
+        var end = new Date(2014, 0, 1);
+        for (var d = new Date(2013, 0, 1); d < end; d.setDate(d.getDate() + 1)) {
+            count++;
+            this.opts.data.push({
+                year: d.getFullYear(),
+                month: d.getMonth() + 1,
+                day: d.getDate(),
+                events: 100-((20+(count%92)) + Math.random()*30)
+            });
         }
-
-        var quarter = "";
-        if(j == 0){
-            quarter = "1st Quarter";
-        } else if(j==1){
-            quarter = "2nd Quarter";
-        } else if(j==2){
-            quarter = "3rd Quarter";
-        } else if(j==3){
-            quarter = "4th Quarter";
-        }
-
-        this.addFrame(quarter, data);
-
-        this.frames[this.frames.length-1].id = "stock-chart-canvas" + j;
-        this.frames[this.frames.length-1].div = document.createElement("div");
-        this.frames[this.frames.length-1].div.appendChild( this.frames[j] );
-        this.container.appendChild(this.frames[this.frames.length-1].div);
     }
+
+    var frameData = [];
+
+    for (var i = 0; i< this.opts.data.length; i++){
+
+        if(q >= 0 && q !== parseInt(i / 92, 10)){
+            this.addFrame(quarter + " 2013 Activity", frameData);
+
+            this.frames[this.frames.length-1].id = "stock-chart-canvas" + q;
+            this.frames[this.frames.length-1].div = document.createElement("div");
+            this.frames[this.frames.length-1].div.appendChild( this.frames[q] );
+            this.container.appendChild(this.frames[this.frames.length-1].div);
+
+            frameData = [];
+            if(q == 0){
+                quarter = "2nd Quarter";
+            } else if(q==1){
+                quarter = "3rd Quarter";
+            } else {
+                quarter = "4th Quarter";
+            }
+        }
+
+        frameData.push(this.opts.data[i].events);
+
+        q = parseInt(i / 92, 10);
+
+    }
+
+    this.addFrame(quarter + " 2013 Activity", frameData);
+
+    this.frames[this.frames.length-1].id = "stock-chart-canvas" + q;
+    this.frames[this.frames.length-1].div = document.createElement("div");
+    this.frames[this.frames.length-1].div.appendChild( this.frames[q] );
+    this.container.appendChild(this.frames[this.frames.length-1].div);
+
 };
 
 StockChart.prototype.addFrame = function(label, data) {
 
     // get bounds of the data
 
-    var max, min;
-
-    for(var i = 0; i< data.length; i++){
-        if(max == undefined || max < data[i]){
-            max = data[i];
-        }
-        if(min == undefined || min > data[i]){
-            min = data[i];
-        }
-    }
-
-    var increment = (max - min) / this.opts.ticks; 
-    var heightIncrement  = (this.height) / this.opts.ticks; 
+    var sorted = data.slice(0).sort();
+    var min = sorted[0] * .8;
+    var max = sorted[sorted.length-5];
+    var increment = (max - min) / this.opts.ticks;
+    var heightIncrement  = (this.height) / this.opts.ticks;
 
     var frameCanvas = Utils.renderToCanvas(this.width, this.height, function(ctx){
         // draw the y ticks
@@ -80796,7 +80844,7 @@ StockChart.prototype.addFrame = function(label, data) {
 
         ctx.lineWidth = "1px";
         for(var i = 0; i < data.length; i++){
-            ctx.lineTo(30 + i*xIncrement, data[i]);
+            ctx.lineTo(30 + i*xIncrement, this.height - this.height * (data[i]-min) / max );
         }
         ctx.lineTo(this.width, this.height-1);
         ctx.stroke();
@@ -80807,11 +80855,11 @@ StockChart.prototype.addFrame = function(label, data) {
         ctx.fill();
         ctx.closePath();
 
-        ctx.fillStyle = "rgba(255,255,255,.5)";
+        ctx.fillStyle = "rgba(255,255,255,.3)";
         for(var i = 0; i < data.length; i++){
 
             ctx.beginPath();
-            ctx.arc(30 + i*xIncrement, data[i], 2, 0, 2*Math.PI);
+            ctx.arc(30 + i*xIncrement,this.height - this.height * (data[i]-min) / max, 2, 0, 2*Math.PI);
             ctx.fill();
         }
 
@@ -80909,6 +80957,7 @@ function addGrid(ctx, ticks, width, height){
     ctx.closePath();
 };
 
+
 module.exports = StockChart;
 
 },{"./Utils":40}],37:[function(require,module,exports){
@@ -80917,7 +80966,8 @@ var Utils = require("./Utils.js");
 var StockChartSmall = function(canvasId, opts){
 
     var defaults = {
-        ticks: 5
+        ticks: 5,
+        data: []
     }
 
     var darkerColor = Utils.shadeColor("#00eeee",-50);
@@ -80988,20 +81038,52 @@ var StockChartSmall = function(canvasId, opts){
 
     var data = [];
 
-    for(var i = 0; i< 20; i++){
-        data.push(Math.random()*this.height);
+    if(!this.opts.data.length){
+        for(var i = 0; i< 30; i++){
+            data.push(Math.random()*this.height);
+        }
+    } else {
+        for(var i = 0; i< this.opts.data.length; i++){
+            data.push(this.opts.data[i].events);
+        }
     }
 
-    var xIncrement = (this.width)/(data.length-1);
+    var sorted = data.slice(0).sort();
+    var min = sorted[0]*.8;
+    var max = sorted[sorted.length-4]*1.2;
+    var f = (max-min)/this.height;
+    console.log(f);
+
+    var xIncrement = (this.width)/(30-2);
 
     this.context.strokeStyle = "#aaa"
     this.context.beginPath();
     this.context.moveTo(0,0);
 
+    var divideDataInto = Math.max(1,Math.floor(data.length/30));
+    var subArea = [];
+    var lowData = [];
+
     for(var i = 0; i < data.length; i++){
-        this.context.lineWidth = "1px";
-        this.context.lineTo(i*xIncrement, this.height - data[i]);
+        if(subArea.length < divideDataInto){
+            subArea.push(data[i]);
+        } else {
+            var sum = 0;
+            for(var j = 0; j< subArea.length; j++){
+                sum += subArea[j];
+            }
+            lowData.push(sum/subArea.length);
+            subArea = [];
+        }
     }
+        
+
+    for(var i = 0; i< lowData.length; i++){
+        this.context.lineWidth = "1px";
+        this.context.lineTo(i*xIncrement, this.height - lowData[i]/f);
+    }
+    this.context.lineTo(this.width, this.height - lowData[lowData.length-1]/f);
+    this.context.stroke();
     this.context.lineTo(this.width, 0);
     this.context.stroke();
     this.context.fillStyle = "#000";
@@ -81347,7 +81429,6 @@ Utils.shadeColor = function(color, percent) {
 }
 
 Utils.drawCurvedRectangle = function(ctx, left, top, width, height, radius){
-    console.log("drawing");
 
     ctx.beginPath();
     ctx.moveTo(left + radius, top);
@@ -81418,7 +81499,7 @@ var onSwitch = function(view){
 
         screensaver.text("GITHUB");
         LightTable.hide();
-        Boardroom.init(onSwitch);
+        Boardroom.init("GITHUB", window.githubHistory);
 
         setTimeout(function(){
             active = "br";
@@ -81443,11 +81524,6 @@ var showWebglError = function(){
 };
 
 $(function(){
-        console.log("LOADED");
-
-
-    //console.log("-----");
-    //console.log(LightTable);
     try {
         LightTable.init(onSwitch);
 

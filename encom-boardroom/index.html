@@ -9,6 +9,7 @@
         <link href="css/light-table-styles.css" rel="stylesheet" type="text/css" />
         <link href="css/boardroom-styles.css" rel="stylesheet" type="text/css" />
         <script src="js/globe-grid.js"></script>
+        <script src="js/github-2013.js"></script>
         <script src="build/encom-boardroom.js"></script>
     </head>
     <body>
@@ -255,72 +256,90 @@
                 <div class="header" id="globalization-header">GLOBALIZATION</div>
                 <canvas id="satbar" width="180px" height="36px"></canvas>
                 <div class="location-slider" id="location-slider-northamerica"">
-                    <span class="location-area" id="location-area-northamerica">No America</span>
-                    <span class="location-city" id="location-city-northamerica"></span>
+                    <div class="location-name">
+                        <span class="location-area" id="location-area-northamerica">No America</span>
+                        <span class="location-city" id="location-city-northamerica"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider" id="location-slider-southamerica" >
-                    <span class="location-area" id="location-area-southamerica">So America</span>
-                    <span class="location-city" id="location-city-southamerica"></span>
+                    <div class="location-name">
+                        <span class="location-area" id="location-area-southamerica">So America</span>
+                        <span class="location-city" id="location-city-southamerica"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider" id="location-slider-europe">
-                    <span class="location-area other" id="location-area-europe">Europe</span>
-                    <span class="location-city" id="location-city-europe"></span>
+                    <div class="location-name">
+                        <span class="location-area other" id="location-area-europe">Europe</span>
+                        <span class="location-city" id="location-city-europe"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider" id="location-slider-asia">
-                    <span class="location-area other" id="location-area-asia">Asia</span>
-                    <span class="location-city" id="location-city-asia"></span>
+                    <div class="location-name">
+                        <span class="location-area other" id="location-area-asia">Asia</span>
+                        <span class="location-city" id="location-city-asia"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider" id="location-slider-australia">
-                    <span class="location-area" id="location-area-australia">Australia</span>
-                    <span class="location-city" id="location-city-australia"></span>
+                    <div class="location-name">
+                        <span class="location-area" id="location-area-australia">Australia</span>
+                        <span class="location-city" id="location-city-australia"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider" id="location-slider-africa">
-                    <span class="location-area other" id="location-area-africa">Africa</span>
-                    <span class="location-city" id="location-city-africa"></span>
+                    <div class="location-name">
+                        <span class="location-area other" id="location-area-africa">Africa</span>
+                        <span class="location-city" id="location-city-africa"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider" id="location-slider-antarctica">
-                    <span class="location-area other" id="location-area-antarctica">Antarctica</span>
-                    <span class="location-city" id="location-city-antarctica"></span>
+                    <div class="location-name">
+                        <span class="location-area other" id="location-area-antarctica">Antarctica</span>
+                        <span class="location-city" id="location-city-antarctica"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider location-gap" id="location-slider-other">
-                    <span class="location-area" id="location-area-other">Other</span>
-                    <span class="location-city" id="location-city-other"></span>
+                    <div class="location-name">
+                        <span class="location-area" id="location-area-other">Other</span>
+                        <span class="location-city" id="location-city-other"></span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
                     <div class="clear"></div>
                 </div>
                 <div class="location-slider" id="location-slider-unknown">
-                    <span class="location-area" id="location-area-unknown">Location</span>
-                    <span class="location-city" id="location-city-unknown">Not Specified</span>
+                    <div class="location-name">
+                        <span class="location-area" id="location-area-unknown">Location</span>
+                        <span class="location-city" id="location-city-unknown">Not Specified</span>
+                    </div>
                     <div class="location-line"></div>
                     <ul>
                     </ul>
@@ -372,17 +391,16 @@
                 </div>
                 <div id="growth-container">
                     <div id = "ticker">
-                        <div id="ticker-text">GITHUB</div>
+                        <div id="ticker-text"></div>
                         <div id="ticker-subtext">[INC]</div>
                         <div id="ticker-lines">
                             <div class="ticker-line" id="ticker-line-1">.</div>
                             <div class="ticker-line" id="ticker-line-2">.</div>
                         </div>
                         <div id="ticker-value">
-                            +32.5%
                         </div>
                         <div id="ticker-ytd">
-                            YEAR-TO-DATE
+                            2013 Events
                         </div>
                         <canvas id="stock-chart-small" width="72px" height="40px"></canvas>
                     </div>
@@ -504,7 +522,6 @@
                 </div>
                 <div id="media-container">
                     <div id="media-top" class="media-box">
-                        <div class="media-scanlines"></div>
                         <div class="user-pic larger"><span></span></div>
                         <div class="user-pic"><span></span></div>
                         <div class="user-pic"><span></span></div>
@@ -578,7 +595,6 @@
                         <span>say</span>
                     </div>
                     <div id="media-bottom" class="media-box">
-                        <div class="media-scanlines"></div>
                         <div class="user-pic larger"><span></span></div>
                         <div class="user-pic"><span></span></div>
                         <div class="user-pic"><span></span></div>
@@ -720,5 +736,19 @@
 
 
         </div>
+        <script type="text/javascript">
+        
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-4481396-1']);
+            _gaq.push(['_trackPageview']);
+        
+            (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        
+        </script>
+        
     </body>
 </html>
