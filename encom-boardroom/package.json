@@ -1,6 +1,6 @@
 {
   "name": "encom-boardroom",
-  "version": "0.4.1",
+  "version": "0.5.1",
   "description": "encom-boardroom",
   "main": "index.html",
   "dependencies": {
@@ -23,7 +23,8 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-copy": "~0.5.0",
     "browserify": "~3.44.2",
-    "grunt-browserify": "~2.0.8"
+    "grunt-browserify": "~2.0.8",
+    "grunt-contrib-uglify": "~0.4.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -42,10 +43,10 @@
     "url": "https://github.com/arscan/encom-boardroom/issues"
   },
   "homepage": "https://github.com/arscan/encom-boardroom",
-  "_id": "encom-boardroom@0.4.1",
-  "_from": "encom-boardroom@0.4.1",
+  "_id": "encom-boardroom@0.5.1",
+  "_from": "encom-boardroom@0.5.1",
   "dist": {
-    "shasum": "defb875e190a59b753b2551f0f2d8d9b2efc7a62"
+    "shasum": "8d0451e9bf826152600bee5f9c1dd6e1c5f69a19"
   },
-  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.4.1.tgz"
+  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.5.1.tgz"
 }
