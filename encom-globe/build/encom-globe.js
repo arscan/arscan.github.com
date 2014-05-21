@@ -330,14 +330,22 @@ var Tile = function(centerPoint, hexSize){
 
 };
 
-Tile.prototype.getLatLon = function(radius){
-    var theta = Math.acos(this.centerPoint.y / radius); //lat 
-    var phi = Math.atan2(this.centerPoint.x ,this.centerPoint.z); // lon
+Tile.prototype.getLatLon = function(radius, boundaryNum){
+    var point = this.centerPoint;
+    if(typeof boundaryNum == "number" && boundaryNum < this.boundary.length){
+        point = this.boundary[boundaryNum];
+    }
+    var phi = Math.acos(point.y / radius); //lat 
+    var theta = (Math.atan2(point.x, point.z) + Math.PI + Math.PI / 2) % (Math.PI * 2) - Math.PI; // lon
+    
+    // theta is a hack, since I want to rotate by Math.PI/2 to start.  sorryyyyyyyyyyy
     return {
-        lat: 180 * theta / Math.PI - 90,
-        lon: 360 * phi / (2* Math.PI)
+        lat: 180 * phi / Math.PI - 90,
+        lon: 180 * theta / Math.PI
     };
 };
+
+
 
 Tile.prototype.scaledBoundary = function(scale){
 
@@ -41633,6 +41641,10 @@ var addInitialData = function(){
 
 var createParticles = function(){
 
+    if(this.hexGrid){
+        this.scene.remove(this.hexGrid);
+    }
+
     var pointVertexShader = [
         "#define PI 3.141592653589793238462643",
         "#define DISTANCE 500.0",
@@ -41668,7 +41680,7 @@ var createParticles = function(){
         "{",
         "   gl_FragColor = vColor;",
         "   float depth = gl_FragCoord.z / gl_FragCoord.w;",
-        "   float fogFactor = smoothstep(" + (parseInt(this.cameraDistance)-200) +".0," + (parseInt(this.cameraDistance+200)) +".0, depth );",
+        "   float fogFactor = smoothstep(" + (parseInt(this.cameraDistance)-200) +".0," + (parseInt(this.cameraDistance+300)) +".0, depth );",
         "   vec3 fogColor = vec3(0.0);",
         "   gl_FragColor = mix( vColor, vec4( fogColor, gl_FragColor.w ), fogFactor );",
         "}"
@@ -41788,40 +41800,6 @@ var createParticles = function(){
 
     }
 
-    /*
-
-    var addHex = function(i, lat, lng){
-        var k = i * 4;
-        // var C = Math.random()*.25 + .25;
-        var C = 1/this.pointsPerDegree * Math.min(1,this.pointSize * (1 + (Math.random() * (2*this.pointsVariance)) - this.pointsVariance));
-        var B = .866*C;
-        var A = C/2;
-
-        var p1 = utils.mapPoint(lat + 0 - B, lng + A + C - B, 500);
-        var p2 = utils.mapPoint(lat + 0 - B, lng + A - B, 500);
-        var p3 = utils.mapPoint(lat + B - B, lng + 0 - B, 500);
-        var p4 = utils.mapPoint(lat + 2*B - B, lng + A - B, 500);
-        var p5 = utils.mapPoint(lat + 2*B - B, lng + A + C - B, 500);
-        var p6 = utils.mapPoint(lat + B - B, lng + 2*C - B, 500);
-
-        var colorIndex = Math.floor(Math.random()*myColors.length);
-        var colorRGB = myColors[colorIndex].rgb();
-        var color = new THREE.Color();
-
-        color.setRGB(colorRGB[0]/255.0, colorRGB[1]/255.0, colorRGB[2]/255.0);
-
-        addTriangle(k, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p6.x, p6.y, p6.z, lat, lng, color);
-        addTriangle(k+1, p2.x, p2.y, p2.z, p6.x, p6.y, p6.z, p3.x, p3.y, p3.z, lat, lng, color);
-        addTriangle(k+2, p3.x, p3.y, p3.z, p6.x, p6.y, p6.z, p5.x, p5.y, p5.z, lat, lng, color);
-        addTriangle(k+3, p4.x, p4.y, p4.z, p3.x, p3.y, p3.z, p5.x, p5.y, p5.z, lat, lng, color);
-
-    };
-
-    for(i = 0; i < this.points.length; i++){
-        addHex.call(this, i, this.points[i].lat, this.points[i].lon);
-    }
-   */
-
     geometry.offsets = [];
 
     var offsets = triangles / chunkSize;
@@ -41840,8 +41818,8 @@ var createParticles = function(){
 
     geometry.computeBoundingSphere();
 
-    mesh = new THREE.Mesh( geometry, pointMaterial );
-    this.scene.add( mesh );
+    this.hexGrid = new THREE.Mesh( geometry, pointMaterial );
+    this.scene.add( this.hexGrid );
 
 };
 
@@ -41922,7 +41900,8 @@ function Globe(width, height, opts){
         maxPins: 500,
         maxMarkers: 4,
         data: [],
-        tiles: []
+        tiles: [],
+        viewAngle: 0
     };
 
     for(var i in defaults){
@@ -41933,7 +41912,8 @@ function Globe(width, height, opts){
             }
         }
     }
-    this.cameraDistance = 1700 / this.scale;
+
+    this.setScale(this.scale);
 
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
     this.renderer.setSize( this.width, this.height);
@@ -41957,33 +41937,24 @@ function Globe(width, height, opts){
 Globe.prototype.init = function(cb){
 
     // create the camera
-    this.camera = new THREE.PerspectiveCamera( 50, this.width / this.height, 1, this.cameraDistance + 250 );
+    this.camera = new THREE.PerspectiveCamera( 50, this.width / this.height, 1, this.cameraDistance + 350 );
     this.camera.position.z = this.cameraDistance;
 
-    this.cameraAngle=(Math.PI * 2) * .5;
+    this.cameraAngle=(Math.PI);
 
     // create the scene
     this.scene = new THREE.Scene();
 
-    this.scene.fog = new THREE.Fog( 0x000000, this.cameraDistance-200, this.cameraDistance+250 );
+    this.scene.fog = new THREE.Fog( 0x000000, this.cameraDistance, this.cameraDistance+350 );
 
     createIntroLines.call(this);
-
-    // pregenerate the satellite canvas
-    var numFrames = 50;
-    var pixels = 100;
-    var rows = 10;
-    var waveStart = Math.floor(numFrames/8);
-    var numWaves = 8;
-    var repeatAt = Math.floor(numFrames-2*(numFrames-waveStart)/numWaves)+1;
-    // this.satelliteCanvas = createSatelliteCanvas.call(this, numFrames, pixels, rows, waveStart, numWaves);
 
     // create the smoke particles
 
     this.smokeProvider = new SmokeProvider(this.scene);
 
     createParticles.call(this);
-    cb();
+    setTimeout(cb, 500);
 };
 
 Globe.prototype.destroy = function(callback){
@@ -42016,9 +41987,7 @@ Globe.prototype.addPin = function(lat, lon, text){
     var altitude = 1.2;
 
     if(typeof text != "string" || text.length === 0){
-        altitude -= Math.random() * .1;
-    } else {
-        altitude -= Math.random() * .1;
+        altitude -= .05 + Math.random() * .05;
     }
 
     var pin = new Pin(lat, lon, text, altitude, this.scene, this.smokeProvider, opts);
@@ -42061,11 +42030,13 @@ Globe.prototype.addPin = function(lat, lon, text){
                 hidePins[i].hideLabel();
                 hidePins[i].hideSmoke();
                 hidePins[i].hideTop();
+                hidePins[i].changeAltitude(Math.random() * .05 + 1.1);
             }
         } else if (collisionCount > 0){
             pin.hideLabel();
             pin.hideSmoke();
             pin.hideTop();
+            pin.changeAltitude(Math.random() * .05 + 1.1);
         }
     }
 
@@ -42154,6 +42125,44 @@ Globe.prototype.addConstellation = function(sats, opts){
 
 };
 
+
+Globe.prototype.setMaxPins = function(_maxPins){
+    this.maxPins = _maxPins;
+
+    while(this.pins.length > this.maxPins){
+        var oldPin = this.pins.shift();
+        this.quadtree.removeObject(oldPin);
+        oldPin.remove();
+    }
+};
+
+Globe.prototype.setMaxMarkers = function(_maxMarkers){
+    this.maxMarkers = _maxMarkers;
+    while(this.markers.length > this.maxMarkers){
+        this.markers.shift().remove();
+    }
+};
+
+Globe.prototype.setBaseColor = function(_color){
+    this.baseColor = _color;
+    createParticles.call(this);
+};
+
+Globe.prototype.setMarkerColor = function(_color){
+    this.markerColor = _color;
+    this.scene._encom_markerTexture = null;
+
+};
+
+Globe.prototype.setPinColor = function(_color){
+    this.pinColor = _color;
+};
+
+Globe.prototype.setScale = function(_scale){
+    this.scale = _scale;
+    this.cameraDistance = 1700/_scale;
+};
+
 Globe.prototype.tick = function(){
 
     if(!this.camera){
@@ -42187,9 +42196,9 @@ Globe.prototype.tick = function(){
     }
 
 
-    this.camera.position.x = this.cameraDistance * Math.cos(this.cameraAngle);
-    this.camera.position.y = 400;
-    this.camera.position.z = this.cameraDistance * Math.sin(this.cameraAngle);
+    this.camera.position.x = this.cameraDistance * Math.cos(this.cameraAngle) * Math.cos(this.viewAngle);
+    this.camera.position.y = Math.sin(this.viewAngle) * this.cameraDistance;
+    this.camera.position.z = this.cameraDistance * Math.sin(this.cameraAngle) * Math.cos(this.viewAngle);
 
 
     for(var i in this.satellites){
@@ -42210,6 +42219,8 @@ Globe.prototype.tick = function(){
             this.introLines.children[0].material.opacity = (this.totalRunTime/this.introLinesDuration) * (1 / .1) - .2;
         }if(this.totalRunTime/this.introLinesDuration > .8){
             this.introLines.children[0].material.opacity = Math.max(1-this.totalRunTime/this.introLinesDuration,0) * (1 / .2);
+        } else {
+            this.introLines.children[0].material.opacity = 1;
         }
         this.introLines.rotateY((2 * Math.PI)/(this.introLinesDuration/renderTime));
     } else if(this.introLines){
@@ -42884,7 +42895,6 @@ var createCanvas = function(numFrames, pixels, rows, waveStart, numWaves, waveCo
 var Satellite = function(lat, lon, altitude, scene, _opts, canvas, texture){
 
     var geometry, 
-    material,
     point = utils.mapPoint(lat, lon),
     opts,
     numFrames,
@@ -42928,6 +42938,8 @@ var Satellite = function(lat, lon, altitude, scene, _opts, canvas, texture){
         }
     }
 
+    this.opts = opts;
+
     if(!canvas){
         this.canvas = createCanvas(numFrames, pixels, rows, waveStart, opts.numWaves, opts.waveColor, opts.coreColor, opts.shieldColor);
         this.texture = new THREE.Texture(this.canvas)
@@ -42947,13 +42959,13 @@ var Satellite = function(lat, lon, altitude, scene, _opts, canvas, texture){
     }
 
     geometry = new THREE.PlaneGeometry(opts.size * 150, opts.size * 150,1,1);
-    material = new THREE.MeshBasicMaterial({
+    this.material = new THREE.MeshBasicMaterial({
         map : this.texture,
         depthTest: false,
         transparent: true
     });
 
-    this.mesh = new THREE.Mesh(geometry, material);
+    this.mesh = new THREE.Mesh(geometry, this.material);
     this.mesh.tiltMultiplier = Math.PI/2 * (1 - Math.abs(lat / 90));
     this.mesh.tiltDirection = (lat > 0 ? -1 : 1);
     this.mesh.lon = lon;
@@ -42966,6 +42978,55 @@ var Satellite = function(lat, lon, altitude, scene, _opts, canvas, texture){
     scene.add(this.mesh);
 
 }
+
+Satellite.prototype.changeAltitude = function(_altitude){
+    
+    var newPoint = utils.mapPoint(this.lat, this.lon);
+    newPoint.x *= _altitude;
+    newPoint.y *= _altitude;
+    newPoint.z *= _altitude;
+
+    this.altitude = _altitude;
+
+    this.mesh.position.set(newPoint.x, newPoint.y, newPoint.z);
+
+};
+
+Satellite.prototype.changeCanvas = function(numWaves, waveColor, coreColor, shieldColor){
+    /* private vars */
+    numFrames = 50;
+    pixels = 100;
+    rows = 10;
+    waveStart = Math.floor(numFrames/8);
+
+    if(!numWaves){
+        numWaves = this.opts.numWaves;
+    } else {
+        this.opts.numWaves = numWaves;
+    }
+    if(!waveColor){
+        waveColor = this.opts.waveColor;
+    } else {
+        this.opts.waveColor = waveColor;
+    }
+    if(!coreColor){
+        coreColor = this.opts.coreColor;
+    } else {
+        this.opts.coreColor = coreColor;
+    }
+    if(!shieldColor){
+        shieldColor = this.opts.shieldColor;
+    } else {
+        this.opts.shieldColor = shieldColor;
+    }
+
+    this.canvas = createCanvas(numFrames, pixels, rows, waveStart, numWaves, waveColor, coreColor, shieldColor);
+    this.texture = new THREE.Texture(this.canvas)
+    this.texture.needsUpdate = true;
+    repeatAt = Math.floor(numFrames-2*(numFrames-waveStart)/numWaves)+1;
+    this.animator = new TextureAnimator(this.texture,rows, numFrames/rows, numFrames, 80, repeatAt); 
+    this.material.map = this.texture;
+};
 
 Satellite.prototype.tick = function(cameraPosition, cameraAngle, renderTime) {
     // underscore should be good enough
