@@ -1,6 +1,6 @@
 {
   "name": "encom-globe",
-  "version": "0.3.3",
+  "version": "0.4.1",
   "description": "encom-globe",
   "main": "src/Globe.js",
   "devDependencies": {
@@ -37,10 +37,6 @@
     "url": "https://github.com/arscan/encom-globe/issues"
   },
   "homepage": "https://github.com/arscan/encom-globe",
-  "_id": "encom-globe@0.3.3",
-  "_from": "encom-globe@0.3.3",
-  "dist": {
-    "shasum": "b728449820fc7d094bfd19d0050b0952a68357f0"
-  },
-  "_resolved": "https://registry.npmjs.org/encom-globe/-/encom-globe-0.3.3.tgz"
+  "_id": "encom-globe@0.4.1",
+  "_from": "encom-globe@0.4.1"
 }
