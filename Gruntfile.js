@@ -48,7 +48,8 @@ module.exports = function(grunt) {
                 }],
                 options: {
                     includes: {
-                        analytics: './ga.inc.html'
+                        analytics: './ga.inc.html',
+                        boardroomEsPath: './br_es_path.inc.html'
                     }
                 }
             }
