@@ -1,6 +1,6 @@
 {
   "name": "encom-boardroom",
-  "version": "0.8.1",
+  "version": "0.8.3",
   "description": "encom-boardroom",
   "main": "index.html",
   "dependencies": {
@@ -29,7 +29,8 @@
     "grunt-contrib-uglify": "~0.4.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodejs stream-server.js"
   },
   "repository": {
     "type": "git",
@@ -45,10 +46,10 @@
     "url": "https://github.com/arscan/encom-boardroom/issues"
   },
   "homepage": "https://github.com/arscan/encom-boardroom",
-  "_id": "encom-boardroom@0.8.1",
-  "_from": "encom-boardroom@0.8.1",
+  "_id": "encom-boardroom@0.8.3",
+  "_from": "encom-boardroom@0.8.3",
   "dist": {
-    "shasum": "d63abf4376f05a6c126c0c8845d4a97a6f6afe83"
+    "shasum": "5264690c5d5dc6b84d191a39f773883d35104a7f"
   },
-  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.8.1.tgz"
+  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.8.3.tgz"
 }
