@@ -32,6 +32,7 @@ app.use("/js", express.static(path.join(__dirname, 'js')));
 app.use("/images", express.static(path.join(__dirname, 'images')));
 app.use("/css", express.static(path.join(__dirname, 'css')));
 app.use("/build", express.static(path.join(__dirname, 'build')));
+app.enable('trust proxy');
 
 var openConnections = [];
 
@@ -66,7 +67,6 @@ app.get('/events.js', function(req, res) {
         console.log("Closed Connection. Current Connections: " + openConnections.length);
     });
 });
- 
 
 var sendData = function(data){
 
