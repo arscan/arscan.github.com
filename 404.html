@@ -1,3 +1,739 @@
 <script>
     location.href="/encom-boardroom/";
 </script>
+
+<DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js">
+        </script>
+
+        <script> 
+            // somebody posted a bad link to one of my projects, this is to fix
+
+            if(document.URL.indexOf("encom-boardroom/@arscan") > 0){
+                location.href="/encom-boardroom/";
+            }
+
+
+            $(document).ready(function()
+            {
+
+                var bounds = [
+                [-5,0,2,250],
+                [448,203,507,227],
+                [459,166,619,203],
+                [573,202,817,227],
+                [338,240,943,248],
+                [815,202,827,220],
+                [825,206,839,213],
+                [839,209,856,212],
+                [0,247,1115,250],
+                [0,0,1296,120],
+                [471,120,479,204],
+                [783,119,789,204],
+                [454,191,477,203],
+                [896,210,913,210],
+                [417,206,452,217],
+                [437,214,449,224],
+                [401,209,422,212],
+                [347,193,373,204],
+                [235,205,269,214],
+                [247,147,285,163],
+                [128,162,227,178],
+                [342,227,398,214],
+                [862,226,918,239],
+                [1126,243,1182,260],
+                [1139,237,1174,243],
+                [1158,227,1186,214],
+                [1164,214,1193,233],
+                [1139,168,1176,218],
+                [1120,152,1177,169],
+                [1114,144,1147,158],
+                [1144,138,1271,157],
+                [1267,118,1278,140],
+                [988,139,1028,154],
+                [1167,200,1170,244],
+                [895,199,914,211],
+                [118,128,163,141],
+                [351,229,404,243]
+                ];
+
+                var staticobjects = 
+                [[0,0,138,250],
+                [112,50,100,92],
+                [129,142,100,36],
+                [212,9,131,155],
+                [320,70,94,135],
+                [441,88,66,120],
+                [829,47,130,164],
+                [728,83,99,131],
+                [942,27,123,127],
+                [985,167,32,23],
+                [1097,34,144,184],
+                [1056,56,115,115]
+
+
+                ];
+
+
+                var frame = 0, 
+                flagframe = 0,
+                gaterframe = 0,
+                framewidth = 12,
+                messageframe = 0,
+                frameheight = 32,
+                direction = -1,  // 0 = left; 1 = right; 2=down; 3=up;
+                mouseX = 600,
+                mouseY = 350,
+                princeX = 300,
+                princeY = 100,
+                gater1X = 810,
+                gater1Y=  235,
+                gater2X = 422,
+                gater2Y= 234,
+                gater3X = 622,
+                gater3Y= 237,
+                gater1direction = 1,
+                gater2direction = 0,
+                gater3direction = 0,
+                gater1paused = false,
+                gater2paused = false,
+                gater3paused = false,
+                gater1destinationX=gater2X,
+                gater1destinationY=gater2Y
+                gater2destinationX=gater3X,
+                gater2destinationY=gater3Y,
+                gater3destinationX=gater1X,
+                gater3destinationY=gater1Y,
+                introSequence = true;  
+
+                $('#commandinput').focus();
+
+                $('#graham').css("background-image", "url(/kq/prince_small_updated.png)")
+                .css("background-position", "-13 -34")
+                .css("position","absolute")
+                .css("width","12")
+                .css("height","32")
+                .css("z-index","4");
+
+                $('#gater1').css("background-image", "url(/kq/kings_gater_small.png)")
+                .css("background-position", "0 0")
+                .css("position","absolute")
+                .css("width","25")
+                .css("height","12")
+                .css("left","100")
+                .css("top","0")
+                .css("z-index","4");
+
+                $('#gater2').css("background-image", "url(/kq/kings_gater_small.png)")
+                .css("background-position", "0 0")
+                .css("position","absolute")
+                .css("width","25")
+                .css("height","12")
+                .css("z-index","4");
+
+
+                $('#gater3').css("background-image", "url(/kq/kings_gater_small.png)")
+                .css("background-position", "0 0")
+                .css("position","absolute")
+                .css("width","25")
+                .css("height","12")
+                .css("z-index","4");
+
+
+
+
+                $('#flag').css("background-image", "url(/kq/kings_flags_small.png)")
+                .css("background-position", "0 0")
+                .css("position","absolute")
+                .css("width","89px")
+                .css("height","11px")
+                .css("left","541px")
+                .css("top","93px")
+                .css("z-index","3");
+
+
+
+                $('#flag2').css("background-image", "url(/kq/kings_flags_small.png)")
+                .css("background-position", "0 0")
+                .css("position","absolute")
+                .css("width","89px")
+                .css("height","11px")
+                .css("left","637px")
+                .css("top","93px")
+                .css("z-index","3");
+
+                $('#game').css("left","-100px");
+
+                for(var i = 0; i<staticobjects.length;i++){
+
+                    $('#game').prepend('<img id="staticobject' + i + '" src="/kq/staticobject' + i + '.png" />');
+                    $('#game').children('#staticobject' + i)
+                    .css("position","absolute")
+                    .css("left",staticobjects[i][0])
+                    .css("top",staticobjects[i][1])
+                    .css("z-index",staticobjects[i][1] + staticobjects[i][3]);
+
+                }
+                var centerScreen = function() {
+
+                    var newLeft = $("#game").css("left");
+
+                    if($(window).width() > 300){
+
+                        newLeft = $(window).width()/2 - 596;
+
+
+                        if(-1 * princeX + 150 > newLeft){
+                            newLeft = -1 * princeX + 150;
+                            }else if (newLeft + princeX +150 > $(window).width()){
+                            newLeft = $(window).width() -princeX-150;
+                        }
+
+                        if(newLeft > 0)
+                        newLeft = 0;
+
+                    }
+
+                    $("#game").css("left",newLeft);
+
+                };
+
+                var checkValid = function (x,y){
+
+                    for(var i = 0; i< bounds.length; i++){
+                        if(x+10>=bounds[i][0] & x<=bounds[i][2] & y+30>=bounds[i][1] & y+30<=bounds[i][3]){
+                            //console.log('a broke on ' + i + ' at ' + x + ',' + y);    
+                            return false;
+                        }
+
+                    }
+                    return true;
+                };
+
+
+                $(window).resize(function() {   centerScreen() });
+
+                (function loop(){
+
+                    if(introSequence){
+                        if(princeY <180)
+                        direction = 2;
+                        else {
+                            direction = -1; 
+                            introSequence = false;
+                        }
+
+
+                    }
+
+
+                    frame = (frame + 1) % 6;
+
+                    if(direction === 0){
+                        if(checkValid(princeX+2,princeY)){
+                            princeX = princeX+2;
+                        }
+
+                    }
+                    if(direction === 1){
+                        if(checkValid(princeX-2,princeY)){
+                            princeX = princeX-2;
+                        }
+
+                    }
+                    if(direction === 3){
+                        if(checkValid(princeX,princeY-2)){
+                            princeY = princeY-2;
+                        }
+
+                    }
+                    if(direction === 2){
+                        if(checkValid(princeX,princeY+2)){
+                            princeY = princeY+2;
+                        }
+
+                    }
+
+                    /* 
+
+                    if(mouseX - (princeX+(framewidth/2))>3){
+                        if(checkValid(princeX+3,princeY)){
+                            princeX = princeX + 3;
+                        }
+                        direction = 0;
+
+                        } else if(mouseX - (princeX+(framewidth/2))<-2){
+                        if(checkValid(princeX-2,princeY)){
+                            princeX = princeX - 2;
+                        }
+
+                        direction = 1;
+
+                    }
+                    if(mouseY - (princeY+(frameheight/2))>2){
+                        if(checkValid(princeX,princeY+2)){
+                            princeY = princeY + 2;
+                        }
+
+                        if(Math.abs(mouseX-(princeX+(framewidth/2)))<2){
+                            direction = 2
+                        }
+
+                        } else if(mouseY-(princeY+(frameheight/2))<-2){
+                        if(checkValid(princeX,princeY-2)){
+                            princeY = princeY - 2;
+                        }
+                        if(Math.abs(mouseX-(princeX+(framewidth/2)))<2){
+                            direction = 3
+                        }
+
+                    }
+
+                    */
+
+                    //if(Math.abs(mouseY-(princeY+(frameheight/2)))>2 || Math.abs(mouseX-(princeX+(framewidth/2)))>2){
+                        if(direction !== -1){       
+
+                            $('#graham').css("background-position", (-1 * frame * framewidth -1) + "px " + (-1*frameheight*direction) +"px");
+                        }   
+
+
+                        // animate flag
+                        flagframe = (flagframe + 1) % 5;
+                        $('#flag').css("background-position", "0px " + (-1*flagframe*13) +"px");
+                        $('#flag2').css("background-position", "0px " + (-1*flagframe*13) +"px");
+
+
+
+                        // animate gater
+                        gaterframe = (gaterframe + 1) % 15;
+
+                        $('#gater1').css("background-position", (-1*(Math.floor(gaterframe/5))*28) + "px " + (12*Math.max(0,gater1direction)) +"px");
+                        $('#gater2').css("background-position", (-1*(Math.floor(gaterframe/5))*28) + "px " + (12*Math.max(0,gater2direction)) +"px");
+                        $('#gater3').css("background-position", (-1*(Math.floor(gaterframe/5))*28) + "px " + (12*Math.max(0,gater3direction)) +"px");
+
+
+
+                        if(gater1X < gater1destinationX)
+                        gater1X = gater1X+1;
+
+                        if(gater1X > gater1destinationX)
+                        gater1X = gater1X-1;
+
+
+                        if(gater1Y < gater1destinationY && Math.abs(gater1destinationX-gater1X)/Math.abs(gater1destinationY-gater1Y) < 10){
+                            gater1Y = gater1Y+1;
+
+                        }
+
+                        if(gater1Y > gater1destinationY && Math.abs(gater1destinationX-gater1X)/Math.abs(gater1destinationY-gater1Y) < 10){
+                            gater1Y = gater1Y-1;
+                        }
+
+                        if(gater1X === gater1destinationX && gater1Y === gater1destinationY && !gater1paused){
+                            gater1paused = true;
+                            setTimeout(function(){
+
+
+                                gater1destinationX = Math.floor(Math.random()*512) + 360;
+                                gater1destinationY = Math.floor(Math.random()*7) + 231;
+
+                                if(gater1destinationX > gater1X)
+                                gater1direction = 0;
+                                else
+                                gater1direction = 1;
+
+                                gater1paused = false;
+
+
+                            },5000);
+
+                        }
+
+                        if(gater2X < gater2destinationX)
+                        gater2X = gater2X+1;
+
+                        if(gater2X > gater2destinationX)
+                        gater2X = gater2X-1;
+
+
+                        if(gater2Y < gater2destinationY && Math.abs(gater2destinationX-gater1X)/Math.abs(gater2destinationY-gater2Y) < 10){
+                            gater2Y = gater2Y+1;
+
+                        }
+
+                        if(gater2Y > gater2destinationY && Math.abs(gater2destinationX-gater2X)/Math.abs(gater2destinationY-gater2Y) < 10){
+                            gater2Y = gater2Y-1;
+                        }
+
+
+                        if(gater2X === gater2destinationX && gater2Y === gater2destinationY && !gater2paused){
+                            gater2paused = true;
+                            setTimeout(function(){
+
+
+                                gater2destinationX = Math.floor(Math.random()*512) + 360;
+                                gater2destinationY = Math.floor(Math.random()*7) + 231;
+
+                                if(gater2destinationX > gater2X)
+                                gater2direction = 0;
+                                else
+                                gater2direction = 1;
+
+                                gater2paused = false;
+
+
+                            },5000);
+
+                        }
+
+                        if(gater3X < gater3destinationX)
+                        gater3X = gater3X+1;
+
+                        if(gater3X > gater3destinationX)
+                        gater3X = gater3X-1;
+
+
+                        if(gater3Y < gater3destinationY)
+                        gater3Y = gater3Y+1;
+
+                        if(gater3Y > gater3destinationY)
+                        gater3Y = gater3Y-1;
+
+                        if(gater3X === gater3destinationX && gater3Y === gater3destinationY && !gater3paused){
+                            gater3paused = true;
+                            setTimeout(function(){
+
+
+                                gater3destinationX = Math.floor(Math.random()*512) + 360;
+                                gater3destinationY = Math.floor(Math.random()*7) + 231;
+
+                                if(gater3destinationX > gater3X)
+                                gater3direction = 0;
+                                else
+                                gater3direction = 1;
+
+                                gater3paused = false;
+
+
+                            },5000);
+
+                        }
+
+
+                        // Set everybody to the right spot
+
+
+                        $('#graham').css("left",princeX);
+                        $('#graham').css("top",princeY);
+                        $('#graham').css("z-index",princeY+30);
+
+                        $('#gater1').css("left",gater1X);
+                        $('#gater1').css("top",gater1Y);
+                        $('#gater1').css("z-index",gater1Y+30);
+
+
+                        $('#gater2').css("left",gater2X);
+                        $('#gater2').css("top",gater2Y);
+                        $('#gater1').css("z-index",gater2Y+30);
+
+
+                        $('#gater3').css("left",gater3X);
+                        $('#gater3').css("top",gater3Y);
+                        $('#gater1').css("z-index",gater3Y+30);
+
+                        // center screen
+                        centerScreen();
+
+
+                        setTimeout(loop,80);
+                    })();
+
+                    $(document).mousemove(function(e){
+
+                        mouseX = e.pageX;
+                        mouseY = e.pageY-400;
+
+                    });
+
+
+                    $(document).keydown(function(e) {
+
+                        switch (e.which) {
+                            case 39: // right
+                            introSequence = false;
+                            direction = 0;
+                            break;
+                            case 37: // left
+                            introSequence = false;
+                            direction = 1;
+                            break;
+                            case 38: // up
+                            introSequence = false;
+                            direction = 3;
+                            break;
+                            case 40: // down
+                            introSequence = false;
+                            direction = 2;
+                            break;
+                        }
+                        //console.log(e.which)
+                    });
+
+
+                    $(document).keyup(function(e) {
+                        switch (e.which) {
+                            case 39: // right
+                            direction = -1;
+                            break;
+                            case 37: // left
+                            direction = -1;
+                            break;
+                            case 38: // up
+                            direction = -1;
+                            break;
+                            case 40: // down
+                            direction = -1;
+                            break;
+
+                        }
+                        //console.log(e.which)
+                    });
+
+                    $('#commandinput').keyup(function(e) {
+                        switch (e.which) {
+
+                            case 13:
+                            runcommand();
+                            $('#commandinput').val('');
+
+                        }
+
+                    });
+
+
+
+
+                    var runcommand = function(){
+
+                        if(($('#commandinput').val() == 'move rock' || $('#commandinput').val() == 'move stone' || $('#commandinput').val() == 'push rock' || $('#commandinput').val() == 'push stone') && (princeX > 222 && princeX<275 && princeY>155 && princeY<180)){
+                            alert('You try pushing the rock...');
+                            } else if (false){
+                            alert('huh');
+
+                            } else {
+
+                            alert('Sorry, you can\'t do that here');
+                        }
+
+
+
+                    };
+
+
+
+
+
+
+
+                });
+
+
+
+
+
+
+
+
+
+
+            </script> 
+
+            <style type="text/css">
+
+
+                html, body, div, span, applet, object, iframe,
+                h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+                a, abbr, acronym, address, big, cite, code,
+                del, dfn, em, img, ins, kbd, q, s, samp,
+                small, strike, strong, sub, sup, tt, var,
+                b, u, i, center,
+                dl, dt, dd, ol, ul, li,
+                fieldset, form, label, legend,
+                table, caption, tbody, tfoot, thead, tr, th, td,
+                article, aside, canvas, details, embed, 
+                figure, figcaption, footer, header, hgroup, 
+                menu, nav, output, ruby, section, summary,
+                time, mark, audio, video {
+                    margin: 0;
+                    padding: 0;
+                    border: 0;
+                    font-size: 100%;
+                    font: inherit;
+                    vertical-align: baseline;
+                }
+                p {
+                    padding:15px;
+                }
+
+                body {
+                    background-color: #5555FF;
+                    color: #322814;
+                }
+
+                #background {
+                    width:100%;
+                    height:260px;
+                }
+
+
+                #game {
+                    width:1561px;
+                    height:250px;
+                    background-image:url(/kq/bg_wide_full_small_final.png);
+
+                    bottom:20px;
+                    position:absolute;
+                    z-index:20;
+                    left:0px;
+                }
+
+                #commandline {
+                    width:100%;
+                    background-color: #000000;
+                    bottom:0px;
+                    position:absolute;
+                    z-index:20;
+                    left:0px;
+                    margin: 0 auto;
+                    padding: 0 auto;
+                    color: #FFFFFF;
+                }
+                #header {
+                    width:100%;
+                    background-color: #FFFFFF;
+                    top:0px;
+                    position:absolute;
+                    z-index:20;
+                    left:0px;
+                    margin: 5 auto;
+                    padding: 5 auto;
+                    color: #000000;
+                    font-family:Courier;
+                    min-width:500px;
+                    border:1px;
+                    border-color:black;
+                    font-weight:bold;
+                }
+
+                #leftheader {
+                    float:left;
+                    padding:5px;
+
+                }
+                #rightheader {
+                    float:right;
+                    padding:5px;
+
+                }
+
+                input {
+                    font-family:Courier;
+                    color: #CCCCCC;
+                    background: #000000;
+                    padding: 0px;
+                    margin:0px;
+                    border:0px;
+                    width:80%;
+                    font-weight: bold;
+                }
+                input:focus {
+                    outline: none;
+                }
+
+                #container{
+                    overflow-y:scroll;
+                    position:absolute;
+                    top:0px;
+                    left:0px;
+                    right:0px;
+                    bottom:0px;
+                    z-index:30px;
+                    height:100%;
+                    width:100%;
+                    background: -moz-linear-gradient(-90deg, #0000AA, #8080D5);
+                    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(0, 0, 170)), to(rgb(128, 128, 213)));
+
+                }
+                #containercenter {
+
+                    margin-top:30px;
+                    width:500px;
+                    z-index:30;  
+                    position: absolute;
+                    top: 50%;
+                    margin-top: -200px;/* half of #content height*/
+                    left:50%;
+                    margin-left: -200px;
+                }
+
+                #content {
+                    min-height:200px;
+                    padding: 10px 20px 10px 20px;
+                    height:auto;
+                    background-color: rgba(255, 255, 255, 0.7);
+
+                    -moz-border-radius:10px;
+                    -webkit-border-radius:10px;
+                    -khtml-border-radius:10px;
+                    border-radius:10px;
+                    font: Normal 22px Georgia, "Times New Roman", Times, serif;
+                    color: #121212;
+
+                }
+            </style>
+        </head>
+
+
+        <div id="background">
+            <div id="game">
+
+                <div id="graham"></div> 
+                <div id="gater1"></div> 
+                <div id="gater2"></div> 
+                <div id="gater3"></div> 
+                <div id="flag"></div> 
+                <div id="flag2"></div> 
+
+            </div>
+
+        </div>
+        <div id="commandline">
+            &nbsp;&gt; &nbsp;<input type=text autofocus id="commandinput">
+        </div>
+        <body style="overflow-x:hidden;"> 
+            <div id="container">
+                <div id="containercenter">
+                    <div id="content">
+                        
+                        <p>Oh no!  You thought you were going to Rob's website, but you've landed in some strange land!</p>
+                        <p>Can you find your way back to his site?</p>
+                        <p>Use arrow keys to move.  And issue commands at the prompt at the bottom of the screen</p>
+                        <p>Good luck!</p>
+                    </div>
+                </div>
+            </div>
+            <div id="header">
+                <div id="leftheader">Welcome to Rob Scanlon's Wesite</div>
+                <div id="rightheader">
+
+
+                </div>
+            </div>
+
+
+        </body>
+    </html>
+
