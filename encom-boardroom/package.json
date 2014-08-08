@@ -1,6 +1,6 @@
 {
   "name": "encom-boardroom",
-  "version": "0.8.10",
+  "version": "0.9.1",
   "description": "encom-boardroom",
   "main": "index.html",
   "dependencies": {
@@ -46,10 +46,10 @@
     "url": "https://github.com/arscan/encom-boardroom/issues"
   },
   "homepage": "https://github.com/arscan/encom-boardroom",
-  "_id": "encom-boardroom@0.8.10",
-  "_from": "encom-boardroom@0.8.10",
+  "_id": "encom-boardroom@0.9.1",
+  "_from": "encom-boardroom@0.9.1",
   "dist": {
-    "shasum": "0d7c100dc9c7f3ae82372672b36a6ad4ca22b706"
+    "shasum": "503baa19bcbc530a76dd175b48c68aa70a7ca131"
   },
-  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.8.10.tgz"
+  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.9.1.tgz"
 }
