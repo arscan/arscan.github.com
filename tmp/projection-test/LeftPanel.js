@@ -1,17 +1,17 @@
-function createLeftPanel(renderer, canvasWidth, canvasHeight){
+function createLeftPanel(renderer, renderTarget){
 
        var renderScene,
        renderComposer,
        renderCamera,
        clock;
 
-    var stats;
+       var canvasWidth = renderTarget.width;
+       var canvasHeight = renderTarget.height;
+
 
 
     var BLURINESS = 3.9;
 
-    init();
-    animate();
 
     function renderToCanvas(width, height, renderFunction) {
         var buffer = document.createElement('canvas');
@@ -38,7 +38,7 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
 
     function createNameCanvas(name, subject, details){
 
-        return renderToCanvas(600, 600, function(ctx){
+        return renderToCanvas(512, 512, function(ctx){
             ctx.strokeStyle="#fff";
 
             ctx.font = "bold 12pt Roboto";
@@ -50,14 +50,14 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
             ctx.fillStyle = '#eac7df';
             ctx.fillText(name.toUpperCase(), 78, 60);
 
-            ctx.font = "bold 20pt Roboto";
+            ctx.font = "bold 14pt Roboto";
             ctx.fillStyle = '#eac7df';
             ctx.fillText("SUBJECT: " + subject.toUpperCase(), 80, 100);
 
             for(var i = 0; i< details.length; i++){
-                ctx.font = "bold 12pt Roboto";
+                ctx.font = "bold 11pt Roboto";
                 ctx.fillStyle = '#eac7df';
-                ctx.fillText(details[i].toUpperCase(), 80, 140 + i*22);
+                ctx.fillText(details[i].toUpperCase(), 80, 138 + i*20);
 
             }
 
@@ -105,14 +105,10 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
 
     function init(){
         clock = new THREE.Clock();
-        stats = new Stats();
-        container = document.createElement( 'div' );
-        container.appendChild( stats.domElement );
-        document.body.appendChild( container );
 
         renderCamera = new THREE.PerspectiveCamera( 70, canvasWidth / canvasHeight, 1, 1000 );
-        renderCamera.position.z = 300;
-        renderCamera.position.y = 20;
+        renderCamera.position.z = 260;
+        renderCamera.position.y = 0;
         renderScene = new THREE.Scene();
 
         var loader = new THREE.OBJLoader();
@@ -145,13 +141,13 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
             skeletonObject.children[0].material = skeletonMaterial;
             skeletonObject.children[1].material = organMaterial;
 
-            skeletonObject.position.set(105, -60, 0);
+            skeletonObject.position.set(95, -100, 0);
 
             renderScene.add(skeletonObject);
 
         });
 
-        var nameCanvas1= createNameCanvas("Scanlon", "Robert Scanlon", ["Alias: \"ARSCAN\"", 
+        var nameCanvas1= createNameCanvas("Scanlon", "Rob Scanlon", ["Alias: \"ARSCAN\"", 
                                           "species: terran", 
                                           "origin: Boston, MA",
                                           "legs: 2",
@@ -161,13 +157,13 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
         var nameTexture1 = new THREE.Texture(nameCanvas1)
         nameTexture1.needsUpdate = true;
 
-        var nameCanvas2 = createNameCanvas("Scanlon", "Robert Scanlon", ["education", 
-                                           "cornell: bs computer science", 
-                                           "mit: Ms engineering & management", 
+        var nameCanvas2 = createNameCanvas("Scanlon", "Rob Scanlon", ["education", 
+                                           "something", 
+                                           "something else something", 
                                            "", 
                                            "Occupation",
                                            "software engineer",
-                                           "web, data viz"]);
+                                           "something something something"]);
 
         var nameTexture2 = new THREE.Texture(nameCanvas2)
         nameTexture2.needsUpdate = true;
@@ -187,23 +183,23 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
         var plane = new THREE.Mesh( planegeometry, nameBoxMaterial );
         plane.position.x = 100;
         plane.position.y = -100;
-        plane.position.z = -830;
+        plane.position.z = -750;
         renderScene.add( plane );
 
         var nameTween1 = new TWEEN.Tween(plane.position)
-        .to({x: -60}, 3000);
+        .to({x: -10}, 3000);
         var nameTween2 = new TWEEN.Tween(plane.position)
-        .to({x: -20}, 5000)
+        .to({x: 20}, 5000)
         .chain(nameTween1);
 
         nameTween1.chain(nameTween2);
 
         new TWEEN.Tween(plane.position)
         .easing( TWEEN.Easing.Cubic.Out )
-        .to({x: 150, y: -190, z: -100}, 300)
+        .to({x: 140, y: -200, z: -60}, 300)
         .chain(new TWEEN.Tween(plane.position)
                .easing( TWEEN.Easing.Cubic.In )
-               .to({x: -20}, 500)
+               .to({x: 0}, 500)
                .delay(6200)
                .onComplete(function(){
                    nameBoxMaterial.uniforms.name1.value = nameTexture2;
@@ -220,7 +216,7 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
 
         projectorComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth/1.5, canvasHeight/1.5));
         projectorComposer.addPass(renderScenePass);
-        projectorComposer.addPass(new THREE.ProjectorPass(renderer, new THREE.Vector2(-.2, .2)));
+        projectorComposer.addPass(new THREE.ProjectorPass(renderer, new THREE.Vector2(-.18, 0)));
 
         blurComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth/4, canvasHeight/4));
         blurComposer.addPass(renderScenePass);
@@ -230,7 +226,8 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
         blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (canvasHeight/4)}));
 
 
-        mainComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth, canvasHeight));
+        // mainComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth, canvasHeight));
+        mainComposer = new THREE.EffectComposer(renderer, renderTarget);
         mainComposer.addPass(renderScenePass);
         mainComposer.addPass(new THREE.ShaderPass(THREE.FXAAShader, {resolution: new THREE.Vector2(1/canvasWidth, 1/canvasHeight)}));
 
@@ -253,8 +250,9 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
         var addPass3 = new THREE.ShaderPass(THREE.AdditiveBlendShader);
         addPass3.uniforms['tAdd'].value = projectorComposer.readBuffer;
         addPass3.uniforms['fOpacity'].value = 0.3;
-        addPass3.renderToScreen = true;
         mainComposer.addPass(addPass3);
+        mainComposer.addPass(new THREE.ShaderPass(THREE.CopyShader)); /* to get the buffers lined up properly */
+
 
         // setInterval(function(){
         //     addPass3.enabled = !addPass3.enabled;
@@ -263,30 +261,19 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
         // renderScenePass.uniforms[ "tDiffuse" ].value = fullResolutionComposer.renderTarget2;
     }
 
-    function animate(){
+    function render(){
+        // renderer.render(mainScene, camera);
+        var time = clock.getElapsedTime();
 
         if(renderScene.children.length > 1){
             renderScene.children[1].rotation.y -= .005;
         }
 
-
-        stats.update();
-
-        render();
-
-        requestAnimationFrame(animate);
-    }
-
-    function render(){
-        // renderer.render(mainScene, camera);
-        var time = clock.getElapsedTime();
-
-
         TWEEN.update();
 
-        LeftPanelShaders.skeleton.uniforms.currentTime.value = time -2;
-        LeftPanelShaders.organs.uniforms.currentTime.value = time -3;
-        LeftPanelShaders.nameBox.uniforms.currentTime.value = time -3;
+        LeftPanelShaders.skeleton.uniforms.currentTime.value = time -6;
+        LeftPanelShaders.organs.uniforms.currentTime.value = time -7;
+        LeftPanelShaders.nameBox.uniforms.currentTime.value = time -1;
         renderComposer.render();
 
         projectorComposer.render();
@@ -297,5 +284,14 @@ function createLeftPanel(renderer, canvasWidth, canvasHeight){
         mainComposer.render();
 
     }
+
+    init();
+
+    return Object.freeze({
+        render: render
+
+
+
+    });
 }
 
