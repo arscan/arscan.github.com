@@ -14,7 +14,11 @@ var container = document.createElement( 'div' ),
 
     backgroundPanelTarget = new THREE.WebGLRenderTarget(1280, 580, targetParams),
     backgroundPanel = createBackgroundPanel(renderer, backgroundPanelTarget),
-    backgroundQuad = new THREE.Mesh( new THREE.PlaneGeometry(1280, 580), new THREE.MeshBasicMaterial({map: backgroundPanelTarget}))
+    backgroundQuad = new THREE.Mesh( new THREE.PlaneGeometry(1280, 580), new THREE.MeshBasicMaterial({map: backgroundPanelTarget})),
+
+    bottomPanel = createBottomPanel($("#bottom-panel"))
+
+
     ;
 
 leftQuad.position.set(512/2,512/2 + 60, 0);
