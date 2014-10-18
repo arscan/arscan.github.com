@@ -24,7 +24,7 @@ function createBackgroundPanel(renderer, renderTarget){
 
         // LIGHTS
 
-        // var ambientLight = new THREE.AmbientLight( 0x222222 );
+        // var ambientLight = new THREE.AmbientLight( 0x111111 );
         // scene.add( ambientLight );
 
         pointLight1 = new THREE.PointLight( 0xeac7df, 0.75, 1500 );
@@ -33,7 +33,7 @@ function createBackgroundPanel(renderer, renderTarget){
         pointLight2 = new THREE.PointLight( 0x479578, 0.75, 1500 );
         pointLight2.position.z = -480;
 
-        pointLight3 = new THREE.PointLight( 0x12b7a7, 2.95, 1500 );
+        pointLight3 = new THREE.PointLight( 0x12b7a7, 3.95, 2000 );
         pointLight3.position.y = 850;
         pointLight3.position.z = -420;
 
