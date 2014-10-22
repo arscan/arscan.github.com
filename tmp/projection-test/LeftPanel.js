@@ -1,9 +1,13 @@
 function createLeftPanel(renderer, renderTarget){
 
-       var renderScene,
+   var renderScene,
        renderComposer,
        renderCamera,
-       clock;
+       clock,
+       mainComposer,
+       projectorComposer,
+       blurComposer,
+       glowComposer;
 
        var canvasWidth = renderTarget.width;
        var canvasHeight = renderTarget.height;
