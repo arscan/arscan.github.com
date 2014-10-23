@@ -180,7 +180,7 @@ function createLeftPanel(renderer, renderTarget){
 
         nameBoxMaterial.uniforms.name1.value = nameTexture1;
         nameBoxMaterial.transparent = true;
-        var planegeometry = new THREE.PlaneGeometry( 400, 400 );
+        var planegeometry = new THREE.PlaneBufferGeometry( 400, 400 );
         // var planematerial = new THREE.MeshBasicMaterial( {map: nameTexture, transparent: true} );
 
 

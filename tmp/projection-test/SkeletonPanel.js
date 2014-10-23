@@ -1,4 +1,4 @@
-function createSkeletonPanel(renderer, renderTarget){
+function createSkeletonPanel(renderer, width, height, x, y){
 
    var renderScene,
        renderCamera,
@@ -9,8 +9,15 @@ function createSkeletonPanel(renderer, renderTarget){
        blurComposer;
        // glowComposer;
 
-   var canvasWidth = renderTarget.width;
-   var canvasHeight = renderTarget.height;
+    var targetParams = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat};
+    var renderTarget = new THREE.WebGLRenderTarget(width, height, targetParams);
+    var quad = new THREE.Mesh( new THREE.PlaneBufferGeometry(width, height), new THREE.MeshBasicMaterial({map: renderTarget, transparent: true}));
+
+    quad.material.blending = THREE.AdditiveBlending;
+    quad.position.set(x, y, 0);
+
+   var width = renderTarget.width;
+   var height = renderTarget.height;
 
     var Shaders = {
         skeleton: {
@@ -78,8 +85,8 @@ function createSkeletonPanel(renderer, renderTarget){
     function init(){
         clock = new THREE.Clock();
 
-        // renderCamera = new THREE.PerspectiveCamera( 70, canvasWidth / canvasHeight, 1, 1000 );
-        renderCamera = new THREE.OrthographicCamera(0, canvasWidth, canvasHeight, 0, -1000, 1000),
+        // renderCamera = new THREE.PerspectiveCamera( 70, width / height, 1, 1000 );
+        renderCamera = new THREE.OrthographicCamera(0, width, height, 0, -1000, 1000),
         renderScene = new THREE.Scene();
 
         var loader = new THREE.OBJLoader();
@@ -108,14 +115,14 @@ function createSkeletonPanel(renderer, renderTarget){
 
             skeletonObject.children[0].geometry.mergeVertices();
             skeletonObject.children[0].geometry.computeVertexNormals();
-            skeletonObject.children[0].scale.set(1.5,1.5,1.5);
+            skeletonObject.children[0].scale.set(1.3,1.3,1.3);
             skeletonObject.children[1].geometry.computeVertexNormals();
-            skeletonObject.children[1].scale.set(1.5,1.5,1.5);
+            skeletonObject.children[1].scale.set(1.3,1.3,1.3);
 
             skeletonObject.children[0].material = skeletonMaterial;
             skeletonObject.children[1].material = organMaterial;
 
-            skeletonObject.position.set(canvasWidth/2, canvasHeight/8, 0);
+            skeletonObject.position.set(width/2, height/8, 0);
 
             renderScene.add(skeletonObject);
 
@@ -126,33 +133,33 @@ function createSkeletonPanel(renderer, renderTarget){
 
         var renderScenePass = new THREE.TexturePass(renderComposer.renderTarget2);
 
-        // projectorComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth/1.5, canvasHeight/1.5));
+        // projectorComposer = new THREE.EffectComposer(renderer, createRenderTarget(width/1.5, height/1.5));
         // projectorComposer.addPass(renderScenePass);
         // projectorComposer.addPass(new THREE.ProjectorPass(renderer, new THREE.Vector2(-.18, 0)));
 
-        blurComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth/4, canvasHeight/4));
+        blurComposer = new THREE.EffectComposer(renderer, createRenderTarget(width/4, height/4));
         blurComposer.addPass(renderScenePass);
-        blurComposer.addPass(new THREE.ShaderPass(THREE.HorizontalBlurShader, {h: BLURINESS / (canvasWidth/4)}));
-        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: BLURINESS / (canvasHeight/4)}));
-        blurComposer.addPass(new THREE.ShaderPass(THREE.HorizontalBlurShader, {h: (BLURINESS/4) / (canvasWidth/4)}));
-        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (canvasHeight/4)}));
-        blurComposer.addPass(new THREE.ShaderPass(THREE.HorizontalBlurShader, {h: (BLURINESS/4) / (canvasWidth/4)}));
-        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (canvasHeight/4)}));
-        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (canvasHeight/4)}));
+        blurComposer.addPass(new THREE.ShaderPass(THREE.HorizontalBlurShader, {h: BLURINESS / (width/4)}));
+        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: BLURINESS / (height/4)}));
+        blurComposer.addPass(new THREE.ShaderPass(THREE.HorizontalBlurShader, {h: (BLURINESS/4) / (width/4)}));
+        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (height/4)}));
+        blurComposer.addPass(new THREE.ShaderPass(THREE.HorizontalBlurShader, {h: (BLURINESS/4) / (width/4)}));
+        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (height/4)}));
+        blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (height/4)}));
 
 
-        // mainComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth, canvasHeight));
+        // mainComposer = new THREE.EffectComposer(renderer, createRenderTarget(width, height));
         mainComposer = new THREE.EffectComposer(renderer, renderTarget);
         mainComposer.addPass(renderScenePass);
-        mainComposer.addPass(new THREE.ShaderPass(THREE.FXAAShader, {resolution: new THREE.Vector2(1/canvasWidth, 1/canvasHeight)}));
+        mainComposer.addPass(new THREE.ShaderPass(THREE.FXAAShader, {resolution: new THREE.Vector2(1/width, 1/height)}));
 
-        // glowComposer = new THREE.EffectComposer(renderer, createRenderTarget(canvasWidth, canvasHeight));
+        // glowComposer = new THREE.EffectComposer(renderer, createRenderTarget(width, height));
         // glowComposer.addPass(renderScenePass);
 
-        // glowComposer.addPass(new THREE.ShaderPass( THREE.HorizontalBlurShader, {h: 2/canvasWidth} ));
-        // glowComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: 2/canvasHeight}));
-        // glowComposer.addPass(new THREE.ShaderPass( THREE.HorizontalBlurShader, {h: 1/canvasWidth} ));
-        // glowComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: 1/canvasHeight}));
+        // glowComposer.addPass(new THREE.ShaderPass( THREE.HorizontalBlurShader, {h: 2/width} ));
+        // glowComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: 2/height}));
+        // glowComposer.addPass(new THREE.ShaderPass( THREE.HorizontalBlurShader, {h: 1/width} ));
+        // glowComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: 1/height}));
 
         var addPass = new THREE.ShaderPass(THREE.AdditiveBlendShader);
         addPass.uniforms['tAdd'].value = blurComposer.writeBuffer;
@@ -195,10 +202,11 @@ function createSkeletonPanel(renderer, renderTarget){
     init();
 
     return Object.freeze({
-        render: render
-
-
-
+        render: render,
+        renderTarget: renderTarget,
+        width: width,
+        height: height,
+        quad: quad
     });
 }
 

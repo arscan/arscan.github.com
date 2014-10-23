@@ -1,12 +1,15 @@
 
-function createBackgroundPanel(renderer, renderTarget){
+function createBackgroundPanel(renderer, width, height){
 
     var renderScene,
-    renderComposer,
-    renderCamera;
+        renderComposer,
+        renderCamera;
 
-    var canvasWidth = renderTarget.width;
-    var canvasHeight = renderTarget.height;
+    var targetParams = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat};
+    var renderTarget = new THREE.WebGLRenderTarget(width, height, targetParams);
+    var quad = new THREE.Mesh( new THREE.PlaneBufferGeometry(width, height), new THREE.MeshBasicMaterial({map: renderTarget}));
+    quad.position.set(width/2,height/2, 0);
+
 
     var pointLight1, pointLight2, pointLight3, pointLight4;
     var scene = new THREE.Scene();
@@ -77,11 +80,11 @@ function createBackgroundPanel(renderer, renderTarget){
         var parameters = { fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true };
         var material = new THREE.ShaderMaterial( parameters );
 
-        var geometry= new THREE.PlaneGeometry(800, 600);
+        var geometry= new THREE.PlaneBufferGeometry(800, 600);
         // var material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture( "normal_map.png")});
         // uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture( "normal_map.png" );
 
-        var spacerGeometry= new THREE.PlaneGeometry(48, 1600);
+        var spacerGeometry= new THREE.PlaneBufferGeometry(48, 1600);
         var spacerMaterial = new THREE.MeshPhongMaterial( { ambient: 0x000000, color: 0x9fa4b7, specular: 0x000000, shininess: 0, shading: THREE.FlatShading } );
 
         var spacerMesh = new THREE.Mesh( spacerGeometry, spacerMaterial );
@@ -101,73 +104,73 @@ function createBackgroundPanel(renderer, renderTarget){
         createPanel(geometry, {x:1500,y:-300}, material);
         createPanel(geometry, {x:-940,y:-300}, material);
 
-        var number1 = new THREE.Mesh(new THREE.PlaneGeometry(35, 35), 
+        var number1 = new THREE.Mesh(new THREE.PlaneBufferGeometry(35, 35), 
                                      new THREE.MeshBasicMaterial({transparent: true, opacity: .7, map: THREE.ImageUtils.loadTexture("number1.png")}));
         number1.position.set(-510, 340, -460);
         scene.add(number1);
 
-        var number2 = new THREE.Mesh(new THREE.PlaneGeometry(35, 35), 
+        var number2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(35, 35), 
                                      new THREE.MeshBasicMaterial({transparent: true, opacity: .7, map: THREE.ImageUtils.loadTexture("number2.png")}));
         number2.position.set(-510, 145, -460);
         scene.add(number2);
 
-        var number3 = new THREE.Mesh(new THREE.PlaneGeometry(35, 35), 
+        var number3 = new THREE.Mesh(new THREE.PlaneBufferGeometry(35, 35), 
                                      new THREE.MeshBasicMaterial({transparent: true, opacity: .7, map: THREE.ImageUtils.loadTexture("number3.png")}));
         number3.position.set(-510, -45, -460);
         scene.add(number3);
 
-        var number4 = new THREE.Mesh(new THREE.PlaneGeometry(35, 35), 
+        var number4 = new THREE.Mesh(new THREE.PlaneBufferGeometry(35, 35), 
                                      new THREE.MeshBasicMaterial({transparent: true, opacity: .7, map: THREE.ImageUtils.loadTexture("number4.png")}));
         number4.position.set(-510, -243, -460);
         scene.add(number4);
         
         var horizTexture = new THREE.MeshBasicMaterial({transparent: true, opacity: .8, map: THREE.ImageUtils.loadTexture("horizontal_lights.png")});
 
-        var horizLight1 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight1 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight1.position.set(0, 350, -500);
         scene.add(horizLight1);
 
-        var horizLight2 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight2.position.set(1024, 350, -500);
         scene.add(horizLight2);
 
-        var horizLight3 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight3 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight3.position.set(-1024, 350, -500);
         scene.add(horizLight3);
 
-        var horizLight4 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight4 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight4.position.set(0, 148, -500);
         scene.add(horizLight4);
 
-        var horizLight5 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight5 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight5.position.set(1024, 148, -500);
         scene.add(horizLight5);
 
-        var horizLight6 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight6 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight6.position.set(-1024, 148, -500);
         scene.add(horizLight6);
 
-        var horizLight7 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight7 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight7.position.set(0, -47, -500);
         scene.add(horizLight7);
 
-        var horizLight8 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight8 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight8.position.set(1024, -47, -500);
         scene.add(horizLight8);
 
-        var horizLight9 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight9 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight9.position.set(-1024, -47, -500);
         scene.add(horizLight9);
 
-        var horizLight10 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight10 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight10.position.set(1024, -250, -500);
         scene.add(horizLight10);
 
-        var horizLight11 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight11 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight11.position.set(-1024, -250, -500);
         scene.add(horizLight11);
 
-        var horizLight12 = new THREE.Mesh(new THREE.PlaneGeometry(1024, 18), horizTexture); 
+        var horizLight12 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1024, 18), horizTexture); 
         horizLight12.position.set(0, -250, -500);
         scene.add(horizLight12);
 
@@ -214,9 +217,11 @@ function createBackgroundPanel(renderer, renderTarget){
     init();
 
     return Object.freeze({
-        render: render
-
-
+        render: render,
+        renderTarget: renderTarget,
+        width: width,
+        height: height,
+        quad: quad
     });
 }
 

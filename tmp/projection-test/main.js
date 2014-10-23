@@ -2,46 +2,36 @@
 var container = document.createElement( 'div' ),
     stats = new Stats(), 
     renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } ), 
-    camera = new THREE.OrthographicCamera(0, 1280, 580, 0, 0, 100),
+    camera = new THREE.OrthographicCamera(0, 1280, 580, 0, -1000, 1000),
     scene = new THREE.Scene(),
 
-    targetParams = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat},
+    skeletonPanel = createSkeletonPanel(renderer, 250, 400, 512/2+ 500, 512/2+ 60),
+    namePanel = createNamePanel(renderer, 400, 400, 300, 512/2 + 60),
+    
+    projectorPanel = createProjectorPanel(renderer, 1280, 580, [namePanel, skeletonPanel]);
+    backgroundPanel = createBackgroundPanel(renderer, 1280, 580),
 
-    leftPanelTarget = new THREE.WebGLRenderTarget(512, 512, targetParams),
-    leftPanel = createLeftPanel(renderer, leftPanelTarget),
-    leftQuad = new THREE.Mesh( new THREE.PlaneGeometry(512, 512), new THREE.MeshBasicMaterial({map: leftPanelTarget, transparent: true}))
-    leftQuad.material.blending = THREE.AdditiveBlending
-
-    //remove
-    skeletonPanelTarget = new THREE.WebGLRenderTarget(250, 400, targetParams),
-    skeletonPanel = createSkeletonPanel(renderer, skeletonPanelTarget),
-    skeletonQuad = new THREE.Mesh( new THREE.PlaneGeometry(250, 400), new THREE.MeshBasicMaterial({map: skeletonPanelTarget, transparent: true}))
-    skeletonQuad.material.blending = THREE.AdditiveBlending
-
-    backgroundPanelTarget = new THREE.WebGLRenderTarget(1280, 580, targetParams),
-    backgroundPanel = createBackgroundPanel(renderer, backgroundPanelTarget),
-    backgroundQuad = new THREE.Mesh( new THREE.PlaneGeometry(1280, 580), new THREE.MeshBasicMaterial({map: backgroundPanelTarget})),
-
-    bottomPanel = createBottomPanel($("#bottom-panel"))
+    bottomPanel = createBottomPanel($("#bottom-panel")),
+    
+    clock = new THREE.Clock();
 
 
-    ;
-
-leftQuad.position.set(512/2,512/2 + 60, 0);
-backgroundQuad.position.set(1280/2,580/2, 0);
-
+// backgroundPanel.quad.position.set(1280/2,580/2, 0);
+// projectorPanel.quad.position.set(1280, 580/2, 1);
 
 //remove
-skeletonQuad.position.set(512/2 + 500,512/2 + 60, 0);
-scene.add(skeletonQuad);
+// scene.add(skeletonPanel.quad);
 
+//remove
+// scene.add(namePanel.quad);
 
-scene.add(leftQuad);
-scene.add(backgroundQuad);
+// scene.add(leftQuad);
+scene.add(projectorPanel.quad);
+scene.add(backgroundPanel.quad);
 
 container.appendChild( stats.domElement );
 document.body.appendChild( container );
-renderer.setSize( 1280, 530 );
+renderer.setSize( 1280, 580 );
 container.appendChild( renderer.domElement );
 
 
@@ -49,12 +39,14 @@ container.appendChild( renderer.domElement );
 
 
 function render(){
+    var time = clock.getElapsedTime();
     stats.update();
-    leftPanel.render();
     backgroundPanel.render();
 
-    // remove
+    skeletonPanel.quad.position.x = projectorPanel.width / 2 + Math.sin(time/2) * 300;
     skeletonPanel.render();
+    namePanel.render();
+    projectorPanel.render();
 
     renderer.render(scene, camera);
 
@@ -62,6 +54,14 @@ function render(){
     // render my effect composer
 
     requestAnimationFrame(render);
+
+    TWEEN.update();
 }
 
 render();
+
+$(document).on("click",function(event){
+    namePanel.quad.position.set(event.clientX, 580-event.clientY - namePanel.height / 2, 0);
+
+});
+
