@@ -38,7 +38,7 @@ function createProjectorPanel(renderer, width, height, elements){
         var renderScenePass = new THREE.TexturePass(renderComposer.renderTarget2);
         projectorComposer = new THREE.EffectComposer(renderer, createRenderTarget(width/2.8, height/2.8));
         projectorComposer.addPass(renderScenePass);
-        projectorComposer.addPass(new THREE.ProjectorPass(renderer, new THREE.Vector2(-.18, 0)));
+        projectorComposer.addPass(new THREE.ProjectorPass(renderer, new THREE.Vector2(-.04, 0.05)));
 
         renderComposer.addPass(new THREE.ShaderPass(THREE.AdditiveBlendShader, {tAdd: projectorComposer.renderTarget1, fOpacity: .5}));
     }

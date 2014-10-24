@@ -206,8 +206,7 @@ function createNamePanel(renderer, width, height, x, y){
         clock = new THREE.Clock();
 
         renderCamera = new THREE.PerspectiveCamera( 70, width / height, 1, 1000 );
-        renderCamera.position.z = 260;
-        renderCamera.position.y = 0;
+        renderCamera.position.set(0, 50, 120);
         renderScene = new THREE.Scene();
 
         var nameCanvas1= createNameCanvas("Scanlon", "Rob Scanlon hasdfasdfasdfasdf", ["Alias: \"ARSCAN\"", 
@@ -240,14 +239,12 @@ function createNamePanel(renderer, width, height, x, y){
 
         nameBoxMaterial.uniforms.name1.value = nameTexture1;
         nameBoxMaterial.transparent = true;
-        var planegeometry = new THREE.PlaneBufferGeometry( 400, 400 );
+        var planegeometry = new THREE.PlaneBufferGeometry( width, height );
         // var planematerial = new THREE.MeshBasicMaterial( {map: nameTexture, transparent: true} );
 
 
         var plane = new THREE.Mesh( planegeometry, nameBoxMaterial );
-        plane.position.x = 50;
-        plane.position.y = -20;
-        plane.position.z = 0;
+        plane.position.set(50, 0, 0);
         renderScene.add( plane );
 
         setTimeout(function(){
@@ -255,22 +252,6 @@ function createNamePanel(renderer, width, height, x, y){
            nameBoxMaterial.uniforms.textInStartTime.value = 7.0,
            nameBoxMaterial.uniforms.textOutStartTime.value = 0.0
         }, 7500);
-
-        /*
-        new TWEEN.Tween(plane.position)
-        .easing( TWEEN.Easing.Cubic.Out )
-        .to({x: 140, y: -200, z: -60}, 300)
-        .chain(new TWEEN.Tween(plane.position)
-               .easing( TWEEN.Easing.Cubic.In )
-               .to({x: 0}, 500)
-               .delay(6200)
-               .onComplete(function(){
-                   nameBoxMaterial.uniforms.name1.value = nameTexture2;
-                   nameBoxMaterial.uniforms.textInStartTime.value = 7.0,
-                   nameBoxMaterial.uniforms.textOutStartTime.value = 0.0
-                   nameTween1.start();
-               })).start();
-              */
 
 
         renderComposer = new THREE.EffectComposer(renderer, createRenderTarget(width, height));
@@ -285,8 +266,6 @@ function createNamePanel(renderer, width, height, x, y){
         blurComposer.addPass(new THREE.ShaderPass(THREE.HorizontalBlurShader, {h: (BLURINESS/4) / (width/4)}));
         blurComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: (BLURINESS/4) / (height/4)}));
 
-
-        // mainComposer = new THREE.EffectComposer(renderer, createRenderTarget(width, height));
         mainComposer = new THREE.EffectComposer(renderer, renderTarget);
         mainComposer.addPass(renderScenePass);
 
@@ -298,23 +277,10 @@ function createNamePanel(renderer, width, height, x, y){
         glowComposer.addPass(new THREE.ShaderPass( THREE.HorizontalBlurShader, {h: 1/width} ));
         glowComposer.addPass(new THREE.ShaderPass(THREE.VerticalBlurShader, {v: 1/height}));
 
-        // var addPass = new THREE.ShaderPass(THREE.AdditiveBlendShader);
-        // addPass.uniforms['tAdd'].value = blurComposer.writeBuffer;
-        // mainComposer.addPass(addPass);
-
         var addPass2 = new THREE.ShaderPass(THREE.AdditiveBlendShader);
         addPass2.uniforms['tAdd'].value = glowComposer.writeBuffer;
         mainComposer.addPass(addPass2);
 
-        // mainComposer.addPass(addPass2);
-        // mainComposer.addPass(new THREE.ShaderPass(THREE.CopyShader)); /* to get the buffers lined up properly */
-
-
-        // setInterval(function(){
-        //     addPass3.enabled = !addPass3.enabled;
-        // }, 1000);
-
-        // renderScenePass.uniforms[ "tDiffuse" ].value = fullResolutionComposer.renderTarget2;
     }
 
     function render(){
