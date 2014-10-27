@@ -1,4 +1,4 @@
-function createProjectsPanel(renderer, width, height, x, y){
+function createAboutPanel(renderer, width, height, x, y){
 
    var renderScene,
        renderComposer,
@@ -45,14 +45,14 @@ function createProjectsPanel(renderer, width, height, x, y){
        return buffer;
    };
 
-   function createTitleCanvas(name){
+   function createTitleCanvas(){
 
        return renderToCanvas(256, 80, function(ctx){
            ctx.strokeStyle="#fff";
 
            ctx.font = "bold 14pt Roboto";
            ctx.fillStyle = '#ff8d07';
-           ctx.fillText("OPEN SOURCE", 25, 15);
+           ctx.fillText("ABOUT", 25, 15);
 
            ctx.lineWidth = 1.5;
            ctx.strokeStyle="#fd2616";
@@ -97,7 +97,7 @@ function createProjectsPanel(renderer, width, height, x, y){
         renderCamera.position.y = 0;
         renderScene = new THREE.Scene();
 
-        var titleCanvas= createTitleCanvas("subtitle", "RProjects"); 
+        var titleCanvas= createTitleCanvas(); 
 
         var titleTexture = new THREE.Texture(titleCanvas)
         titleTexture.needsUpdate = true;
@@ -175,7 +175,7 @@ function createProjectsPanel(renderer, width, height, x, y){
     init();
 
     return Object.freeze({
-        toString: function(){return "ProjectsPanel"},
+        toString: function(){return "AboutPanel"},
         render: render,
         renderTarget: renderTarget,
         width: width,
