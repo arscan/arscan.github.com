@@ -19,7 +19,7 @@ function createProjectsPanel(renderer, width, height, x, y){
 
    var BLURINESS = 3.9;
 
-   var encomSphere,
+   var encomGlobe,
        encomBoardroom,
        hexasphere,
        streamed;
@@ -40,21 +40,19 @@ function createProjectsPanel(renderer, width, height, x, y){
        buffer.width = width;
        buffer.height = height;
 
-       // $(".container").append(buffer);
-
        renderFunction(buffer.getContext('2d'));
 
        return buffer;
    };
 
-   function createTitleCanvas(name){
+   function createTitleCanvas(){
 
        return renderToCanvas(256, 80, function(ctx){
            ctx.strokeStyle="#fff";
 
            ctx.font = "bold 14pt Roboto";
            ctx.fillStyle = '#ff8d07';
-           ctx.fillText("OPEN SOURCE", 25, 15);
+           ctx.fillText("Projects", 25, 15);
 
            ctx.lineWidth = 1.5;
            ctx.strokeStyle="#fd2616";
@@ -99,7 +97,7 @@ function createProjectsPanel(renderer, width, height, x, y){
         renderCamera.position.y = 0;
         renderScene = new THREE.Scene();
 
-        var titleCanvas= createTitleCanvas("subtitle", "RProjects"); 
+        var titleCanvas= createTitleCanvas(); 
 
         var titleTexture = new THREE.Texture(titleCanvas)
         titleTexture.needsUpdate = true;
@@ -111,15 +109,20 @@ function createProjectsPanel(renderer, width, height, x, y){
         plane.position.set(0, 90, 0);
         renderScene.add( plane );
 
-        encomSphere = new THREE.Mesh(new THREE.PlaneBufferGeometry(100,100),
+        encomGlobe = createEncomGlobe(renderScene);
+        /*
+        encomGlobe = new THREE.Mesh(new THREE.PlaneBufferGeometry(100,100),
                                     new THREE.MeshBasicMaterial({color: 0xFF0000, opacity: .2, transparent: true}));
-        encomSphere.position.set(-70, 20, 0);
-        renderScene.add(encomSphere);
+        encomGlobe.position.set(-70, -80, 0);
+        renderScene.add(encomGlobe);
+       */
 
-        encomBoardroom = new THREE.Mesh(new THREE.PlaneBufferGeometry(100,60),
-                                    new THREE.MeshBasicMaterial({color: 0x00FF00, opacity: .2, transparent: true}));
-        encomBoardroom.position.set(80, 50, 0);
-        renderScene.add(encomBoardroom);
+        // encomBoardroom = new THREE.Mesh(new THREE.PlaneBufferGeometry(100,60),
+        //                             new THREE.MeshBasicMaterial({color: 0x00FF00, opacity: .2, transparent: true}));
+        // encomBoardroom.position.set(80, 50, 0);
+        // renderScene.add(encomBoardroom);
+        
+        encomBoardroom = createEncomBoardroom(renderScene);
 
         streamed = new THREE.Mesh(new THREE.PlaneBufferGeometry(300,80),
         // streamed = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000,1000),
@@ -167,6 +170,8 @@ function createProjectsPanel(renderer, width, height, x, y){
         // blurComposer.render();
         glowComposer.render();
 
+        encomBoardroom.render();
+        encomGlobe.render();
 
         mainComposer.render();
 
