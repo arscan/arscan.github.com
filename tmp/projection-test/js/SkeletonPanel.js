@@ -104,7 +104,7 @@ function createSkeletonPanel(renderer, scale){
         skeletonMaterial.blending = THREE.AdditiveBlending;
         organMaterial.blending = THREE.AdditiveBlending;
 
-        loader.load( '../models/skeleton.obj', LOADSYNC.register(function ( skeletonObject ) {
+        loader.load( '/tmp/projection-test/models/skeleton.obj', LOADSYNC.register(function ( skeletonObject ) {
 
             skeletonObject.children[0].geometry.mergeVertices();
             skeletonObject.children[0].geometry.computeVertexNormals();
