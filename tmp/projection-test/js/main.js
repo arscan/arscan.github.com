@@ -289,14 +289,12 @@ $(function(){
         rotateCheckTimeout = null;
 
     function isPortrait(){
-        console.log(navigator.userAgent);
-        console.log($(window).width());
-        console.log($(window).height());
         return ( /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) && $(window).width() < $(window).height());
     }
 
     function load(){
         if(!isPortrait() || skipRotate){
+            $("body").height(4000);
             $("#please-rotate").css({"display": "none"});
             WebFont.load({
                 google: {
@@ -310,7 +308,8 @@ $(function(){
         }
     }
 
-    $("#skip-rotate").click(function(){
+
+    $("#please-rotate").click(function(){
         clearTimeout(rotateCheckTimeout);
         skipRotate = true;
         load();
