@@ -284,15 +284,40 @@ function main(renderWidth){
 }
 
 $(function(){
-    var bgHeight = 1600;
+    var bgHeight = 1600, 
+        skipRotate = false,
+        rotateCheckTimeout = null;
 
+    function isPortrait(){
+        console.log(navigator.userAgent);
+        console.log($(window).width());
+        console.log($(window).height());
+        return ( /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) && $(window).width() < $(window).height());
+    }
 
-    WebFont.load({
-        google: {
-            families: ['Roboto:500']
-        },
-        active: main.bind(this,$(window).width()) // TODO: FIGURE OUT THE WIDTH?
-    }); 
+    function load(){
+        if(!isPortrait() || skipRotate){
+            $("#please-rotate").css({"display": "none"});
+            WebFont.load({
+                google: {
+                    families: ['Roboto:500']
+                },
+                active: main.bind(this,$(window).width()) // TODO: FIGURE OUT THE WIDTH?
+            }); 
+        } else {
+            $("#please-rotate").css({"display": "block"});
+            rotateCheckTimeout = setTimeout(load, 500);
+        }
+    }
+
+    $("#skip-rotate").click(function(){
+        clearTimeout(rotateCheckTimeout);
+        skipRotate = true;
+        load();
+    });
+
+    load();
+});
 
 /*
     $('body').height( bgHeight + $(window).height() );
@@ -305,8 +330,6 @@ $(function(){
         }    
     });
 */
-
-});
 
 /*
 $(window).resize(function() {
