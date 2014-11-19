@@ -49,8 +49,16 @@ video {
     display: none;
 }
 
-
 #loading-graphic {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    position:fixed;
+    z-index: 10;
+}
+
+#play-button {
+    color: #fff;
     width: 100%;
     height: 100%;
     background-color: #000;

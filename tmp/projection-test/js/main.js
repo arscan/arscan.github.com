@@ -439,8 +439,12 @@ $(function(){
         skipRotate = false,
         rotateCheckTimeout = null;
 
+    function isMobile(){
+        return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
     function isPortrait(){
-        return ( /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) && $(window).width() < $(window).height());
+        return ( isMobile && $(window).width() < $(window).height());
     }
 
     function load(){
@@ -451,8 +455,23 @@ $(function(){
                 google: {
                     families: ['Roboto:500']
                 },
-                active: main.bind(this,$(window).width()) // TODO: FIGURE OUT THE WIDTH?
-                // active: main.bind(this,1280) // TODO: FIGURE OUT THE WIDTH?
+                active: function(){
+                    if(true){
+                        $("#play-button").click(function(){
+                            $("#play-button").css({display: "none"});
+                            var video = $("#video")[0];
+                            console.log(video);
+                            video.src = "videos/test_vid.webm";
+                            video.setAttribute('crossorigin', 'anonymous');
+                            video.load(); // must call after setting/changing source
+                            video.play();
+                            main($(window).width());
+                        });
+                    } else {
+                        $("#play-button").css({display: "none"});
+                        main($(window).width());
+                    }
+                }
             }); 
         } else {
             $("#please-rotate").css({"display": "block"});
