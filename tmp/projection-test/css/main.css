@@ -64,6 +64,8 @@ video {
     background-color: #000;
     position:fixed;
     z-index: 20;
+    text-align: center;
+    padding-top: 300px;
 }
 
 #loading-graphic div {
@@ -220,6 +222,7 @@ video {
 }
 
 #rotate-message {
+    background-color: #000;
     font-size: 20pt;
     text-align: center;
     font-family: Verdana, Geneva, sans-serif;
