@@ -467,9 +467,9 @@ $(function(){
                 active: function(){
                     if(isMobile){
                         $("#play-button").click(function(){
+                            start();
 
                             $("#play-button").velocity({opacity: 0}, {complete: function(){
-                                start();
                                 $("#play-button").css({display: "none"});
                             }});
                         });
