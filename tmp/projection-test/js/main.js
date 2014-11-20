@@ -52,6 +52,7 @@ function main(renderWidth){
     scene.add(projectorPanel.quad);
     scene.add(subjectPanel.quad);
     scene.add(backgroundPanel.quad);
+    backgroundPanel.quad.material.opacity = .1;
 
     skeletonPanel.setPosition(350 * screenScale, renderHeight - 20 * screenScale, 1);
     // namePanel.setPosition(50 * screenScale, 358*screenScale, 1);
@@ -110,18 +111,21 @@ function main(renderWidth){
             var newX = carouselCenter.x + (renderWidth/3) * Math.cos(Math.PI * 2 * (i / carouselPanels.length) + Math.PI * 2 * (carouselLocation + .58));
             var newZ = Math.max(0, Math.min(1, 1.1 * Math.sin(Math.PI * 2 * (i / carouselPanels.length) + Math.PI * 2 * (carouselLocation) + 1.2)));
             carouselPanels[i].setPosition(newX, newY, newZ);
-
-
-            // var scale = getScale(panel.quad.position.y);
-
-            // panel.quad.scale.set(scale, scale, scale, scale);
-
-            // panel.setBlur(getBlur(panel.quad.position.y));
         }
-
     }
 
     function runIntroAnimation(){
+        /* Background */
+        new TWEEN.Tween({level: .1})
+           .to({level: 1}, 3000)
+           .easing(TWEEN.Easing.Back.InOut)
+           .onUpdate(function(){
+               backgroundPanel.setLightBarLevel(this.level);
+               backgroundPanel.setOverheadLightLevel(this.level);
+               subjectPanel.setBrightness(this.level);
+
+           }).start();
+
 
         /* Name Panel */
         createChainedTween(namePanel, [
@@ -218,7 +222,6 @@ function main(renderWidth){
             }).start();
 
         setTimeout(function(){clock.start()}, 6000);
-
 
         /*
         var nameIntroTween = new TWEEN.Tween({x: renderWidth *.8, y: renderHeight / 2, z: 0})
@@ -437,14 +440,20 @@ function main(renderWidth){
 $(function(){
     var bgHeight = 1600, 
         skipRotate = false,
-        rotateCheckTimeout = null;
-
-    function isMobile(){
-        return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
+        rotateCheckTimeout = null,
+        isMobile = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     function isPortrait(){
         return ( isMobile && $(window).width() < $(window).height());
+    }
+
+    function start(){
+        var video = $("#video")[0];
+        video.src = "videos/test_vid.webm";
+        video.setAttribute('crossorigin', 'anonymous');
+        video.load(); // must call after setting/changing source
+        video.play();
+        main($(window).width());
     }
 
     function load(){
@@ -456,20 +465,16 @@ $(function(){
                     families: ['Roboto:500']
                 },
                 active: function(){
-                    if(true){
+                    if(isMobile){
                         $("#play-button").click(function(){
-                            $("#play-button").css({display: "none"});
-                            var video = $("#video")[0];
-                            console.log(video);
-                            video.src = "videos/test_vid.webm";
-                            video.setAttribute('crossorigin', 'anonymous');
-                            video.load(); // must call after setting/changing source
-                            video.play();
-                            main($(window).width());
+
+                            $("#play-button").velocity({opacity: 0}, {complete: function(){
+                                start();
+                                $("#play-button").css({display: "none"});
+                            }});
                         });
                     } else {
-                        $("#play-button").css({display: "none"});
-                        main($(window).width());
+                        start();
                     }
                 }
             }); 
@@ -485,6 +490,10 @@ $(function(){
         skipRotate = true;
         load();
     });
+
+    if(!isMobile){
+        $("#play-button").css({display: "none"});
+    }
 
     load();
 });
