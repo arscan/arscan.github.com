@@ -118,11 +118,12 @@ function main(renderWidth){
         /* Background */
         new TWEEN.Tween({level: .1})
            .to({level: 1}, 3000)
-           .easing(TWEEN.Easing.Back.InOut)
+           .easing(TWEEN.Easing.Quadratic.Out)
            .onUpdate(function(){
                backgroundPanel.setLightBarLevel(this.level);
                backgroundPanel.setOverheadLightLevel(this.level);
                subjectPanel.setBrightness(this.level);
+               bottomPanel.element.css({opacity: this.level});
 
            }).start();
 
@@ -280,6 +281,15 @@ function main(renderWidth){
     }
 
     render();
+
+    $(window).resize(function() {
+        if($(window).width() > renderWidth * 1.3){
+            location.href = '#';
+            return;
+        }
+        $('canvas').css({width: $(window).width(), height: $(window).width() / screenRatio});
+        bottomPanel.element.hide();
+    });
 
     $(document).on("mousedown","canvas", function(event){
         
@@ -476,7 +486,6 @@ $(function(){
                         video.load(); // must call after setting/changing source
                         video.play();
                         main($(window).width());
-                        start();
                     }
                 }
             }); 
