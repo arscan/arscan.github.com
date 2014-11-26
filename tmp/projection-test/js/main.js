@@ -298,6 +298,12 @@ function main(renderWidth){
         hammertime.on('pan', function(ev){
             carouselVelocity = ev.velocity;
         });
+
+        $("canvas").on('mousewheel', function(event){
+            carouselVelocity = event.deltaY / 2 + carouselVelocity;
+        });
+
+
     }
 
     function setTwitter(){
@@ -319,22 +325,17 @@ function main(renderWidth){
     }
 
     function render(){
+        requestAnimationFrame(render);
+
         var time = clock.getElapsedTime();
         stats.update();
 
-        carouselVelocity *= .99;
-        console.log(clock.getDelta() * 1000 * carouselVelocity);
+        carouselVelocity *= .95;
 
         if(Math.abs(carouselVelocity) > .001){
-            carouselLocation += ((clock.getDelta() * 1000 * carouselVelocity) / -8);
+            carouselLocation += (((clock.getDelta() * 1000 * carouselVelocity) / -8) * screenScale);
             setPanelPositions();
         }
-
-
-
-
-
-
 
         backgroundPanel.render(time);
 
@@ -361,7 +362,6 @@ function main(renderWidth){
 
         TWEEN.update();
 
-        requestAnimationFrame(render);
 
     }
 
@@ -389,7 +389,7 @@ $(function(){
 
     function load(){
         if(!isPortrait() || skipRotate){
-            $("body").height(4000);
+            // $("body").height(4000);
             $("#please-rotate").css({"display": "none"});
             WebFont.load({
                 google: {
