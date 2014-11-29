@@ -40,7 +40,7 @@ function main(renderWidth){
         carouselPanels = [aboutPanel, linksPanel, bioPanel, photosPanel, projectsPanel],
         carouselLocation = 0,
         carouselGrabbed = false,
-        carouselCenter = { x: renderWidth, y: 380 * screenScale},
+        carouselCenter = { x: renderWidth - 50 * screenScale, y: 420 * screenScale},
         carouselVelocity = 0,
         carouselSnapping = false,
 
@@ -300,8 +300,23 @@ function main(renderWidth){
         hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
         /* right carousel */
         hammertime.on('pan', function(ev){
-            snapTween.stop();
-            carouselVelocity = ev.velocity;
+            console.log("panning");
+            if(ev.center.x > renderWidth / 2){
+                snapTween.stop(); 
+
+                if(ev.velocity < 0){
+                    carouselVelocity = Math.max(-.5 * screenScale, ev.velocity / screenScale);
+                } else {
+                    carouselVelocity = Math.max(.001, Math.min(.5 * screenScale, ev.velocity / screenScale));
+                }
+
+                if((ev.direction === Hammer.DIRECTION_LEFT || ev.direction === Hammer.DIRECTION_RIGHT) && ev.center.y < renderHeight /3){
+                    carouselVelocity *= -1;
+                }
+
+                return;
+            } 
+
         });
 
         $("canvas").on('mousewheel', function(event){
