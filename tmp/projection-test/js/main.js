@@ -183,7 +183,7 @@ function main(renderWidth){
                 easing: TWEEN.Easing.Back.Out,
                 position: {x: 200 * screenScale}
             },
-            {   delay: 4000, 
+            {   delay: 1000, 
                 duration: 2000, 
                 easing: TWEEN.Easing.Quintic.InOut,
                 position: {x: 50 * screenScale}
@@ -208,7 +208,7 @@ function main(renderWidth){
                 easing: TWEEN.Easing.Back.Out,
                 position: {y: 360 * screenScale}
             },
-            {   delay: 4000, 
+            {   delay: 1000, 
                 duration: 2000, 
                 easing: TWEEN.Easing.Quintic.InOut,
                 position: {y: 358 * screenScale}
@@ -220,14 +220,14 @@ function main(renderWidth){
 
         createChainedTween(sharePanel, [
             {position: {x: renderWidth + 100, z:0}},
-            {   delay: 500, 
-                duration: 1000, 
+            {   delay: 0, 
+                duration: 500, 
                 easing: TWEEN.Easing.Quintic.Out,
                 position: {x: renderWidth - 200 * screenScale, z:0}
             },
-            {   delay: 1000, 
-                duration: 3000, 
-                easing: TWEEN.Easing.Quadratic.InOut,
+            {   delay: 500, 
+                duration: 2000, 
+                easing: TWEEN.Easing.Quintic.InOut,
                 position: {x: 20 * screenScale, z: 1}
             },
         ]
@@ -235,13 +235,13 @@ function main(renderWidth){
 
         createChainedTween(sharePanel, [
             {position: {y: renderHeight - 120 * screenScale}},
-            {   delay: 500, 
-                duration: 1000, 
+            {   delay: 0, 
+                duration: 500, 
                 easing: TWEEN.Easing.Back.Out,
                 position: {y: renderHeight - 150 * screenScale}
             },
             {   delay: 0, 
-                duration: 2000, 
+                duration: 1300, 
                 easing: TWEEN.Easing.Quintic.InOut,
                 position: {y: renderHeight - 20 * screenScale}
             },
@@ -279,7 +279,7 @@ function main(renderWidth){
     LOADSYNC.onComplete(function(){
         $("#loading-graphic").velocity({color: "#000", opacity: 0},{"display":"none"});
         runIntroAnimation();
-        setTimeout(function(){clock.start()}, 6000);
+        setTimeout(function(){clock.start()}, 2400);
         // clock.start();
     });
 
@@ -375,11 +375,32 @@ function main(renderWidth){
                 }
             }
 
-            var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY);
+            var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY)
             if(typeof res === "string"){
                 location.href=res;
                 return;
             }
+
+        });
+        $("canvas").on('mousemove', function(event){
+            if(carouselVelocity === 0){
+                for(var i = 0; i< carouselPanels.length; i++){
+                    var res= carouselPanels[i].checkBounds(event.offsetX, renderHeight - event.offsetY);
+                    if(typeof res === "string"){
+                        $("canvas").addClass("pointing");
+                        return;
+                    }
+
+                }
+            }
+
+            var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY);
+            if(typeof res === "string"){
+                $("canvas").addClass("pointing");
+                return;
+            }
+
+            $("canvas").removeClass("pointing");
 
         });
 
@@ -491,7 +512,7 @@ $(function(){
     var bgHeight = 1600, 
         skipRotate = false,
         rotateCheckTimeout = null,
-        isMobile = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        isMobile = true;///Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     function isPortrait(){
         return ( isMobile && $(window).width() < $(window).height());
@@ -508,22 +529,21 @@ $(function(){
                 active: function(){
                     if(isMobile){
                         $("#play-button").click(function(){
-                            var video = $("#video")[0];
-                            if(typeof video.load == "function"){
-                                VIDEO_ENABLED = true;
-                                video.src = "videos/test_vid.webm";
-                                video.setAttribute('crossorigin', 'anonymous');
-                                video.load(); // must call after setting/changing source
-                                video.play();
-                            } else {
-
-
-                            }
-                            main($(window).width());
-
                             $("#play-button").velocity({opacity: 0}, {complete: function(){
                                 $("#play-button").css({display: "none"});
                             }});
+                            setTimeout(function(){
+                                var video = $("#video")[0];
+                                if(typeof video.load == "function"){
+                                    VIDEO_ENABLED = true;
+                                    video.src = "videos/test_vid.webm";
+                                    video.setAttribute('crossorigin', 'anonymous');
+                                    video.load(); // must call after setting/changing source
+                                    video.play();
+                                }
+                                main($(window).width());
+                            }, 500);
+
                         });
                     } else {
                         var video = $("#video")[0];
