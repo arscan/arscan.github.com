@@ -55,8 +55,6 @@ function main(renderWidth){
     // hide the rotation graphic 
     $("#please-rotate").css({display: "none"});
 
-    // unhide the laoding graphic
-    $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2 - 100 * screenScale, "left": window.innerWidth/2 - 100 * screenScale });
 
 
     /* add add position the main panels */
@@ -512,7 +510,7 @@ $(function(){
     var bgHeight = 1600, 
         skipRotate = false,
         rotateCheckTimeout = null,
-        isMobile = true;///Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        isMobile = Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     function isPortrait(){
         return ( isMobile && $(window).width() < $(window).height());
@@ -527,6 +525,8 @@ $(function(){
                     families: ['Roboto:500']
                 },
                 active: function(){
+                    // unhide the laoding graphic
+                    $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2 - 100 * screenScale, "left": window.innerWidth/2 - 100 * screenScale });
                     if(isMobile){
                         $("#play-button").click(function(){
                             $("#play-button").velocity({opacity: 0}, {complete: function(){
