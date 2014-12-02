@@ -510,7 +510,7 @@ $(function(){
     var bgHeight = 1600, 
         skipRotate = false,
         rotateCheckTimeout = null,
-        isMobile = Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        isMobile = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     function isPortrait(){
         return ( isMobile && $(window).width() < $(window).height());
@@ -526,7 +526,7 @@ $(function(){
                 },
                 active: function(){
                     // unhide the laoding graphic
-                    $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2 - 100 * screenScale, "left": window.innerWidth/2 - 100 * screenScale });
+                    $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2 - 100 , "left": window.innerWidth/2 - 100});
                     if(isMobile){
                         $("#play-button").click(function(){
                             $("#play-button").velocity({opacity: 0}, {complete: function(){
