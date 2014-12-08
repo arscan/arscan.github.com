@@ -355,7 +355,7 @@ function main(renderWidth){
 
         $("canvas").on('mousewheel', function(event){
             snapTween.stop();
-            carouselVelocity = event.deltaY / 5 + carouselVelocity;
+            carouselVelocity = Math.max(-.5, Math.min(.5, event.deltaY / 6 + carouselVelocity));
         });
         $("canvas").on('click', function(event){
             if(carouselVelocity === 0){
