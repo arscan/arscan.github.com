@@ -520,6 +520,7 @@ $(function(){
     function load(){
         if(!isPortrait() || skipRotate){
             $("#please-rotate").css({"display": "none"});
+            $("#play-image").css({"display": "block", "top": window.innerHeight/2 - 50, "left": window.innerWidth/2 - 100});
             WebFont.load({
                 google: {
                     families: ['Roboto:500']
@@ -570,7 +571,6 @@ $(function(){
         skipRotate = true;
         load();
     });
-    $("#play-image").css({"display": "block", "top": window.innerHeight/2 - 50, "left": window.innerWidth/2 - 100});
 
     if(!isMobile){
         $("#play-button").css({display: "none"});
