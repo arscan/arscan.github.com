@@ -312,6 +312,7 @@ function main(renderWidth){
                 if((ev.direction === Hammer.DIRECTION_LEFT || ev.direction === Hammer.DIRECTION_RIGHT) && ev.center.y < renderHeight /3){
                     carouselVelocity *= -1;
                 }
+                 carouselVelocity *= 1.3;
 
                 return;
             } 
