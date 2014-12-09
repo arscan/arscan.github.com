@@ -436,13 +436,16 @@ function main(renderWidth){
 
     function render(){
         requestAnimationFrame(render);
+        // setTimeout(render, 1000/5);
 
         var delta = clock.getDelta();
         var time = clock.getElapsedTime();
         var carouselMoving = Math.abs(carouselVelocity) > 0;
 
+        var numTicks = (delta / .01666)
+
         stats.update();
-        carouselVelocity *= (1 - delta);
+        carouselVelocity *= Math.pow(.95, numTicks);
 
         if(Math.abs(carouselVelocity) > .02){
             carouselLocation = (carouselLocation + (-1 * delta * carouselVelocity * screenScale)) % 1;
@@ -465,9 +468,13 @@ function main(renderWidth){
 
         }
 
+
+        if(!carouselMoving){
+            skeletonPanel.render(time, 2 * Math.PI * mouseX / renderWidth);
+            namePanel.render(time);
+        } 
+
         backgroundPanel.render(time);
-        skeletonPanel.render(time, 2 * Math.PI * mouseX / renderWidth);
-        namePanel.render(time);
         sharePanel.render(time);
         tinyPanel1.render(time);
         tinyPanel2.render(time);
