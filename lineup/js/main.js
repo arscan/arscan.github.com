@@ -538,6 +538,7 @@ $(function(){
             $("#please-rotate").css({"display": "none"});
             $("#cassette-bg").css({"visibility":"hidden"});
             $("#play-image").css({"display": "block", "top": window.innerHeight/2 - 50, "left": window.innerWidth/2});
+            $("#cassette-svg").css({"top": window.innerHeight/2 - 150, "left": window.innerWidth/2 - 300});
             new Vivus('cassette-svg', {type: 'oneByOne', duration: 100, start: "autostart"}, function(){
                 WebFont.load({
                     google: {
@@ -545,7 +546,7 @@ $(function(){
                     },
                     active: function(){
                         // unhide the laoding graphic
-                        // $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2 - 100 , "left": window.innerWidth/2 - 100});
+                        $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2, "left": window.innerWidth/2});
                         if(isMobile && VIDEO_ENABLED){
                             $("#play-button").click(function(){
                                 $("#play-button").velocity({opacity: 0}, {complete: function(){
