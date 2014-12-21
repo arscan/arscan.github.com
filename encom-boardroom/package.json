@@ -1,24 +1,25 @@
 {
   "name": "encom-boardroom",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "encom-boardroom",
   "main": "index.html",
   "dependencies": {
-    "grunt": "~0.4.2",
     "encom-globe": "*",
-    "github-timeline-stream": "*",
-    "wikipedia-stream": "*",
-    "pusher.color": "~0.2.4",
-    "three": "~0.66.2",
-    "jquery": "~2.1.0",
     "event-source": "~0.1.0",
+    "express": "~4.3.0",
+    "github-timeline-stream": "*",
+    "grunt": "~0.4.2",
+    "jquery": "~2.1.0",
+    "jquery-ui": "~1.10.5",
+    "map-stream": "~0.1.0",
     "moment": "~2.6.0",
     "moment-timezone": "0.0.6",
-    "jquery-ui": "~1.10.5",
+    "pleaserotate.js": "*",
+    "pusher.color": "~0.2.4",
     "request": "~2.34.0",
-    "map-stream": "~0.1.0",
-    "express": "~4.3.0",
-    "serve-favicon": "~2.0.0"
+    "serve-favicon": "~2.0.0",
+    "three": "~0.66.2",
+    "wikipedia-stream": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -40,16 +41,14 @@
     "name": "rscanlon@mit.edu"
   },
   "license": "MIT",
-  "readme": "Encom Boardroom\n=================\n\nAn HTML5 recreation of the [Boardroom Scene](http://work.gmunk.com/TRON-Board-Room) \nin Disney's [Tron: Legacy](http://www.imdb.com/tible/tt1104001/).  It currently\ndisplays realtime data from Github and Wikipedia to make it a bit more fun.  View it in action at http://www.robscanlon.com/encom-boardroom .\n\n![Boardroom light table](https://raw.github.com/arscan/encom-boardroom/master/images/screenshot_lighttable.jpg \"Boardroom light table\")\n\n![Boardroom screen](https://raw.github.com/arscan/encom-boardroom/master/images/screenshot.jpg \"Boardroom screen\")\n\nWhile I attempted to stay true to the film, it simply wasn't practical to recreate every element that is portrayed in the scene. The graphics displayed in the film contain a remarkable amount of detail despite only being visible for a couple of seconds. I am in awe of those that put it together.\n\nMy focus was on the globe and I made it available as a [standalone library](http://github.com/arscan/encom-globe) for those interested. The other elements are only loose adaptations of the film version. This project is not associated with Github, Wikipedia, Tron: Legacy, or Disney. It is just a tribute.\n\n### Usage\n\nThe web application can be launched simply by serving up `./index.html`.  If you would like the full application, including the feeds from wikipedia and github, install and run the node application as follows:\n\n```sh\nnpm install\nPORT=8000 node stream-server.js\n```\n\nThen point your browser at `http://localhost:8000`.\n\nThe code isn't particularly well organized right now to quickly add in new feeds, but it certainly is possible.  I did split out the globe into its own [standalone library](https://github.com/arscan/encom-globe) that can be easily reused though.\n\n### Noteable Dependencies\n\n* [Node.js](http://nodejs.org/)\n* [Three.js](http://threejs.org/)\n* [Encom Globe](http://www.robscanlon.com/encom-globe)\n* [Hexasphere.js](http://www.robscanlon.com/hexasphere/)\n* [Quadtree2](https://github.com/burninggramma/quadtree2.js)\n\n### Feed Info\n\n**Github:** Data is being streamed in realtime from Github's [public timeline feed](http://github.com/timeline.json). Location information is retrieved from the user's github profile and is mapped using [geonames.org](http://geonames.org). Historic 2013 data was retrieved from the [Github Archive](http://githubarchive.org). User pictures are from [Gravatar](http://gravatar.com) and are throttled to under one per second to conserve bandwidth.\n\n**Wikipedia:** Data is being streamed in realtime from Wikipedia's [public irc feed](http://meta.wikimedia.org/wiki/IRC_channels#Raw_feeds). Location information is only available from anonymous users in the form of IP addresses, and is mapped to real locations using [freegeoip.net](http://freegeoip.net).\n\n### License\n\nThe MIT License (MIT)\nCopyright (c) 2014 Robert Scanlon\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n",
+  "readme": "Encom Boardroom\n=================\n\nAn HTML5 recreation of the [Boardroom\nScene](http://work.gmunk.com/TRON-Board-Room) in Disney's [Tron:\nLegacy](http://www.imdb.com/tible/tt1104001/).  It currently displays realtime\ndata from Github and Wikipedia to make it a bit more fun.  View it in action at\nhttp://www.robscanlon.com/encom-boardroom .\n\n![Boardroom light table](https://raw.github.com/arscan/encom-boardroom/master/images/screenshot_lighttable.jpg \"Boardroom light table\")\n\n![Boardroom screen](https://raw.github.com/arscan/encom-boardroom/master/images/screenshot.jpg \"Boardroom screen\")\n\nWhile I attempted to stay true to the film, it simply wasn't practical to\nrecreate every element that is portrayed in the scene. The graphics displayed\nin the film contain a remarkable amount of detail despite only being visible\nfor a couple of seconds. I am in awe of those that put it together.\n\nMy focus was on the globe and I made it available as a [standalone\nlibrary](http://github.com/arscan/encom-globe) for those interested. The other\nelements are only loose adaptations of the film version. This project is not\nassociated with Github, Wikipedia, Tron: Legacy, or Disney. It is just a\ntribute.\n\n### Usage\n\nThe web application can be launched simply by serving up `./index.html`.  If\nyou would like the full application, including the feeds from wikipedia and\ngithub, install and run the node application as follows:\n\n```sh\nnpm install\nPORT=8000 node stream-server.js\n```\n\nThen point your browser at `http://localhost:8000`.\n\nThe code isn't particularly well organized right now to quickly add in new\nfeeds, but it certainly is possible.  I did split out the globe into its own\n[standalone library](https://github.com/arscan/encom-globe) that can be easily\nreused though.\n\n### Noteable Dependencies\n\n* [Node.js](http://nodejs.org/)\n* [Three.js](http://threejs.org/)\n* [Encom Globe](http://www.robscanlon.com/encom-globe)\n* [Hexasphere.js](http://www.robscanlon.com/hexasphere/)\n* [Quadtree2](https://github.com/burninggramma/quadtree2.js)\n* [pleaserotate.js](http://www.github.com/arscan/pleaserotate.js)\n\n### Feed Info\n\n**Github:** Data is being streamed in realtime from Github's [public timeline\nfeed](http://github.com/timeline.json). Location information is retrieved from\nthe user's github profile and is mapped using\n[geonames.org](http://geonames.org). Historic 2013 data was retrieved from the\n[Github Archive](http://githubarchive.org). User pictures are from\n[Gravatar](http://gravatar.com) and are throttled to under one per second to\nconserve bandwidth.\n\n**Wikipedia:** Data is being streamed in realtime from Wikipedia's [public irc\nfeed](http://meta.wikimedia.org/wiki/IRC_channels#Raw_feeds). Location\ninformation is only available from anonymous users in the form of IP addresses,\nand is mapped to real locations using [freegeoip.net](http://freegeoip.net).\n\n### License\n\nThe MIT License (MIT)\nCopyright (c) 2014 Robert Scanlon\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n",
   "readmeFilename": "README.md",
+  "gitHead": "a33c7dd51dab2867d4b988d34bd817a169509453",
   "bugs": {
     "url": "https://github.com/arscan/encom-boardroom/issues"
   },
   "homepage": "https://github.com/arscan/encom-boardroom",
-  "_id": "encom-boardroom@0.9.2",
-  "_from": "encom-boardroom@0.9.2",
-  "dist": {
-    "shasum": "9603c091f4a4c9e190e35921460f6719148cc4c8"
-  },
-  "_resolved": "https://registry.npmjs.org/encom-boardroom/-/encom-boardroom-0.9.2.tgz"
+  "_id": "encom-boardroom@0.9.3",
+  "_shasum": "13217dcd756fd171cc442a970e7df34488ab75be",
+  "_from": "encom-boardroom@0.9.3"
 }
