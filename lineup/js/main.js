@@ -1,9 +1,8 @@
-var VIDEO_ENABLED = false;
+var VIDEO_ENABLED = window.location.href.indexOf('?DISABLE_VIDEO') === -1;
 
 function main(renderWidth){
 
-    var //loadingCirlce = createLoadingCircle($("#loading-graphic")),
-        container = document.createElement( 'div' ),
+    var container = document.createElement( 'div' ),
         stats = new Stats(),
         renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } ), 
         hammertime = new Hammer(renderer.domElement),
@@ -30,19 +29,20 @@ function main(renderWidth){
         aboutPanel = createAboutPanel(renderer, screenScale),
         projectsPanel = createProjectsPanel(renderer, screenScale),
         photosPanel = createPhotosPanel(renderer, screenScale),
-        bioPanel = createBioPanel(renderer, screenScale),
         linksPanel = createLinksPanel(renderer, screenScale),
         backgroundPanel = createBackgroundPanel(renderer, renderWidth, renderHeight),
-        projectorPanel = createProjectorPanel(renderer, renderWidth, renderHeight, [namePanel, skeletonPanel, tinyPanel1, tinyPanel2, tinyPanel3, tinyPanel4, tinyPanel5, sharePanel, photosPanel, projectsPanel, aboutPanel, bioPanel, linksPanel]),
+        projectorPanel = createProjectorPanel(renderer, renderWidth, renderHeight, [namePanel, skeletonPanel, tinyPanel1, tinyPanel2, tinyPanel3, tinyPanel4, tinyPanel5, sharePanel, photosPanel, projectsPanel, aboutPanel, linksPanel]),
         subjectPanel = createSubjectPanel(renderer, screenScale);//326, 580, 500 + 326/2, 580/2 - 120 ),
         bottomPanel = createBottomPanel($("#bottom-panel").css({"top":renderHeight - (60 * screenScale) + Math.max(0,(window.innerHeight - renderHeight)/2), "width": renderWidth})),
 
-        carouselPanels = [aboutPanel, linksPanel, bioPanel, photosPanel, projectsPanel],
+        carouselPanels = [aboutPanel, linksPanel, photosPanel, projectsPanel],
         carouselLocation = 0,
         carouselGrabbed = false,
-        carouselCenter = { x: renderWidth, y: 380 * screenScale},
+        carouselCenter = { x: renderWidth - 50 * screenScale, y: 420 * screenScale},
         carouselVelocity = 0,
         carouselSnapping = false,
+
+        mouseX = 0,
 
         interactivePanels = [namePanel, skeletonPanel, sharePanel],
         grabbedPanel = null,
@@ -55,32 +55,27 @@ function main(renderWidth){
     // hide the rotation graphic 
     $("#please-rotate").css({display: "none"});
 
-    // unhide the laoding graphic
-    $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2 - 100 * screenScale, "left": window.innerWidth/2 - 100 * screenScale });
-
-
     /* add add position the main panels */
     scene.add(projectorPanel.quad);
     scene.add(subjectPanel.quad);
     scene.add(backgroundPanel.quad);
     backgroundPanel.quad.material.opacity = .1;
 
-    skeletonPanel.setPosition(350 * screenScale, renderHeight - 20 * screenScale, 1);
-    // namePanel.setPosition(50 * screenScale, 358*screenScale, 1);
-    // sharePanel.setPosition(20 * screenScale, renderHeight - 20 * screenScale, 1);
-    subjectPanel.setPosition(500 * screenScale, 450 * screenScale, 1);
+    skeletonPanel.setPosition(380 * screenScale, renderHeight - 20 * screenScale, 1);
+    subjectPanel.setPosition(450 * screenScale, 450 * screenScale, 1);
     tinyPanel1.setPosition(2024 * screenScale, 100 * screenScale, .5);
     tinyPanel2.setPosition(-2024 * screenScale, 105 * screenScale, .5);
     tinyPanel3.setPosition(2024 * screenScale, 110 * screenScale, .5);
     tinyPanel4.setPosition(2024 * screenScale, 115 * screenScale, .5);
     tinyPanel5.setPosition(2024 * screenScale, 120 * screenScale, .5);
-
     sharePanel.setPosition(renderWidth + 1000, 0, 0);
+
     // put the carouselPanels off the right side of the screen
     for(var i = 0; i< carouselPanels.length; i++){
         carouselPanels[i].setPosition(renderWidth + 1000, 0, 0);
 
     }
+
     /* place and position the rendering canvas */
     container.appendChild( stats.domElement );
     document.body.appendChild( container );
@@ -159,7 +154,7 @@ function main(renderWidth){
            .onUpdate(function(){
                backgroundPanel.setLightBarLevel(this.level);
                backgroundPanel.setLightLevel(this.level);
-               subjectPanel.setBrightness(this.level);
+               // subjectPanel.setBrightness(this.level);
                bottomPanel.element.css({opacity: this.level});
 
            }).start();
@@ -183,7 +178,7 @@ function main(renderWidth){
                 easing: TWEEN.Easing.Back.Out,
                 position: {x: 200 * screenScale}
             },
-            {   delay: 4000, 
+            {   delay: 1000, 
                 duration: 2000, 
                 easing: TWEEN.Easing.Quintic.InOut,
                 position: {x: 50 * screenScale}
@@ -208,7 +203,7 @@ function main(renderWidth){
                 easing: TWEEN.Easing.Back.Out,
                 position: {y: 360 * screenScale}
             },
-            {   delay: 4000, 
+            {   delay: 1000, 
                 duration: 2000, 
                 easing: TWEEN.Easing.Quintic.InOut,
                 position: {y: 358 * screenScale}
@@ -220,14 +215,14 @@ function main(renderWidth){
 
         createChainedTween(sharePanel, [
             {position: {x: renderWidth + 100, z:0}},
-            {   delay: 500, 
-                duration: 1000, 
+            {   delay: 0, 
+                duration: 500, 
                 easing: TWEEN.Easing.Quintic.Out,
                 position: {x: renderWidth - 200 * screenScale, z:0}
             },
-            {   delay: 1000, 
-                duration: 3000, 
-                easing: TWEEN.Easing.Quadratic.InOut,
+            {   delay: 500, 
+                duration: 2000, 
+                easing: TWEEN.Easing.Quintic.InOut,
                 position: {x: 20 * screenScale, z: 1}
             },
         ]
@@ -235,13 +230,13 @@ function main(renderWidth){
 
         createChainedTween(sharePanel, [
             {position: {y: renderHeight - 120 * screenScale}},
-            {   delay: 500, 
-                duration: 1000, 
+            {   delay: 0, 
+                duration: 500, 
                 easing: TWEEN.Easing.Back.Out,
                 position: {y: renderHeight - 150 * screenScale}
             },
             {   delay: 0, 
-                duration: 2000, 
+                duration: 1300, 
                 easing: TWEEN.Easing.Quintic.InOut,
                 position: {y: renderHeight - 20 * screenScale}
             },
@@ -279,12 +274,17 @@ function main(renderWidth){
     LOADSYNC.onComplete(function(){
         $("#loading-graphic").velocity({color: "#000", opacity: 0},{"display":"none"});
         runIntroAnimation();
-        setTimeout(function(){clock.start()}, 6000);
+        setTimeout(function(){clock.start()}, 3000);
         // clock.start();
     });
 
-
     function setInteraction(){
+        var prevDeltaX = 0, 
+            prevDeltaY = 0, 
+            panning = false,
+            panTimeout = null,
+            panStartPositionX = namePanel.quad.position.x,
+            panStartPositionY = namePanel.quad.position.y;
 
         /* window resize events */
         $(window).resize(function() {
@@ -300,13 +300,104 @@ function main(renderWidth){
         hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
         /* right carousel */
         hammertime.on('pan', function(ev){
-            snapTween.stop();
-            carouselVelocity = ev.velocity;
+            if(ev.center.x > renderWidth / 2 && !panning){
+                snapTween.stop(); 
+
+                if(ev.velocity < 0){
+                    carouselVelocity = Math.max(-.8 * screenScale, ev.velocity / screenScale);
+                } else {
+                    carouselVelocity = Math.max(.001, Math.min(.8 * screenScale, ev.velocity / screenScale));
+                }
+
+                if((ev.direction === Hammer.DIRECTION_LEFT || ev.direction === Hammer.DIRECTION_RIGHT) && ev.center.y < renderHeight /3){
+                    carouselVelocity *= -1;
+                }
+                 carouselVelocity *= 1.3;
+
+                return;
+            } 
+
+            // check to see if we are on the name panel
+
+            if(namePanel.checkBounds(ev.center.x, renderHeight - ev.center.y)){
+                if(!panning){
+                    panStartPositionX = namePanel.quad.position.x;
+                    panStartPositionY= namePanel.quad.position.y;
+                }
+                panning = true;
+                namePanel.setDeltaPosition(ev.deltaX - prevDeltaX, -1 * (ev.deltaY - prevDeltaY));
+                prevDeltaX = ev.deltaX;
+                prevDeltaY = ev.deltaY;
+                clearTimeout(panTimeout);
+                panTimeout = setTimeout(function(){
+                    prevDeltaX = 0; 
+                    prevDeltaY = 0; 
+                    panning = false;
+                    new TWEEN.Tween({x: namePanel.quad.position.x})
+                         .to({x: panStartPositionX})
+                         .easing(TWEEN.Easing.Back.Out)
+                         .onUpdate(function(){
+                             namePanel.quad.position.x = this.x;
+                         })
+                         .start();
+                    new TWEEN.Tween({y: namePanel.quad.position.y})
+                         .delay(100)
+                         .to({y: panStartPositionY})
+                         .easing(TWEEN.Easing.Back.Out)
+                         .onUpdate(function(){
+                             namePanel.quad.position.y = this.y;
+                         })
+                         .start();
+                }, 1000);
+
+            }
+
         });
 
         $("canvas").on('mousewheel', function(event){
             snapTween.stop();
-            carouselVelocity = event.deltaY / 5 + carouselVelocity;
+            carouselVelocity = Math.max(-.5, Math.min(.5, event.deltaY / 6 + carouselVelocity));
+        });
+        $("canvas").on('click', function(event){
+            if(carouselVelocity === 0){
+                for(var i = 0; i< carouselPanels.length; i++){
+                    var res= carouselPanels[i].checkBounds(event.offsetX, renderHeight - event.offsetY);
+                    if(typeof res === "string"){
+                        location.href=res;
+                        return;
+                    }
+
+                }
+            }
+
+            var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY)
+            if(typeof res === "string"){
+                location.href=res;
+                return;
+            }
+
+        });
+        $("canvas").on('mousemove', function(event){
+            mouseX = event.offsetX;
+            if(carouselVelocity === 0){
+                for(var i = 0; i< carouselPanels.length; i++){
+                    var res= carouselPanels[i].checkBounds(event.offsetX, renderHeight - event.offsetY);
+                    if(typeof res === "string"){
+                        $("canvas").addClass("pointing");
+                        return;
+                    }
+
+                }
+            }
+
+            var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY);
+            if(typeof res === "string"){
+                $("canvas").addClass("pointing");
+                return;
+            }
+
+            $("canvas").removeClass("pointing");
+
         });
 
         $(window).keydown(function(event){
@@ -345,14 +436,17 @@ function main(renderWidth){
     }
 
     function render(){
-        // setTimeout(render, 1000/30);
         requestAnimationFrame(render);
+        // setTimeout(render, 1000/5);
+
         var delta = clock.getDelta();
         var time = clock.getElapsedTime();
         var carouselMoving = Math.abs(carouselVelocity) > 0;
 
+        var numTicks = (delta / .01666)
+
         stats.update();
-        carouselVelocity *= (1 - delta);
+        carouselVelocity *= Math.pow(.95, numTicks);
 
         if(Math.abs(carouselVelocity) > .02){
             carouselLocation = (carouselLocation + (-1 * delta * carouselVelocity * screenScale)) % 1;
@@ -372,22 +466,24 @@ function main(renderWidth){
                    carouselSnapping = false;
 
                }).start();
-               
-
 
         }
 
+
+        if(!carouselMoving){
+            skeletonPanel.render(time, 2 * Math.PI * mouseX / renderWidth);
+            namePanel.render(time);
+        } 
+
         backgroundPanel.render(time);
 
-        // skeletonPanel.quad.position.x = projectorPanel.width / 2 + Math.sin(time/2) * 300;
-        skeletonPanel.render(time);
-        namePanel.render(time);
-        sharePanel.render(time);
         tinyPanel1.render(time);
         tinyPanel2.render(time);
         tinyPanel3.render(time);
         tinyPanel4.render(time);
         tinyPanel5.render(time);
+        sharePanel.render(time);
+
 
         for(var i = 0; i < carouselPanels.length; i++){
             if(carouselPanels[i].quad.position.x < renderWidth + 200){
@@ -396,12 +492,17 @@ function main(renderWidth){
         }
 
         projectorPanel.render(time);
-        subjectPanel.render();
+
+        try {
+            subjectPanel.render();
+        } catch (ex){
+            console.log("GOT IT");
+            location.href='?DISABLE_VIDEO';
+        }
 
         renderer.render(scene, camera);
 
         TWEEN.update();
-
 
     }
 
@@ -423,49 +524,67 @@ $(function(){
         return ( isMobile && $(window).width() < $(window).height());
     }
 
+    function getWidth(){
+        /* I don't know why my ipad doesn't want to display the right width, soooo lets hardcode! */
+        if(/iPad/i.test(navigator.userAgent)){
+            return 1024;
+        } else {
+            return $(window).width();
+        }
+    }
+
     function load(){
         if(!isPortrait() || skipRotate){
-            // $("body").height(4000);
             $("#please-rotate").css({"display": "none"});
-            WebFont.load({
-                google: {
-                    families: ['Roboto:500']
-                },
-                active: function(){
-                    if(isMobile){
-                        $("#play-button").click(function(){
+            $("#cassette-bg").css({"visibility":"hidden"});
+            $("#play-image").css({"display": "block", "top": window.innerHeight/2 - 50, "left": window.innerWidth/2});
+            $("#cassette-svg").css({"top": window.innerHeight/2 - 150, "left": window.innerWidth/2 - 300});
+            new Vivus('cassette-svg', {type: 'oneByOne', duration: 100, start: "autostart"}, function(){
+                WebFont.load({
+                    google: {
+                        families: ['Roboto:500']
+                    },
+                    active: function(){
+                        // unhide the laoding graphic
+                        $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2, "left": window.innerWidth/2});
+                        if(isMobile && VIDEO_ENABLED){
+                            $("#play-button").click(function(){
+                                $("#play-button").velocity({opacity: 0}, {complete: function(){
+                                    $("#play-button").css({display: "none"});
+                                }});
+                                setTimeout(function(){
+                                    var video = $("#video")[0];
+                                    if(typeof video.load == "function"){
+                                        video.src = "videos/video.mp4";
+                                        video.setAttribute('crossorigin', 'anonymous');
+                                        video.load();
+                                        video.play();
+                                    } else {
+                                        VIDEO_ENABLED = false;
+
+                                    }
+                                    main(getWidth());
+                                }, 500);
+
+                            });
+                        } else {
                             var video = $("#video")[0];
-                            if(typeof video.load == "function"){
-                                VIDEO_ENABLED = true;
-                                video.src = "videos/test_vid.webm";
+                            if(typeof video.load == "function" && VIDEO_ENABLED){
+                                video.src = "videos/video.mp4";
                                 video.setAttribute('crossorigin', 'anonymous');
-                                video.load(); // must call after setting/changing source
+                                video.load();
                                 video.play();
                             } else {
-
+                                VIDEO_ENABLED = false;
 
                             }
-                            main($(window).width());
-
-                            $("#play-button").velocity({opacity: 0}, {complete: function(){
-                                $("#play-button").css({display: "none"});
-                            }});
-                        });
-                    } else {
-                        var video = $("#video")[0];
-                        if(typeof video.load == "function"){
-                            VIDEO_ENABLED = true;
-                            video.src = "videos/test_vid.webm";
-                            video.setAttribute('crossorigin', 'anonymous');
-                            video.load(); // must call after setting/changing source
-                            video.play();
+                            main(getWidth());
                         }
-                        main($(window).width());
                     }
-                }
-            }); 
+                }); 
+            });
         } else {
-            $("#please-rotate").css({"display": "block"});
+            $("#please-rotate").css({"display": "block", "top": window.innerHeight/2 - 100, "left": window.innerWidth/2 - 100});
             rotateCheckTimeout = setTimeout(load, 500);
         }
     }
@@ -477,27 +596,13 @@ $(function(){
         load();
     });
 
-    if(!isMobile){
+    if(!isMobile || !VIDEO_ENABLED){
         $("#play-button").css({display: "none"});
     }
 
     load();
-});
 
-/*
-    $('body').height( bgHeight + $(window).height() );
-    $(window).scroll(function() {
-        if ( $(window).scrollTop() >= ($('body').height() - $(window).height()) ) {
-            $(window).scrollTop(1);
-        }
-        else if ( $(window).scrollTop() == 0 ) {
-            $(window).scrollTop($('body').height() - $(window).height() -1);
-        }    
-    });
-*/
+    
 
-/*
-$(window).resize(function() {
-    $('body').height( bgHeight + $(window).height() );
+
 });
-*/

@@ -97,7 +97,25 @@ function createProjectsPanel(renderer, scale){
     }
 
     function checkBounds(x, y){
-        return panel.checkBounds(x,y);
+        if(panel.checkBounds(x,y)){
+            var panelPos = panel.positionWithinPanel(x, y);
+
+            if(panelPos.y > 160*scale && panelPos.y < 270*scale){
+                return "http://www.robscanlon.com/encom-boardroom";
+            }
+            if(panelPos.y <= 160*scale){
+                if(panelPos.x < width/2){
+                    return "http://www.robscanlon.com/encom-globe";
+                } else {
+                    return "http://www.github.com/arscan/streamed";
+                }
+
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     init();

@@ -129,6 +129,11 @@ function createPanel(renderer, width, height, opts){
                && (y > quad.position.y - height / 2 && y < quad.position.y + height/2);
     }
 
+    function positionWithinPanel(x, y){
+        return {x: x - quad.position.x + width/2, y: y - quad.position.y + height/2};
+
+    }
+
     function setBlur(blur){
         blurLevel = Math.max(0,Math.min(1,blur));
     }
@@ -144,6 +149,15 @@ function createPanel(renderer, width, height, opts){
         }
         if(typeof y == "number"){
             quad.position.y = y - height/2;
+        }
+    }
+
+    function setDeltaPosition(deltaX, deltaY){
+        if(typeof deltaX == "number"){
+            quad.position.x = quad.position.x + deltaX;
+        }
+        if(typeof deltaY == "number"){
+            quad.position.y = quad.position.y + deltaY;
         }
     }
 
@@ -165,8 +179,10 @@ function createPanel(renderer, width, height, opts){
         height: height,
         quad: quad,
         checkBounds: checkBounds,
+        positionWithinPanel: positionWithinPanel,
         setBlur: setBlur,
         setPosition: setPosition,
+        setDeltaPosition: setDeltaPosition,
         setCamera: setCamera,
         renderScene: renderScene, /* should get rid of this, but need to fix the projects objects */
         addToScene: addToScene,

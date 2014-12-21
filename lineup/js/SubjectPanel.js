@@ -1,6 +1,6 @@
 function createSubjectPanel(renderer, scale){
 
-   var STANDARD_DIMENSIONS = {width: 326, height:580},
+   var STANDARD_DIMENSIONS = {width: 400, height:500},
        ROTATE_TIME = 10.0;
 
    var width = STANDARD_DIMENSIONS.width * scale,
@@ -8,9 +8,7 @@ function createSubjectPanel(renderer, scale){
        renderScene,
        renderComposer,
        renderCamera,
-       clock,
-       video,
-       videoTexture,
+       videoMaterial,
        brightnessContrastPass;
 
    var targetParams = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat};
@@ -45,16 +43,12 @@ function createSubjectPanel(renderer, scale){
         //    "return vec3(y,u,v);",
         // "}",
         "bool checkBlue(vec3 colorIn){",
-        "   return (colorIn.b > colorIn.r - .02 && colorIn.b > colorIn.g - .02);",
+        "   return (colorIn.g > colorIn.r + colorIn.b);",
         "}",
         "void main()", 
         "{",
         "   vec4 texel = texture2D(tDiffuse, vUv);",
-        // "  float y = .299 * texel.
-        // "   texel.a  = step(.3, distance(vMaskColor, texel.rgb) / 1.7) + step(.9, 1.0 - texel.b);",
-        // "   texel.a  = step(.08, distance(toYUV(cMaskColor), toYUV(texel.rgb)) / 1.7);",
         " if(checkBlue(texel.rgb)){",
-        // " if(texel.b > texel.r - .02 && texel.b > texel.g - .02){",
         "    texel.a = 0.0;",
         " }",
         " if(checkBlue(texture2D(tDiffuse, vec2(vUv.x + .003, vUv.y)).rgb)){",
@@ -82,9 +76,9 @@ function createSubjectPanel(renderer, scale){
         "    texel.a = texel.a * 0.6;",
         " }",
         // "   texel.a  = step(.08, distance(toYUV(cMaskColor), toYUV(texel.rgb)) / 1.7);",
-        "   texel.b += .05;",
-        "   texel.r -= .1;",
-        "   texel.g -= .1;",
+        // "   texel.b += .05;",
+        // "   texel.r -= .1;",
+        // "   texel.g -= .1;",
         "   gl_FragColor = texel;",
         "}"
        ].join('\n')
@@ -97,31 +91,33 @@ function createSubjectPanel(renderer, scale){
     }
 
     function init(){
-        clock = new THREE.Clock();
+        var videoTexture,
+            video;
 
         renderCamera = new THREE.OrthographicCamera(0, width-1, height, 0, -1000, 1000),
         renderScene = new THREE.Scene();
 
-        video = document.getElementById( 'video' );
 
         if(VIDEO_ENABLED){
+            video = document.getElementById( 'video' );
             videoTexture = new THREE.VideoTexture( video );
             videoTexture.minFilter = THREE.LinearFilter;
             videoTexture.magFilter = THREE.LinearFilter;
             videoTexture.format = THREE.RGBAFormat;
+
             subjectShader.uniforms.tDiffuse.value = videoTexture;
+            videoMaterial = new THREE.ShaderMaterial({
+                uniforms: subjectShader.uniforms,
+                vertexShader: subjectShader.vertexShader,
+                fragmentShader: subjectShader.fragmentShader,
+                transparent: true
+            });
         } else {
-            videoTexture = new THREE.Texture();
+            videoMaterial = new THREE.MeshBasicMaterial({transparent: true, map: THREE.ImageUtils.loadTexture("images/snapshot_with_error.png", undefined, LOADSYNC.register())});
 
         }
 
 
-        var videoMaterial = new THREE.ShaderMaterial({
-            uniforms: subjectShader.uniforms,
-            vertexShader: subjectShader.vertexShader,
-            fragmentShader: subjectShader.fragmentShader,
-            transparent: true
-        });
 
         var planegeometry = new THREE.PlaneBufferGeometry( width, height );
 
@@ -131,13 +127,15 @@ function createSubjectPanel(renderer, scale){
 
         renderComposer = new THREE.EffectComposer(renderer, renderTarget);
         renderComposer.addPass(new THREE.RenderPass(renderScene, renderCamera));
-        brightnessContrastPass = new THREE.ShaderPass(THREE.BrightnessContrastShader, {contrast: .5, brightness: -.1});
-        renderComposer.addPass(brightnessContrastPass);
+        // brightnessContrastPass = new THREE.ShaderPass(THREE.BrightnessContrastShader, {contrast: .5, brightness: -.1});
+        // renderComposer.addPass(brightnessContrastPass);
         // renderComposer.addPass(new THREE.ShaderPass(THREE.BrightnessContrastShader, {contrast: .5, brightness: .1 - (1-brightness)}));
-        renderComposer.addPass(new THREE.ShaderPass(THREE.HueSaturationShader, {hue: .05, saturation: -.6}));
+        renderComposer.addPass(new THREE.ShaderPass(THREE.BrightnessContrastShader, {contrast: 0, brightness: -.07}));
+        // renderComposer.addPass(new THREE.ShaderPass(THREE.HueSaturationShader, {hue: .05, saturation: -.6}));
         // renderComposer.addPass(new THREE.ShaderPass(THREE.CopyShader)); // to line them up right
         // renderComposer.addPass(new THREE.ShaderPass(THREE.FXAAShader)); // to line them up right
         renderComposer.addPass(new THREE.ShaderPass(THREE.FXAAShader, {resolution: new THREE.Vector2(1/width, 1/height)}));
+        // renderComposer.addPass(new THREE.ShaderPass(THREE.CopyShader)); // to line them up right
 
     }
 
@@ -164,7 +162,7 @@ function createSubjectPanel(renderer, scale){
     }
 
     function setBrightness(level){
-        brightnessContrastPass.uniforms.brightness.value = -.1 - (.9 - level * .9);
+        // brightnessContrastPass.uniforms.brightness.value = -.1 - (.9 - level * .9);
     }
 
     init();
