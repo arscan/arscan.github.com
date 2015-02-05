@@ -27,6 +27,12 @@ module.exports = function(grunt) {
                     cwd: 'node_modules/encom-boardroom/',
                     src: '**',
                     dest: 'encom-boardroom/'
+                },
+                { 
+                    expand: true,
+                    cwd: 'node_modules/pleaserotate.js/',
+                    src: '**',
+                    dest: 'pleaserotate/'
                 }
                 ]
             }
@@ -45,7 +51,12 @@ module.exports = function(grunt) {
                 {
                     src: "./encom-boardroom/index.html",
                     dest: "./encom-boardroom/index.html"
-                }],
+                },
+                {
+                    src: "./pleaserotate/index.html",
+                    dest: "./pleaserotate/index.html"
+                },
+                ],
                 options: {
                     includes: {
                         analytics: './ga.inc.html',

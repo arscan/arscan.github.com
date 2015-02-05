@@ -1,0 +1,35 @@
+{
+  "name": "pleaserotate.js",
+  "version": "0.0.5",
+  "description": "A simple way to force mobile users to view your site in landscape or portrait mode",
+  "authors": [
+    "Rob Scanlon <robscanlon@gmail.com>"
+  ],
+  "license": "MIT",
+  "main": "pleaserotate.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/arscan/pleaserotate.js.git"
+  },
+  "keywords": [
+    "mobile",
+    "orientation",
+    "portrait",
+    "landscape"
+  ],
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "readme": "pleaserotate.js\n===============\n\nA simple way to force mobile users to view your site in portrait or landscape\nmode.  Include this js file and it will replace your site with a friendly\nmessage until the users' device is in the proper orientation.\n\n![Example](https://raw.githubusercontent.com/arscan/pleaserotate.js/master/demo.gif \"Example\")\n\nView it in action [over here](http://www.robscanlon.com/encom-boardroom/) (mobile device\nrequired to see it).\n\n### Basic Usage\n\nJust include the script file anywhere in your doc:\n\n```html\n<script src=\"pleaserotate.js\"></script>\n```\n\nStyle using CSS.  Configure by creating a `window.PleaseRotateOptions` object\nbefore you include the script.\n\n```html\n<style>\n    /* style the elements with CSS */\n    #pleaserotate-graphic{\n        fill: #fff;\n    }\n\n    #pleaserotate-backdrop {\n        color: #fff;\n        background-color: #000;\n    }\n</style>\n\n<script>\n    /* you can pass in options here */\n    PleaseRotateOptions = {\n        forcePortrait: true // if you would prefer to force portrait mode\n    };\n</script>\n<script src=\"pleaserotate.js\"></script>\n```\n\n### Using AMD or CommonJS\n\nThis supports AMD and CommonJS.  Require ```pleaserotate.js``` and call\n```PleaseRotate.start(options)``` to use.\n\n### Options\n\nThe current default options are:\n\n```javascript\nvar PleaseRotateOptions = {\n    startOnPageLoad: true,\n    onHide: function(){},\n    onShow: function(){},\n    forcePortrait: false,\n    message: \"Please Rotate Your Device\",\n    subMessage: \"(or click to continue)\",\n    allowClickBypass: true,\n    onlyMobile: true,\n    zIndex: 1000,\n    iconNode: null\n};\n```\n\n### Note Regarding Startup\n\nDepending on where you including the javascript file, other parts of your site\ncould render before pleaserotate.js has a chance to block them out.  To help\nyou  work around that, pleaserotate.js attaches classes to the ```<html>```\nelement while running.  Look for ```pleaserotate-showing``` and\n```pleaserotate-hiding``` classes, which indicate that pleaserotate.js has\nfinished loading and if it is currently showing the \"Please Rotate\" message or\nnot.  You can use CSS to hide parts of your page until those classes show up.\n",
+  "readmeFilename": "README.md",
+  "gitHead": "9498380d710b4f842fcc046ed54179f5cc8e0548",
+  "bugs": {
+    "url": "https://github.com/arscan/pleaserotate.js/issues"
+  },
+  "_id": "pleaserotate.js@0.0.5",
+  "scripts": {},
+  "_shasum": "667765f02446eda1ecb043669a1aad2e82d917b6",
+  "_from": "pleaserotate.js@*"
+}

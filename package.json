@@ -19,7 +19,8 @@
   "dependencies": {
     "hexasphere.js": "*",
     "encom-globe": "*",
-    "encom-boardroom": "*"
+    "encom-boardroom": "*",
+    "pleaserotate.js": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
