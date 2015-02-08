@@ -1,6 +1,6 @@
 {
   "name": "pleaserotate.js",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A simple way to force mobile users to view your site in landscape or portrait mode",
   "authors": [
     "Rob Scanlon <robscanlon@gmail.com>"
@@ -24,12 +24,12 @@
   },
   "readme": "pleaserotate.js\n===============\n\nA simple way to force mobile users to view your site in portrait or landscape\nmode.  Include this js file and it will replace your site with a friendly\nmessage until the users' device is in the proper orientation.\n\n![Example](https://raw.githubusercontent.com/arscan/pleaserotate.js/master/demo.gif \"Example\")\n\nView it in action [over here](http://www.robscanlon.com/encom-boardroom/) (mobile device\nrequired to see it).\n\n### Basic Usage\n\nJust include the script file anywhere in your doc:\n\n```html\n<script src=\"pleaserotate.js\"></script>\n```\n\nStyle using CSS.  Configure by creating a `window.PleaseRotateOptions` object\nbefore you include the script.\n\n```html\n<style>\n    /* style the elements with CSS */\n    #pleaserotate-graphic{\n        fill: #fff;\n    }\n\n    #pleaserotate-backdrop {\n        color: #fff;\n        background-color: #000;\n    }\n</style>\n\n<script>\n    /* you can pass in options here */\n    PleaseRotateOptions = {\n        forcePortrait: true // if you would prefer to force portrait mode\n    };\n</script>\n<script src=\"pleaserotate.js\"></script>\n```\n\n### Using AMD or CommonJS\n\nThis supports AMD and CommonJS.  Require ```pleaserotate.js``` and call\n```PleaseRotate.start(options)``` to use.\n\n### Options\n\nThe current default options are:\n\n```javascript\nvar PleaseRotateOptions = {\n    startOnPageLoad: true,\n    onHide: function(){},\n    onShow: function(){},\n    forcePortrait: false,\n    message: \"Please Rotate Your Device\",\n    subMessage: \"(or click to continue)\",\n    allowClickBypass: true,\n    onlyMobile: true,\n    zIndex: 1000,\n    iconNode: null\n};\n```\n\n### Note Regarding Startup\n\nDepending on where you including the javascript file, other parts of your site\ncould render before pleaserotate.js has a chance to block them out.  To help\nyou  work around that, pleaserotate.js attaches classes to the ```<html>```\nelement while running.  Look for ```pleaserotate-showing``` and\n```pleaserotate-hiding``` classes, which indicate that pleaserotate.js has\nfinished loading and if it is currently showing the \"Please Rotate\" message or\nnot.  You can use CSS to hide parts of your page until those classes show up.\n",
   "readmeFilename": "README.md",
-  "gitHead": "8ad1099c2d48b168abe69c5852f1577ebca2752e",
+  "gitHead": "625d1c2115986cb2488aa63597122fae50f05181",
   "bugs": {
     "url": "https://github.com/arscan/pleaserotate.js/issues"
   },
-  "_id": "pleaserotate.js@0.0.6",
+  "_id": "pleaserotate.js@0.1.0",
   "scripts": {},
-  "_shasum": "2794d429bff6c6e6ece0d026578937f97295ae10",
-  "_from": "pleaserotate.js@*"
+  "_shasum": "530b32ef0c68df16ca596c638d57aceb6e4cedf6",
+  "_from": "pleaserotate.js@0.1.0"
 }
