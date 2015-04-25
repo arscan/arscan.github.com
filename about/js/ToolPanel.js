@@ -8,17 +8,26 @@ function createToolPanel(renderer, scale){
 
    var panel = createPanel(renderer, width, height, {foregroundGlow: true});
 
-   var toolPlane;
+   var toolBGPlane;
 
     function init(){
-
-        var toolTexture = THREE.ImageUtils.loadTexture('images/tool-comp.png', undefined, LOADSYNC.register() );
+        var toolTexture = THREE.ImageUtils.loadTexture('images/tools-foreground.png', undefined, LOADSYNC.register() );
         var toolMaterial = new THREE.MeshBasicMaterial({map: toolTexture, transparent: true});
-        var toolGeometry = new THREE.PlaneBufferGeometry( 400 * .5, 374 * .5);
+        var toolGeometry = new THREE.PlaneBufferGeometry( 512, 512);
         toolPlane = new THREE.Mesh( toolGeometry, toolMaterial );
-        toolPlane.position.set(width/2 - 30, height/2, 0);
+        toolPlane.position.set(width/2 - 30, height/2, 1);
+        toolPlane.scale.set(.6,.6,.6);
 
         panel.addToScene( toolPlane );
+
+        var toolBGTexture = THREE.ImageUtils.loadTexture('images/tools-background.png', undefined, LOADSYNC.register() );
+        var toolBGMaterial = new THREE.MeshBasicMaterial({map: toolBGTexture, transparent: true, opacity: .5});
+        var toolBGGeometry = new THREE.PlaneBufferGeometry( 512, 512);
+        toolBGPlane = new THREE.Mesh( toolBGGeometry, toolBGMaterial );
+        toolBGPlane.position.set(width/2 - 30, height/2, 0);
+        toolBGPlane.scale.set(.6,.6,.6);
+
+        panel.addToScene( toolBGPlane );
 
         // var titleCanvas= createTitleCanvas(); 
         // var titleTexture = new THREE.Texture(titleCanvas)
