@@ -368,9 +368,15 @@ function main(renderWidth){
             }
 
             var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY)
+            console.log(res);
             if(typeof res === "string"){
                 location.href=res;
                 return;
+            } else if(typeof res === "function"){
+                console.log("function called");
+                res.call(this);
+                return;
+
             }
 
         });
@@ -379,7 +385,7 @@ function main(renderWidth){
             if(carouselVelocity === 0){
                 for(var i = 0; i< carouselPanels.length; i++){
                     var res= carouselPanels[i].checkBounds(event.offsetX, renderHeight - event.offsetY);
-                    if(typeof res === "string"){
+                    if(typeof res === "string" || typeof res === "function"){
                         $("canvas").addClass("pointing");
                         return;
                     }
@@ -388,7 +394,7 @@ function main(renderWidth){
             }
 
             var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY);
-            if(typeof res === "string"){
+            if(typeof res === "string" || typeof res === "function"){
                 $("canvas").addClass("pointing");
                 return;
             }
@@ -586,5 +592,10 @@ $(function(){
         if(!loaded){
             load();
         }
+    });
+
+    $("#about-x").click(function(){
+        console.log($(this));
+        $(this).parent().css("display", "none");
     });
 });
