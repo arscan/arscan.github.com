@@ -17,6 +17,9 @@ function main(renderWidth){
         snapTween = new TWEEN.Tween(),
         scene = new THREE.Scene();
 
+    /* loading panel */
+    var loadingPanel = createLoadingPanel(renderer, screenScale);
+
     /* panels and such */
     var skeletonPanel = createSkeletonPanel(renderer, screenScale),
         namePanel = createNamePanel(renderer, screenScale),
@@ -31,9 +34,9 @@ function main(renderWidth){
         photosPanel = createPhotosPanel(renderer, screenScale),
         linksPanel = createLinksPanel(renderer, screenScale),
         backgroundPanel = createBackgroundPanel(renderer, renderWidth, renderHeight),
-        projectorPanel = createProjectorPanel(renderer, renderWidth, renderHeight, [toolPanel, namePanel, skeletonPanel, tinyPanel1, tinyPanel2, tinyPanel3, tinyPanel4, tinyPanel5, sharePanel, photosPanel, projectsPanel, linksPanel]),
+        projectorPanel = createProjectorPanel(renderer, renderWidth, renderHeight, [loadingPanel, toolPanel, namePanel, skeletonPanel, tinyPanel1, tinyPanel2, tinyPanel3, tinyPanel4, tinyPanel5, sharePanel, photosPanel, projectsPanel, linksPanel]),
         subjectPanel = createSubjectPanel(renderer, screenScale);//326, 580, 500 + 326/2, 580/2 - 120 ),
-        bottomPanel = createBottomPanel($("#bottom-panel").css({"top":renderHeight - (60 * screenScale) + Math.max(0,(window.innerHeight - renderHeight)/2), "width": renderWidth})),
+        bottomPanel = createBottomPanel($("#bottom-panel").css({"opacity": 0, "top":renderHeight - (60 * screenScale) + Math.max(0,(window.innerHeight - renderHeight)/2), "width": renderWidth})),
 
         carouselPanels = [linksPanel, toolPanel, photosPanel, projectsPanel],
         carouselLocation = 0,
@@ -58,6 +61,8 @@ function main(renderWidth){
     scene.add(backgroundPanel.quad);
     backgroundPanel.quad.material.opacity = .1;
 
+    loadingPanel.setPosition(renderWidth / 2 - 200 * screenScale, renderHeight /2 + 200 * screenScale, 1);
+
     skeletonPanel.setPosition(380 * screenScale, renderHeight - 20 * screenScale, 1);
     subjectPanel.setPosition(450 * screenScale, 450 * screenScale, 1);
     tinyPanel1.setPosition(2024 * screenScale, 100 * screenScale, .5);
@@ -66,6 +71,7 @@ function main(renderWidth){
     tinyPanel4.setPosition(2024 * screenScale, 115 * screenScale, .5);
     tinyPanel5.setPosition(2024 * screenScale, 120 * screenScale, .5);
     sharePanel.setPosition(renderWidth + 1000, 0, 0);
+    namePanel.setPosition(2024 * screenScale, 100 * screenScale, .5);
 
     // put the carouselPanels off the right side of the screen
     for(var i = 0; i< carouselPanels.length; i++){
@@ -151,11 +157,29 @@ function main(renderWidth){
            .onUpdate(function(){
                backgroundPanel.setLightBarLevel(this.level);
                backgroundPanel.setLightLevel(this.level);
-               // subjectPanel.setBrightness(this.level);
+               subjectPanel.setBrightness(this.level);
                bottomPanel.element.css({opacity: this.level});
 
            }).start();
 
+        new TWEEN.Tween({})
+            .to
+
+    loadingPanel.setPosition(renderWidth / 2 - 200 * screenScale, renderHeight /2 + 200 * screenScale, 1);
+        /* loadin gpanel */
+        createChainedTween(loadingPanel, [
+            {position: {x: renderWidth / 2  - 200 * screenScale, y: renderHeight / 2 + 200*screenScale, z:1}},
+            {   delay: 0, 
+                duration: 2000, 
+                easing: TWEEN.Easing.Quintic.InOut,
+                position: {x: 700 * screenScale, y: 500 * screenScale, z:0}
+            },
+            {   delay: 1000, 
+                duration: 1000, 
+                easing: TWEEN.Easing.Quadratic.In,
+                position: {x: -500 * screenScale, y: 500 * screenScale, z:0}
+            }]
+            ).start();
 
         /* Name Panel */
         createChainedTween(namePanel, [
@@ -263,16 +287,15 @@ function main(renderWidth){
     /* register what to do while loading */
 
     LOADSYNC.onUpdate(function(completedCount, totalCount){
-        $(".cassette-tape").velocity("stop");
-        $(".cassette-tape").velocity({"margin-left": 45 * completedCount / totalCount}, 1000);
+        loadingPanel.setPercent(completedCount / totalCount);
     });
 
     /* register what we want to do when loading is complete */
     LOADSYNC.onComplete(function(){
-        $("#loading-graphic").velocity({color: "#000", opacity: 0},{"display":"none"});
-        runIntroAnimation();
-        setTimeout(function(){clock.start()}, 3000);
-        // clock.start();
+        // hide the other stuff
+
+        setTimeout(runIntroAnimation, 2000);
+        setTimeout(function(){clock.start()}, 5000);
     });
 
     function setInteraction(){
@@ -475,6 +498,7 @@ function main(renderWidth){
 
         }
 
+        loadingPanel.render(time);
 
         skeletonPanel.render(time, 2 * Math.PI * mouseX / renderWidth);
         namePanel.render(time);
@@ -536,50 +560,48 @@ $(function(){
         $("#cassette-bg").css({"visibility":"hidden"});
         $("#play-image").css({"display": "block", "top": window.innerHeight/2 - 50, "left": window.innerWidth/2});
         $("#cassette-svg").css({"top": window.innerHeight/2 - 150, "left": window.innerWidth/2 - 300});
-        new Vivus('cassette-svg', {type: 'oneByOne', duration: 100, start: "autostart"}, function(){
-            WebFont.load({
-                google: {
-                    families: ['Roboto:500']
-                },
-                active: function(){
-                    // unhide the laoding graphic
-                    $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2, "left": window.innerWidth/2});
-                    if(isMobile && VIDEO_ENABLED){
-                        $("#play-button").click(function(){
-                            $("#play-button").velocity({opacity: 0}, {complete: function(){
-                                $("#play-button").css({display: "none"});
-                            }});
-                            setTimeout(function(){
-                                var video = $("#video")[0];
-                                if(typeof video.load == "function"){
-                                    video.src = "videos/video.mp4";
-                                    video.setAttribute('crossorigin', 'anonymous');
-                                    video.load();
-                                    video.play();
-                                } else {
-                                    VIDEO_ENABLED = false;
+        WebFont.load({
+            google: {
+                families: ['Roboto:500']
+            },
+            active: function(){
+                // unhide the laoding graphic
+                $("#cassette-bg").css({"visibility": "visible", "top": window.innerHeight/2, "left": window.innerWidth/2});
+                if(isMobile && VIDEO_ENABLED){
+                    $("#play-button").click(function(){
+                        $("#play-button").velocity({opacity: 0}, {complete: function(){
+                            $("#play-button").css({display: "none"});
+                        }});
+                        setTimeout(function(){
+                            var video = $("#video")[0];
+                            if(typeof video.load == "function"){
+                                video.src = "videos/video.mp4";
+                                video.setAttribute('crossorigin', 'anonymous');
+                                video.load();
+                                video.play();
+                            } else {
+                                VIDEO_ENABLED = false;
 
-                                }
-                                main(getWidth());
-                            }, 500);
+                            }
+                            main(getWidth());
+                        }, 500);
 
-                        });
+                    });
+                } else {
+                    var video = $("#video")[0];
+                    if(typeof video.load == "function" && VIDEO_ENABLED){
+                        video.src = "videos/video.mp4";
+                        video.setAttribute('crossorigin', 'anonymous');
+                        video.load();
+                        video.play();
                     } else {
-                        var video = $("#video")[0];
-                        if(typeof video.load == "function" && VIDEO_ENABLED){
-                            video.src = "videos/video.mp4";
-                            video.setAttribute('crossorigin', 'anonymous');
-                            video.load();
-                            video.play();
-                        } else {
-                            VIDEO_ENABLED = false;
+                        VIDEO_ENABLED = false;
 
-                        }
-                        main(getWidth());
                     }
+                    main(getWidth());
                 }
-            }); 
-        });
+            }
+        }); 
     }
 
 
