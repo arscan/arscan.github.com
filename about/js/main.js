@@ -46,6 +46,7 @@ function main(renderWidth){
         carouselSnapping = false,
 
         mouseX = 0,
+        mouseY = 0,
 
         interactivePanels = [namePanel, skeletonPanel, sharePanel],
         grabbedPanel = null,
@@ -173,13 +174,17 @@ function main(renderWidth){
                 duration: 2000, 
                 easing: TWEEN.Easing.Quintic.InOut,
                 position: {x: 700 * screenScale, y: 500 * screenScale, z:0}
-            },
-            {   delay: 1000, 
-                duration: 1000, 
-                easing: TWEEN.Easing.Quadratic.In,
-                position: {x: -500 * screenScale, y: 500 * screenScale, z:0}
             }]
             ).start();
+
+        new TWEEN.Tween({opacity: 1})
+            .to({opacity: 0}, 1000)
+            .delay(1000)
+            .easing(TWEEN.Easing.Quintic.InOut)
+            .onUpdate(function(){
+                loadingPanel.quad.material.opacity = this.opacity;
+
+            }).start();
 
         /* Name Panel */
         createChainedTween(namePanel, [
@@ -310,8 +315,8 @@ function main(renderWidth){
         $(window).resize(function() {
             snapTween.stop();
             if($(window).width() > renderWidth * 1.3 || $(window).width() < renderWidth * .7){
-                // location.href = '?';
-                // return;
+                location.href = '?';
+                return;
             }
             $('canvas').width($(window).width());
             $('canvas').height($(window).width() / screenRatio);
@@ -381,7 +386,7 @@ function main(renderWidth){
         $("canvas").on('click', function(event){
             if(carouselVelocity === 0){
                 for(var i = 0; i< carouselPanels.length; i++){
-                    var res= carouselPanels[i].checkBounds(event.offsetX, renderHeight - event.offsetY);
+                    var res= carouselPanels[i].checkBounds(mouseX, renderHeight - mouseY);
                     if(typeof res === "string"){
                         location.href=res;
                         return;
@@ -390,13 +395,11 @@ function main(renderWidth){
                 }
             }
 
-            var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY)
-            console.log(res);
+            var res= sharePanel.checkBounds(mouseX, renderHeight - mouseY)
             if(typeof res === "string"){
                 location.href=res;
                 return;
             } else if(typeof res === "function"){
-                console.log("function called");
                 res.call(this);
                 return;
 
@@ -404,10 +407,11 @@ function main(renderWidth){
 
         });
         $("canvas").on('mousemove', function(event){
-            mouseX = event.offsetX;
+            mouseX = (event.offsetX || event.pageX - $(event.target).offset().left);
+            mouseY = (event.offsetY || event.pageY - $(event.target).offset().top);
             if(carouselVelocity === 0){
                 for(var i = 0; i< carouselPanels.length; i++){
-                    var res= carouselPanels[i].checkBounds(event.offsetX, renderHeight - event.offsetY);
+                    var res= carouselPanels[i].checkBounds(mouseX, renderHeight - mouseY);
                     if(typeof res === "string" || typeof res === "function"){
                         $("canvas").addClass("pointing");
                         return;
@@ -416,7 +420,7 @@ function main(renderWidth){
                 }
             }
 
-            var res= sharePanel.checkBounds(event.offsetX, renderHeight - event.offsetY);
+            var res= sharePanel.checkBounds(mouseX, renderHeight - mouseY);
             if(typeof res === "string" || typeof res === "function"){
                 $("canvas").addClass("pointing");
                 return;
@@ -498,7 +502,9 @@ function main(renderWidth){
 
         }
 
-        loadingPanel.render(time);
+        if(time <= 0){
+            loadingPanel.render(time);
+        }
 
         skeletonPanel.render(time, 2 * Math.PI * mouseX / renderWidth);
         namePanel.render(time);
@@ -610,14 +616,12 @@ $(function(){
     }
 
     PleaseRotate.onHide(function(){
-        console.log("hide");
         if(!loaded){
             load();
         }
     });
 
     $("#about-x").click(function(){
-        console.log($(this));
         $(this).parent().css("display", "none");
     });
 });
