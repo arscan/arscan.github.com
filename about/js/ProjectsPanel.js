@@ -30,7 +30,7 @@ function createProjectsPanel(renderer, scale){
         var pointerMaterial = new THREE.MeshBasicMaterial({map: pointerTexture, depthTest: false, transparent: true});
         var pointerGeometry = new THREE.PlaneBufferGeometry( 26 * scale, 30 * scale);
         pointerPlane = new THREE.Mesh(pointerGeometry, pointerMaterial );
-        pointerPlane.position.set(35 * scale, 115 * scale,15);
+        pointerPlane.position.set(35 * scale, 115 * scale,0);
         pointerPlane.scale.set(.5, .5, .5);
         panel.addToScene(pointerPlane);
     }
@@ -133,7 +133,6 @@ function createProjectsPanel(renderer, scale){
         new TWEEN.Tween({val: 0, cs: currentSelection}, 1000)
             .to({val: 1, cs: currentSelection})
             .onUpdate(function(){
-                console.log(this);
                 if(this.cs >= 0){
                     menu[this.cs].rightPlane.material.opacity = 1 - this.val;
                     menu[this.cs].picPlane.material.opacity = 1 - this.val;
