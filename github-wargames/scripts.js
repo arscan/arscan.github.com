@@ -169,7 +169,7 @@ updateStatsLoop();
 
 var updateTwitterLoop = function(){
     setTimeout(updateTwitterLoop,100000);
-    $.getJSON('http://cdn.api.twitter.com/1/urls/count.json?url=' + encodeURIComponent(document.URL) + '&callback=?', null, function (results) {
+    $.getJSON('//cdn.api.twitter.com/1/urls/count.json?url=' + encodeURIComponent(document.URL) + '&callback=?', null, function (results) {
             $("#twitter").text(pad(results.count,5));
             });
 }
