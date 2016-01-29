@@ -178,7 +178,7 @@ updateTwitterLoop();
 
 d3.select(self.frameElement).style("height", height + "px");
 
-var es = new EventSource("http://github-api.robscanlon.com/events.js");
+var es = new EventSource("//github-api.robscanlon.com/events.js");
 
 var drawExplosion = function(svg, coord){
     if(explosionRing[explosionIndex]){
