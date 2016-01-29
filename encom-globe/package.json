@@ -1,6 +1,6 @@
 {
   "name": "encom-globe",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "encom-globe",
   "main": "src/Globe.js",
   "devDependencies": {
@@ -32,12 +32,30 @@
     "pusher.color": "~0.2.4",
     "tween.js": "~0.13.0"
   },
-  "readme": "The **Encom Globe** is a WebGL-based clone of the globe from the boardroom scene in [Tron: Legacy](http://www.imdb.com/title/tt1104001/).  If you don't recall that scene, check out [Bradley Munkowitz's excellent writeup](http://work.gmunk.com/TRON-Board-Room) about its production for more information.\n\nThis version attempts to stay as true to the in-movie original as possible while maintaining a high frame rate on low powered machines and devices.  It is getting *pretty close* to acheiving that goal and mimics most of the details seen on screen, including the loading animations for the globe hexagon particles, the satellites, and the markers.\n\n![Encom Globe](https://raw.github.com/arscan/encom-globe/master/screenshot.jpg \"Encom Globe\")\n\nIt written using Three.js, with parts implemented in GLSL.  It is not at all affiliated with Tron, Disney, or the team that created the original movie version.  It is just a tribute.\n\nA [Demo](http://www.robscanlon.com/encom-globe) is available on my website.\n\n### Usage\n\nThe Encom Globe was written as part of a larger project and with a specific use in mind, but it does provide a certain level of flexibility if you would like to use it yourself as an alternative to the popular [WebGL Globe](http://www.chromeexperiments.com/globe).  The blue markers, orange connected markers, and satellites can be placed wherever and whenever you would like.\n\nView [index.html](index.html) for a usage example.\n\n### License\n\nThe MIT License (MIT)\nCopyright (c) 2014 Robert Scanlon\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n\n\n\n\n",
-  "readmeFilename": "README.md",
+  "gitHead": "2e3d8e63c3151c982fe2c19664eefbaff00f99fb",
   "bugs": {
     "url": "https://github.com/arscan/encom-globe/issues"
   },
-  "homepage": "https://github.com/arscan/encom-globe",
-  "_id": "encom-globe@0.5.2",
-  "_from": "encom-globe@0.5.2"
+  "homepage": "https://github.com/arscan/encom-globe#readme",
+  "_id": "encom-globe@0.5.3",
+  "_shasum": "598180545fdd49529b07d58f984982d08c04196a",
+  "_from": "encom-globe@*",
+  "_npmVersion": "2.13.1",
+  "_nodeVersion": "0.10.25",
+  "_npmUser": {
+    "name": "arscan",
+    "email": "robscanlon@gmail.com"
+  },
+  "dist": {
+    "shasum": "598180545fdd49529b07d58f984982d08c04196a",
+    "tarball": "http://registry.npmjs.org/encom-globe/-/encom-globe-0.5.3.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "arscan",
+      "email": "robscanlon@gmail.com"
+    }
+  ],
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/encom-globe/-/encom-globe-0.5.3.tgz"
 }

@@ -1,6 +1,6 @@
 {
   "name": "encom-boardroom",
-  "version": "0.10.2",
+  "version": "0.10.5",
   "description": "encom-boardroom",
   "main": "index.html",
   "dependencies": {
@@ -43,12 +43,12 @@
   "license": "MIT",
   "readme": "Encom Boardroom\n=================\n\nAn HTML5 recreation of the [Boardroom\nScene](http://work.gmunk.com/TRON-Board-Room) in Disney's [Tron:\nLegacy](http://www.imdb.com/tible/tt1104001/).  It currently displays realtime\ndata from Github and Wikipedia to make it a bit more fun.  View it in action at\nhttp://www.robscanlon.com/encom-boardroom .\n\n![Boardroom light table](https://raw.github.com/arscan/encom-boardroom/master/images/screenshot_lighttable.jpg \"Boardroom light table\")\n\n![Boardroom screen](https://raw.github.com/arscan/encom-boardroom/master/images/screenshot.jpg \"Boardroom screen\")\n\nWhile I attempted to stay true to the film, it simply wasn't practical to\nrecreate every element that is portrayed in the scene. The graphics displayed\nin the film contain a remarkable amount of detail despite only being visible\nfor a couple of seconds. I am in awe of those that put it together.\n\nMy focus was on the globe and I made it available as a [standalone\nlibrary](http://github.com/arscan/encom-globe) for those interested. The other\nelements are only loose adaptations of the film version. This project is not\nassociated with Github, Wikipedia, Tron: Legacy, or Disney. It is just a\ntribute.\n\n### Usage\n\nThe web application can be launched simply by serving up `./index.html`.  If\nyou would like the full application, including the feeds from wikipedia and\ngithub, install and run the node application as follows:\n\n```sh\nnpm install\nPORT=8000 node stream-server.js\n```\n\nThen point your browser at `http://localhost:8000`.\n\nThe code isn't particularly well organized right now to quickly add in new\nfeeds, but it certainly is possible.  I did split out the globe into its own\n[standalone library](https://github.com/arscan/encom-globe) that can be easily\nreused though.\n\n### Noteable Dependencies\n\n* [Node.js](http://nodejs.org/)\n* [Three.js](http://threejs.org/)\n* [Encom Globe](http://www.robscanlon.com/encom-globe)\n* [Hexasphere.js](http://www.robscanlon.com/hexasphere/)\n* [Quadtree2](https://github.com/burninggramma/quadtree2.js)\n* [pleaserotate.js](http://www.github.com/arscan/pleaserotate.js)\n\n### Feed Info\n\n**Github:** Data is being streamed in realtime from Github's [public timeline\nfeed](http://github.com/timeline.json). Location information is retrieved from\nthe user's github profile and is mapped using\n[geonames.org](http://geonames.org). Historic 2013 data was retrieved from the\n[Github Archive](http://githubarchive.org). User pictures are from\n[Gravatar](http://gravatar.com) and are throttled to under one per second to\nconserve bandwidth.\n\n**Wikipedia:** Data is being streamed in realtime from Wikipedia's [public irc\nfeed](http://meta.wikimedia.org/wiki/IRC_channels#Raw_feeds). Location\ninformation is only available from anonymous users in the form of IP addresses,\nand is mapped to real locations using [freegeoip.net](http://freegeoip.net).\n\n### License\n\nThe MIT License (MIT)\nCopyright (c) 2014 Robert Scanlon\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n",
   "readmeFilename": "README.md",
-  "gitHead": "622aba7ae6d94c8be200d193a0465454ed41f04b",
+  "gitHead": "1791e43fcc1b0b4c05dc90a4c071a5ddd265b8fa",
   "bugs": {
     "url": "https://github.com/arscan/encom-boardroom/issues"
   },
-  "homepage": "https://github.com/arscan/encom-boardroom",
-  "_id": "encom-boardroom@0.10.2",
-  "_shasum": "61ffbbaa74427d6aadfe9f2bfe6999122aea3a79",
-  "_from": "encom-boardroom@0.10.2"
+  "homepage": "https://github.com/arscan/encom-boardroom#readme",
+  "_id": "encom-boardroom@0.10.5",
+  "_shasum": "f9aa1202fb878891baef974b47d4294e084ec383",
+  "_from": "encom-boardroom@*"
 }
