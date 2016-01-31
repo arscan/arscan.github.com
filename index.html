@@ -37,8 +37,13 @@
              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
              })();
-
          </script>
+
+        <script type="text/javascript">
+            var host = "www.robscanlon.com";
+            if ((host == window.location.host) && (window.location.protocol != "https:"))
+                window.location.protocol = "https";
+        </script>
 
          <script>
              $(document).ready(function()
