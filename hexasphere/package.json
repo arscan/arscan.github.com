@@ -2,25 +2,25 @@
   "_args": [
     [
       {
-        "raw": "hexasphere.js@*",
+        "raw": "hexasphere.js@0.2.1",
         "scope": null,
         "escapedName": "hexasphere.js",
         "name": "hexasphere.js",
-        "rawSpec": "*",
-        "spec": "*",
-        "type": "range"
+        "rawSpec": "0.2.1",
+        "spec": "0.2.1",
+        "type": "version"
       },
       "/home/rob/Projects/arscan.github.com"
     ]
   ],
-  "_from": "hexasphere.js@*",
-  "_id": "hexasphere.js@0.2.0",
+  "_from": "hexasphere.js@0.2.1",
+  "_id": "hexasphere.js@0.2.1",
   "_inCache": true,
   "_location": "/hexasphere.js",
   "_nodeVersion": "6.10.1",
   "_npmOperationalInternal": {
     "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/hexasphere.js-0.2.0.tgz_1491700784142_0.27065160404890776"
+    "tmp": "tmp/hexasphere.js-0.2.1.tgz_1491748183657_0.17129618115723133"
   },
   "_npmUser": {
     "name": "arscan",
@@ -29,22 +29,23 @@
   "_npmVersion": "3.10.10",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "hexasphere.js@*",
+    "raw": "hexasphere.js@0.2.1",
     "scope": null,
     "escapedName": "hexasphere.js",
     "name": "hexasphere.js",
-    "rawSpec": "*",
-    "spec": "*",
-    "type": "range"
+    "rawSpec": "0.2.1",
+    "spec": "0.2.1",
+    "type": "version"
   },
   "_requiredBy": [
+    "#USER",
     "/",
     "/encom-globe"
   ],
-  "_resolved": "https://registry.npmjs.org/hexasphere.js/-/hexasphere.js-0.2.0.tgz",
-  "_shasum": "bf436e14471b28d8197651272d2457e1fff055b0",
+  "_resolved": "https://registry.npmjs.org/hexasphere.js/-/hexasphere.js-0.2.1.tgz",
+  "_shasum": "cebbe7701cdbfa4d6c5ee34769738b62c1487687",
   "_shrinkwrap": null,
-  "_spec": "hexasphere.js@*",
+  "_spec": "hexasphere.js@0.2.1",
   "_where": "/home/rob/Projects/arscan.github.com",
   "author": {
     "name": "robscanlon@gmail.com"
@@ -62,10 +63,10 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "bf436e14471b28d8197651272d2457e1fff055b0",
-    "tarball": "https://registry.npmjs.org/hexasphere.js/-/hexasphere.js-0.2.0.tgz"
+    "shasum": "cebbe7701cdbfa4d6c5ee34769738b62c1487687",
+    "tarball": "https://registry.npmjs.org/hexasphere.js/-/hexasphere.js-0.2.1.tgz"
   },
-  "gitHead": "cc1969627b9268846dfe6da6d94ebd7b7bfb087a",
+  "gitHead": "21a2447fe705d53184e3b2686086bd7749a088a8",
   "homepage": "https://github.com/arscan/hexashere.js#readme",
   "license": "MIT",
   "main": "src/hexasphere.js",
@@ -85,5 +86,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.2.0"
+  "version": "0.2.1"
 }
