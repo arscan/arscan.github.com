@@ -96,11 +96,69 @@ var Hexasphere = function(radius, numDivisions, hexSize){
     points = newPoints;
 
     this.tiles = [];
+    this.tileLookup = {};
 
+    // create tiles and store in a lookup for references
     for(var p in points){
-        this.tiles.push(new Tile(points[p], hexSize));
+        var newTile = new Tile(points[p], hexSize);
+        this.tiles.push(newTile);
+        this.tileLookup[newTile.toString()] = newTile;
+    }
+
+    // resolve neighbor references now that all have been created
+    for(var t in this.tiles){
+        var _this = this;
+        this.tiles[t].neighbors = this.tiles[t].neighborIds.map(function(item){return _this.tileLookup[item]});
     }
 
 };
+
+Hexasphere.prototype.toJson = function() {
+
+    return JSON.stringify({
+        radius: this.radius,
+        tiles: this.tiles.map(function(tile){return tile.toJson()})
+    });
+}
+
+Hexasphere.prototype.toObj = function() {
+
+    var objV = [];
+    var objF = [];
+    var objText = "# vertices \n";
+    var vertexIndexMap = {};
+
+    for(var i = 0; i< this.tiles.length; i++){
+        var t = this.tiles[i];
+        
+        var F = []
+        for(var j = 0; j< t.boundary.length; j++){
+            var index = vertexIndexMap[t.boundary[j]];
+            if(index == undefined){
+                objV.push(t.boundary[j]);
+                index = objV.length;
+                vertexIndexMap[t.boundary[j]] = index;
+            }
+            F.push(index)
+        }
+
+        objF.push(F);
+    }
+
+    for(var i =0; i< objV.length; i++){
+        objText += 'v ' + objV[i].x + ' ' + objV[i].y + ' ' + objV[i].z + '\n';
+    }
+
+    objText += '\n# faces\n';
+    for(var i =0; i< objF.length; i++){
+        faceString = 'f';
+        for(var j = 0; j < objF[i].length; j++){
+            faceString = faceString + ' ' + objF[i][j];
+        }
+        objText += faceString + '\n';
+    }
+
+    return objText;
+}
 
 module.exports = Hexasphere;
