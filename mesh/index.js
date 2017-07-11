@@ -11978,9 +11978,8 @@ let canvas = document.getElementById('canvas');
 canvas.width = window.outerWidth;
 canvas.height = window.outerHeight;
 
-const regl = require('regl')({ canvas: document.getElementById('canvas'), extensions: ['webgl_depth_texture', 'webgl_draw_buffers'] });
-const camera = require('regl-camera')(regl, cameraProps);
-
+const regl = require('regl')({ canvas: document.getElementById('canvas'), extensions: ['webgl_depth_texture'] }); 
+const camera = require('regl-camera')(regl, cameraProps); 
 const depthBuf = regl.texture({
   width: window.innerWidth,
   height: window.innerHeight,
