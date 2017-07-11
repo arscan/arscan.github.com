@@ -132,7 +132,7 @@ const drawLines = regl({
     color: [1, 1, .8],
     time: (context) => context.time
   },
-  lineWidth: 2,
+  lineWidth: 1,
   primitive: 'lines',
   framebuffer: meshFbo,
   count: lines.length * 2
