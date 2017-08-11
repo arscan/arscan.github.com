@@ -49,3 +49,7 @@ canvas {
   color: #001a35;
   font-family: 'Roboto', sans-serif;
 }
+
+#error {
+  padding: 50px; 
+}
