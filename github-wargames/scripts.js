@@ -397,7 +397,7 @@ window.StreamServer && StreamServer.onMessage(function (datain) {
                 $("#leftbottom1overlay").streamwriter("write",data.location);
             }
         }
-    }, Math.random()*500);
+    }, Math.random()*3000);
 });
 
 
