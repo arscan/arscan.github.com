@@ -8,6 +8,20 @@ const rotateZ = require('gl-mat4').rotateZ;
 const scale = require('gl-mat4').scale;
 const tween = require('tween.js')
 
+const webgl_support = () => { 
+  try{
+    var canvas = document.createElement( 'canvas' ); 
+    return !! window.WebGLRenderingContext && ( 
+                                               canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) );
+  }catch( e ) { return false; } 
+};
+
+if(!webgl_support()){
+  [].forEach.call(document.getElementsByClassName('ok'), (e) => {e.style.display='none';}); 
+  [].forEach.call(document.getElementsByClassName('error'), (e) => {e.style.display='';}); 
+  throw('Cant set up webgl');
+}
+
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
 
@@ -251,17 +265,19 @@ const drawVBlurredFbo = regl({
 
     vec4 sum = vec4( 0.0 );
 
-    sum += texture2D( tex, vec2( vUv.x, vUv.y - 5.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y - 4.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y - 3.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y - 2.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y - 1.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y + 1.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y + 2.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y + 3.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y + 4.0 * v ) )/11.0;
-    sum += texture2D( tex, vec2( vUv.x, vUv.y + 5.0 * v ) )/11.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y - 6.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y - 5.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y - 4.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y - 3.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y - 2.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y - 1.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y + 1.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y + 2.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y + 3.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y + 4.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y + 5.0 * v ) )/13.0;
+    sum += texture2D( tex, vec2( vUv.x, vUv.y - 6.0 * v ) )/13.0;
 
     gl_FragColor = sum;
 
@@ -349,13 +365,12 @@ setInterval(function(){
       y: Math.random() * 2 *  Math.PI,
       z: Math.random() * 2 * Math.PI 
   }, 3000).start();
-}, 10000);
+}, 5000);
 
 const clear = () => { regl.clear({ color: [0, 0, 0, 1], depth: 1 }) };
 
 regl.frame(({viewportWidth, viewportHeight}) => {
   stats.begin();
-
   // cameraProps['distance'] = .1;
 
   tween.update();

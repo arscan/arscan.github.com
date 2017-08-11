@@ -1,36 +1,38 @@
 <link rel="stylesheet" type="text/css" href="style.css"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
-<canvas id='canvas'></canvas>
+<canvas id='canvas' class='ok'></canvas>
 
-<div class='container'>
-    <!-- <div class='subtitle'>this is a really long subtitle</div> -->
-    <!-- <div class='title'>the big title <strong>here</strong></div> -->
+<div id='subtitle' class='ok' >this is an experiment by rob scanlon</div>
+<div id='title' class='ok'>Playing with <a href="http://regl.party" id="title-link">regl!</a></strong></div>
 
-    <!-- <div class="bottom"> -->
-    <!--    And then put a whole bunch of stuff down here -->
-    <!-- </div> -->
-
+<div class="ok" id="bottom">
+  WebGL | Z-BUFFER | BASIC DoF SHADER 
 </div>
-<!--  -->
+
+<div class="error">This browser does not support webgl in this configuration. Most browsers should (including mobile).
+  Try another browser or fix your config.  Visit <a href="https://get.webgl.org/">WebGL.org</a> for more information.
+</div>
+
 <script src = "index.js"></script>
-        <script type="text/javascript">
-        
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-4481396-1']);
-            _gaq.push(['_trackPageview']);
-        
-            (function() {
-                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-        
-        </script>
-        
-        <script>
-            var host = "www.robscanlon.com";
-            if ((host == window.location.host) && (window.location.protocol != "https:"))
-                window.location.protocol = "https";
-        </script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4481396-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script>
+  var host = "www.robscanlon.com";
+  if ((host == window.location.host) && (window.location.protocol != "https:"))
+  window.location.protocol = "https";
+</script>
 
 
