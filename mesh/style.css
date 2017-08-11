@@ -50,6 +50,6 @@ canvas {
   font-family: 'Roboto', sans-serif;
 }
 
-#error {
+.error {
   padding: 50px; 
 }
