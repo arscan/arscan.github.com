@@ -369,6 +369,8 @@ setInterval(function(){
 
 const clear = () => { regl.clear({ color: [0, 0, 0, 1], depth: 1 }) };
 
+let first = true;
+
 regl.frame(({viewportWidth, viewportHeight}) => {
   stats.begin();
   // cameraProps['distance'] = .1;
@@ -405,6 +407,10 @@ regl.frame(({viewportWidth, viewportHeight}) => {
     // drawHBlurredFbo({dest: blurFboPong, tex: blurFbo});
 
     drawFinalFbo();
+    if(first){
+      [].forEach.call(document.getElementsByClassName('ok'), (e) => {e.style.removeProperty('display');}); 
+      first = false;
+    }
   });
   stats.end();
 });
