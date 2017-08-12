@@ -23,6 +23,7 @@ if(!webgl_support()){
 }
 
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+stats.dom.style.mixBlendMode = 'multiply';
 document.body.appendChild( stats.dom );
 
 let cameraProps = {
