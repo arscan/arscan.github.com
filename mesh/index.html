@@ -3,8 +3,10 @@
 
 <canvas id='canvas' class='ok'></canvas>
 
-<div id='subtitle' class='ok' style='display: none'>this is an experiment by rob scanlon</div>
-<div id='title' class='ok' style='display: none'>Playing with <a href="http://regl.party" id="title-link">regl!</a></strong></div>
+<div id='title-container'>
+  <div id='subtitle' class='ok' style='display: none'>this is an experiment by rob scanlon</div>
+  <div id='title' class='ok' style='display: none'>Playing with <a href="http://regl.party" id="title-link">regl!</a></strong></div>
+</div>
 
 <div class="ok" id="bottom" style='display: none'>
   WebGL | Z-BUFFER | BASIC DoF SHADER 
@@ -14,6 +16,9 @@
   If you can read this message, something went wrong.  Most likely this browser is having trouble rendering WebGL with the 
   WebGL_depth_texture extension.  This is just an experiment, so these kinds of things happen.
   Try another browser or fix your config.  Visit <a href="https://get.webgl.org/">WebGL.org</a> for more information.
+</div>
+
+<div id="clear-overlay">
 </div>
 
 <script src = "index.js"></script>
